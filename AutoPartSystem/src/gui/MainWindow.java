@@ -1,7 +1,5 @@
 package gui;
 
-
-import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -15,6 +13,12 @@ import javax.swing.JTextArea;
 public class MainWindow extends JFrame{
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
 	public MainWindow(){
 		
 		createGui();
