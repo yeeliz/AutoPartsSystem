@@ -1,17 +1,22 @@
 package gui;
 
+
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JTextArea;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
+
 
 public class MainWindow extends JFrame{
 	
+	
 	public MainWindow(){
+		
 		createGui();
 	}
 	
