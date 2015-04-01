@@ -16,6 +16,12 @@ public class MainWindow extends JFrame{
 	
 	private DataBase db = new DataBase();
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
 	public MainWindow(){
 		createGui();
 		
