@@ -1,5 +1,5 @@
 package dataBase;
 
 public class Part{
-	String name, brand;
+	String name, brand, madeAt, autoType;
 }

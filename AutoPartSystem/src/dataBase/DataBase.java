@@ -17,7 +17,7 @@ public class DataBase {
 	private String conSuccess = "Connection Established!";
 	
 	private String dataBaseUrl =
-"jdbc:sqlserver://localhost;integratedSecurity=true;database=EJEMPLO2";
+"jdbc:sqlserver://localhost;integratedSecurity=true;database=PartsSystem";
 	
 	//Connection to DB
 	Connection dbConnection;
