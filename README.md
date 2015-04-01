@@ -1,4 +1,4 @@
-# AutoPartSystem
+# AutoPartsSystem
 First Programming assignment in DataBases I.
 
 --------------
