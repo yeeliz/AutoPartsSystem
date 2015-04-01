@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import Logic.Console;
+import logic.Console;
 
 /*
  * DataBase object to handle
