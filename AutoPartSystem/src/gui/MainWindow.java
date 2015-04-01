@@ -1,7 +1,6 @@
 package gui;
 
 
-import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,13 +10,17 @@ import javax.swing.JFrame;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 
+import dataBase.DataBase;
 
 public class MainWindow extends JFrame{
 	
+	private DataBase db = new DataBase();
 	
 	public MainWindow(){
-		
 		createGui();
+		
+		//establish a connection to DB
+		db.connect();
 	}
 	
 	private void createGui(){
