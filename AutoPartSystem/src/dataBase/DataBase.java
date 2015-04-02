@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javax.swing.JTextArea;
+
 import logic.Console;
 
 /*
@@ -26,19 +28,19 @@ public class DataBase {
 	 * Connect to server 
 	 * Return: True/False
 	 */
-	public boolean connect(){
+	public boolean connect(Console console){
 		try {
 			dbConnection = DriverManager.getConnection(dataBaseUrl);
 			
 			//Successful connection
 			if(dbConnection != null){
-				Console.printConsole(conSuccess);
+				console.printConsole(conSuccess);
 				return true;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Console.errorMsg(conError);
+			console.errorMsg(conError);
 		}
 		return false;
 	}

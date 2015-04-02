@@ -1,78 +1,77 @@
 package gui;
 
-
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import dataBase.DataBase;
 
+import javax.swing.JTabbedPane;
+
+import com.sun.glass.events.KeyEvent;
+
+import javax.swing.JFormattedTextField;
+
+import java.awt.BorderLayout;
+import java.awt.Font;
+
+import logic.Console;
+
 public class MainWindow extends JFrame{
 	
+	//gui stuff
+	private JTextArea consoleTextArea;
+	//db stuff
 	private DataBase db = new DataBase();
+	//logic stuff
+	private Console console;
+	
 	
 	private static final long serialVersionUID = 1L;
 
 	public MainWindow(){
 		createGui();
-		db.connect();
+		console =  new Console(this.consoleTextArea);
+		db.connect(console);
 	}
 	
 	private void createGui(){
 		setTitle("Autopart System");
 	    setSize(700,500);
 		
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{254, 232, 215, 0};
-		gridBagLayout.rowHeights = new int[]{157, 0, 119, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
-		getContentPane().setLayout(gridBagLayout);
-		
-		JButton btnClientes = new JButton("CLIENTES");
-		GridBagConstraints gbc_btnClientes = new GridBagConstraints();
-		gbc_btnClientes.insets = new Insets(0, 0, 5, 5);
-		gbc_btnClientes.gridx = 0;
-		gbc_btnClientes.gridy = 0;
-		getContentPane().add(btnClientes, gbc_btnClientes);
-		
-		JButton btnOrdenes = new JButton("ORDENES");
-		GridBagConstraints gbc_btnOrdenes = new GridBagConstraints();
-		gbc_btnOrdenes.insets = new Insets(0, 0, 5, 5);
-		gbc_btnOrdenes.gridx = 1;
-		gbc_btnOrdenes.gridy = 0;
-		getContentPane().add(btnOrdenes, gbc_btnOrdenes);
-		
-		JButton btnPartes = new JButton("PARTES");
-		GridBagConstraints gbc_btnPartes = new GridBagConstraints();
-		gbc_btnPartes.insets = new Insets(0, 0, 5, 0);
-		gbc_btnPartes.gridx = 2;
-		gbc_btnPartes.gridy = 0;
-		getContentPane().add(btnPartes, gbc_btnPartes);
-		
-		JSeparator separator = new JSeparator();
-		GridBagConstraints gbc_separator = new GridBagConstraints();
-		gbc_separator.gridwidth = 3;
-		gbc_separator.insets = new Insets(0, 0, 5, 0);
-		gbc_separator.gridx = 0;
-		gbc_separator.gridy = 1;
-		getContentPane().add(separator, gbc_separator);
-		
-		JTextArea textArea = new JTextArea();
-		GridBagConstraints gbc_textArea = new GridBagConstraints();
-		gbc_textArea.gridwidth = 3;
-		gbc_textArea.insets = new Insets(0, 0, 0, 5);
-		gbc_textArea.fill = GridBagConstraints.BOTH;
-		gbc_textArea.gridx = 0;
-		gbc_textArea.gridy = 2;
-		getContentPane().add(textArea, gbc_textArea);
+		/*
+		 * Tabs for multiple views
+		 */
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		//panels
+		JComponent panel1 = new JPanel();
+		JComponent panel2 = new JPanel();
+		JComponent panel3 = new JPanel();
+		//tabs
+		tabbedPane.addTab("Cliente", panel1);
+		tabbedPane.addTab("Partes", panel2);
+		tabbedPane.addTab("Ordenes", panel3);
 		
 		
+		JTextField textField = new JTextField();
+		textField.setText("Cool Text");
+		panel1.add(textField);
+		
+		//add tabs to this frame
+		getContentPane().add(tabbedPane);
+		
+		consoleTextArea = new JTextArea();
+		consoleTextArea.setEditable(false);
+		consoleTextArea.setRows(8);
+		Font f = new Font("Consolas",Font.PLAIN, 16);
+		consoleTextArea.setFont(f);
+		getContentPane().add(consoleTextArea, BorderLayout.SOUTH);
 		setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
@@ -83,6 +82,4 @@ public class MainWindow extends JFrame{
 		MainWindow mainWindow = new MainWindow();
 		mainWindow.setVisible(true);
 	}
-	
-	
 }

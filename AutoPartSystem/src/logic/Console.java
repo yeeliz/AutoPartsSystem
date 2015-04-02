@@ -1,13 +1,22 @@
 package logic;
 
-public final class Console {
+import javax.swing.JTextArea;
+
+public class Console {
 	
-	public static void errorMsg(String msg){
+	private JTextArea console;
+	private String text = "";
+	
+	public Console(JTextArea console){
+		this.console = console;
+	}
+	
+	public void errorMsg(String msg){
 		printConsole("An ERROR has occured!");
 		printConsole(msg);
 	}
 	
-	public static void printConsole(String msg){
-		System.out.println(msg); //change for gui
+	public void printConsole(String msg){
+		console.setText("<< " + msg + "\n" + text);
 	}
 }
