@@ -44,4 +44,7 @@ public class DataBase {
 		}
 		return false;
 	}
+	public Connection getDbConnection(){
+		return dbConnection;
+	}
 }

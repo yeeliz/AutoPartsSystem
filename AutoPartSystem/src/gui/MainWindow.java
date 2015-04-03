@@ -66,6 +66,10 @@ public class MainWindow extends JFrame{
 	private JTextField txtClientCity;
 	private JTextField textField_1;
 	private JTextField txtManagerID;
+	private JTextField txtPartName;
+	private JTextField txtBrandPrice;
+	private JTextField txtBrandName;
+	private JTextField txt;
 
 	public MainWindow(){
 		createGui();
@@ -245,6 +249,9 @@ public class MainWindow extends JFrame{
 		txtManagerID.setBounds(454, 136, 153, 20);
 		clientTab.add(txtManagerID);
 		txtManagerID.setColumns(10);
+		
+		JPanel addPartPanel=new JPanel();
+		
 		
 		//add tabs to this frame
 		getContentPane().add(tabbedPane);
