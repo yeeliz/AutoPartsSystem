@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -10,16 +11,21 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import dataBase.Brand;
 import dataBase.DataBase;
+import dataBase.Manufacturer;
+import dataBase.Part;
 
 import javax.swing.JTabbedPane;
 
-import com.sun.glass.events.KeyEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFormattedTextField;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 
 import logic.Console;
 
@@ -33,6 +39,8 @@ import javax.swing.border.EtchedBorder;
 
 import java.awt.event.ActionListener;
 import java.awt.Color;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import javax.swing.JLabel;
 import javax.swing.border.CompoundBorder;
@@ -67,15 +75,22 @@ public class MainWindow extends JFrame{
 	private JTextField textField_1;
 	private JTextField txtManagerID;
 	private JTextField txtPartName;
-	private JTextField txtBrandPrice;
 	private JTextField txtBrandName;
-	private JTextField txt;
-
+	private JTextField txtManufacturerName;
+	private JButton btnAddManufacturer;
+	private JButton btnAddPart;
+	private JButton btnAddBrand;
+	private JComboBox<Manufacturer> Manufactures;
+	private JComboBox<Brand> brands;
 	public MainWindow(){
 		createGui();
+		
 		console =  new Console(this.consoleTextArea);
 		db.connect(console);
+		loadComboBrand();
+		loadComboManufactures();
 	}
+	
 	
 	private void createGui(){
 		setTitle("Autopart System");
@@ -89,6 +104,13 @@ public class MainWindow extends JFrame{
 		JComponent clientTab = new JPanel();
 		JComponent partsTab = new JPanel();
 		JComponent ordersTab = new JPanel();
+		
+		partsTab.addMouseListener(new MouseAdapter() {// empty implementation of all
+            // MouseListener`s methods
+		public void mousePressed(MouseEvent e) {
+			System.out.println(e.getX() + "," + e.getY());
+		}
+		});
 		//tabs
 		tabbedPane.addTab("Client", clientTab);
 		tabbedPane.addTab("Parts", partsTab);
@@ -250,8 +272,94 @@ public class MainWindow extends JFrame{
 		clientTab.add(txtManagerID);
 		txtManagerID.setColumns(10);
 		
-		JPanel addPartPanel=new JPanel();
+		partsTab.setLayout(null);
 		
+		
+		JLabel lblAddPart= new JLabel("ADD PART");
+		lblAddPart.setBounds(49, 5, 100, 10);
+		partsTab.add(lblAddPart);
+		
+		JLabel lblPartName1= new JLabel("Part Name:");
+		lblPartName1.setBounds(49, 32, 100, 10);
+		partsTab.add(lblPartName1);
+		
+		txtPartName=new JTextField();
+		txtPartName.setBounds(138,27, 100, 19);
+		partsTab.add(txtPartName);
+		txtPartName.setColumns(10);
+		
+		JLabel lblBrands= new JLabel("Brands:");
+		lblBrands.setBounds(49, 59, 100, 10);
+		partsTab.add(lblBrands);
+		
+		brands=new JComboBox<Brand>();
+		brands.setBounds(138, 59, 100, 19);
+		partsTab.add(brands);
+		
+		JLabel lblManufactures= new JLabel("Manufactures:");
+		lblManufactures.setBounds(49, 95, 100, 10);
+		partsTab.add(lblManufactures);
+		
+		Manufactures=new JComboBox<Manufacturer>();
+		Manufactures.setBounds(138, 95, 100, 19);
+		partsTab.add(Manufactures);
+		
+		btnAddPart=new JButton("Add");
+		btnAddPart.setBounds(49, 123, 60, 19);
+		partsTab.add(btnAddPart);
+		btnAddPart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	btnAddPartActionPerformed(evt);
+            }
+        });
+		
+		
+		
+		
+		JLabel lblAddBrand= new JLabel("ADD BRAND");
+		lblAddBrand.setBounds(283, 5, 100, 10);
+		partsTab.add(lblAddBrand);
+				
+		JLabel lblBrandName= new JLabel("Brand Name:");
+		lblBrandName.setBounds(283, 32, 100, 10);
+		partsTab.add(lblBrandName);
+		
+		txtBrandName=new JTextField();
+		txtBrandName.setBounds(367,27, 100, 19);
+		partsTab.add(txtBrandName);
+		txtBrandName.setColumns(10);
+		
+		btnAddBrand=new JButton("Add");
+		btnAddBrand.setBounds(283, 59, 60, 19);
+		partsTab.add(btnAddBrand);
+		btnAddBrand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	btnAddBrandActionPerformed(evt);
+            }
+        });
+		
+		
+		JLabel lblAddManufacturer= new JLabel("ADD MANUFACTURER");
+		lblAddManufacturer.setBounds(486, 5, 150, 10);
+		partsTab.add(lblAddManufacturer);
+		
+		JLabel lblManufacturerName= new JLabel("Manufac Name:");
+		lblManufacturerName.setBounds(486, 32, 100, 10);
+		partsTab.add(lblManufacturerName);
+		
+		txtManufacturerName=new JTextField();
+		txtManufacturerName.setBounds(581,27, 100, 19);
+		partsTab.add(txtManufacturerName);
+		txtManufacturerName.setColumns(10);
+		
+		btnAddManufacturer=new JButton("Add");
+		btnAddManufacturer.setBounds(486, 59, 60, 19);
+		partsTab.add(btnAddManufacturer);
+		btnAddManufacturer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddManufacturerActionPerformed(evt);
+            }
+        });
 		
 		//add tabs to this frame
 		getContentPane().add(tabbedPane);
@@ -265,7 +373,46 @@ public class MainWindow extends JFrame{
 		setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
-	
+	private void btnAddPartActionPerformed(java.awt.event.ActionEvent evt) {                                         
+		Part part=new Part(txtPartName.getText(),(Brand) brands.getSelectedItem(), (Manufacturer)Manufactures.getSelectedItem(), db, console);
+    }  
+	private void btnAddBrandActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        Brand brand=new Brand(txtBrandName.getText(),db,console);
+        brands.addItem(brand);
+	}  
+	private void btnAddManufacturerActionPerformed(java.awt.event.ActionEvent evt) {                                         
+		Manufacturer manufact=new Manufacturer(txtManufacturerName.getText(),db,console);
+        Manufactures.addItem(manufact);
+	}  
+	private void loadComboBrand(){
+		try{
+			//look for the brand in the database and set them in the combobox
+			String query="Select * from [Marca]";
+			PreparedStatement pst=db.getDbConnection().prepareStatement(query);
+			ResultSet rs=pst.executeQuery();
+			while(rs.next()){
+				Brand brand=new Brand(rs.getString("Nombre"));
+				brands.addItem(brand);
+			}
+		}catch (Exception ex){
+			console.errorMsg(ex.getStackTrace().toString());
+		}
+		
+	}
+	private void loadComboManufactures(){
+		try{
+			//look for the brand in the database and set them in the combobox
+			String query="Select * from [Fabricante]";
+			PreparedStatement pst=db.getDbConnection().prepareStatement(query);
+			ResultSet rs=pst.executeQuery();
+			while(rs.next()){
+				Manufacturer manufact=new Manufacturer(rs.getString("Nombre"));
+				Manufactures.addItem(manufact);
+			}
+		}catch (Exception ex){
+			console.errorMsg(ex.getStackTrace().toString());
+		}
+	}
 	
 	public static void main(String args[]){
 		//open main window

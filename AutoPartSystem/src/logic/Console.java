@@ -14,6 +14,7 @@ public class Console {
 	public void errorMsg(String msg){
 		printConsole("An ERROR has occured!");
 		printConsole(msg);
+		System.out.println(msg);
 	}
 	
 	public void printConsole(String msg){

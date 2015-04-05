@@ -7,25 +7,25 @@ public class Part{
 	// Notes: fix the price problem
 	// check a solution for parameters
 	// check a 
-	private String name, price,brand, madeBy;
+	private String name, price;
 	private DataBase db;
 	private logic.Console console; 
-	public Part(String pName,String pPrice,Brand pBrand, String pMadeBy, DataBase pDb
+	public Part(String pName,Brand pBrand, Manufacturer pMadeBy, DataBase pDb
 			,logic.Console pConsole){
 		name=pName;
-		price=pPrice;
-		madeBy=pMadeBy;
+		price="0";
 		db=pDb;
 		console=pConsole;
-		insertInDB(pBrand);
+		insertInDB(pBrand, pMadeBy);
 	}
-	private void insertInDB(Brand pBrand){
+	private void insertInDB(Brand pBrand, Manufacturer pMadeBy){
 		try{
 			Connection dbConnection=db.getDbConnection();
-			String query = "INSERT INTO [Parte] (Nombre,Precio) VALUES (?,?)";
-			PreparedStatement pst = dbConnection.prepareStatement(query);
+			String query = "INSERT INTO [Parte] (Nombre,Precio, Fabricante) VALUES (?,?,?)";
+			PreparedStatement  pst = dbConnection.prepareStatement(query);
 			pst.setString(1, name);
-			pst.setString(2, price);
+			pst.setInt(2, Integer.parseInt(price));
+			pst.setString(3, pMadeBy.toString());
 			if (name!="" && price!=""){
 				pst.executeUpdate();
 			}else{
@@ -36,12 +36,15 @@ public class Part{
 			//code to be excecuted !!!!!
 			query = " declare @BrandName varchar(50) "
 					+ " declare @PartName varchar(50) "
-					+ " set @BrandName = "+pBrand.getName()
-					+ " set @PartName= "+name+
-					" exec getSalesperson @BrandName, @PartName ";
+					+ " set @BrandName =?"
+					+ " set @PartName=?"
+					+ " exec AssociateBrandAndPart @PartName ,@BrandName";
 			pst = dbConnection.prepareStatement(query);
-			pst.executeUpdate();		
-			
+			pst.setString(1,pBrand.toString());
+			pst.setString(2,name);
+			pst.executeUpdate();
+			pst.close();
+			console.printConsole("The insertion of the Part has done");
 		}	catch(Exception ex){
 			console.errorMsg(ex.toString());
 		}
