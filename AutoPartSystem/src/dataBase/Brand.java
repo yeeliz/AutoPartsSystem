@@ -25,15 +25,21 @@ public class Brand {
 			String query = "INSERT INTO [Marca] (Nombre) VALUES (?)";
 			PreparedStatement pst = dbConnection.prepareStatement(query);
 			pst.setString(1, name);
+<<<<<<< HEAD
 			if(name!=""){
 				
 				System.out.println(name);
+=======
+			if(name!=""){ //maybe move to gui || logic side
+>>>>>>> origin/master
 				pst.executeUpdate();	
 			}else{
+				//need to show msg's to console too 
 				throw new Exception("No name to create a brand");
 			}
 			pst.close();
 		}catch(Exception ex){
+			//we need write our own custom msg
 			console.errorMsg(ex.toString());
 		}
 	}

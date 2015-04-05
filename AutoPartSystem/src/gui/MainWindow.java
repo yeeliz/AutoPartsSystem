@@ -59,10 +59,12 @@ public class MainWindow extends JFrame{
 	
 	//gui stuff
 	private JTextArea consoleTextArea;
-	//db stuff
-	private DataBase db = new DataBase();
+
 	//logic stuff
 	private Console console;
+	
+	//db stuff
+	private DataBase db = new DataBase(console); //pass console so db can show msg's
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -86,9 +88,13 @@ public class MainWindow extends JFrame{
 		createGui();
 		
 		console =  new Console(this.consoleTextArea);
+<<<<<<< HEAD
 		db.connect(console);
 		loadComboBrand();
 		loadComboManufactures();
+=======
+		db.connect();
+>>>>>>> origin/master
 	}
 	
 	
