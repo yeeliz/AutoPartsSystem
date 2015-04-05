@@ -25,12 +25,8 @@ public class Brand {
 			String query = "INSERT INTO [Marca] (Nombre) VALUES (?)";
 			PreparedStatement pst = dbConnection.prepareStatement(query);
 			pst.setString(1, name);
-<<<<<<< HEAD
 			if(name!=""){
-				
 				System.out.println(name);
-				
->>>>>>> origin/master
 				pst.executeUpdate();	
 			}else{
 				//need to show msg's to console too 
