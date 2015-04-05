@@ -88,11 +88,9 @@ public class MainWindow extends JFrame{
 		createGui();
 		
 		console =  new Console(this.consoleTextArea);
-<<<<<<< HEAD
 		loadComboBrand();
 		loadComboManufactures();
 		db.connect();
->>>>>>> origin/master
 	}
 	
 	
