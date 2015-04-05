@@ -23,12 +23,17 @@ public class DataBase {
 	
 	//Connection to DB
 	Connection dbConnection;
+	Console	console;
+	
+	public DataBase(Console console){
+		this.console = console;
+	}
 	
 	/* 
 	 * Connect to server 
 	 * Return: True/False
 	 */
-	public boolean connect(Console console){
+	public boolean connect(){
 		try {
 			dbConnection = DriverManager.getConnection(dataBaseUrl);
 			
