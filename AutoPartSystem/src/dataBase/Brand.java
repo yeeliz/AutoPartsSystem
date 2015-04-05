@@ -29,8 +29,7 @@ public class Brand {
 			if(name!=""){
 				
 				System.out.println(name);
-=======
-			if(name!=""){ //maybe move to gui || logic side
+				
 >>>>>>> origin/master
 				pst.executeUpdate();	
 			}else{

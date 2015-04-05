@@ -48,5 +48,12 @@ public class Part{
 		}	catch(Exception ex){
 			console.errorMsg(ex.toString());
 		}
-	}	
+	}
+	private void deleteFromDb(){
+		try{
+			
+		}catch (Exception ex){
+			console.errorMsg(ex.toString());
+		}
+	}
 }
