@@ -20,10 +20,8 @@ public class Console {
 	}
 	
 	public void printConsole(String msg){
-		text += "[" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + 
-				calendar.get(Calendar.MINUTE)+"] << " + msg + "\n";
-		
-		console.setText(text);
+		console.append("[" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + 
+				calendar.get(Calendar.MINUTE)+"] << " + msg + "\n");
 		
 	}
 }

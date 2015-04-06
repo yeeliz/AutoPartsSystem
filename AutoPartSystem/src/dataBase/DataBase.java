@@ -40,7 +40,6 @@ public class DataBase {
 			//Successful connection
 			if(dbConnection != null){
 				console.printConsole(conSuccess);
-				console.printConsole("COol");
 				return true;
 			}
 		} catch (SQLException e) {

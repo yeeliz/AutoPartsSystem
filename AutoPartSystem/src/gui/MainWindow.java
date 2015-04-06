@@ -7,11 +7,15 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.event.*;
 
 import dataBase.Brand;
+import dataBase.Client;
 import dataBase.DataBase;
 import dataBase.Manufacturer;
 import dataBase.Part;
@@ -24,6 +28,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFormattedTextField;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
 
@@ -68,6 +73,8 @@ public class MainWindow extends JFrame{
 	
 	
 	private static final long serialVersionUID = 1L;
+	private JTabbedPane tabbedPane;
+	
 	private JTextField TfPartName;
 	private JTable tableResults;
 	private DefaultTableModel model;
@@ -93,8 +100,6 @@ public class MainWindow extends JFrame{
 		console =  new Console(this.consoleTextArea);
 		db=new DataBase(console); //pass console so db can show msg's
 		db.connect();
-		loadComboBrand();
-		loadComboManufactures();
 	}
 	
 	
@@ -105,12 +110,16 @@ public class MainWindow extends JFrame{
 		/*
 		 * Tabs for multiple views
 		 */
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		//panels
 		JComponent clientTab = new JPanel();
+		clientTab.setName("clientTab");
 		JComponent partsTab = new JPanel();
+		partsTab.setName("partsTab");
 		JComponent ordersTab = new JPanel();
+		ordersTab.setName("ordersTab");
 		JComponent providersTab=new JPanel();
+		providersTab.setName("providersTab");
 		
 		
 		//tabs
@@ -119,6 +128,20 @@ public class MainWindow extends JFrame{
 		tabbedPane.addTab("Orders", ordersTab);
 		tabbedPane.addTab("Providers",providersTab);
 		ordersTab.setLayout(null);
+				
+	     /*
+	        * Tab Listener
+	        * We load basic DB Content when every time a tab is switched
+	     */
+	    tabbedPane.addChangeListener(new ChangeListener()
+	    {
+	      public void stateChanged(ChangeEvent e)
+	      {
+	        loadTabsStuff();
+	      }
+	    });
+		
+		//--<<<<<<
 		
 		JTabbedPane nestedTabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 		nestedTabbedPane.setBounds(0, 0, 679, 269);
@@ -184,7 +207,6 @@ public class MainWindow extends JFrame{
 		searchProviderTab.add(lbResults);
 		
 		//Table show provider results
-		TableColumn temp = new TableColumn();
 		model = new DefaultTableModel(); 
 		tableResults = new JTable();
 		tableResults.setModel(model);
@@ -201,7 +223,7 @@ public class MainWindow extends JFrame{
 		nestedTabbedPane.addTab("New Order", null, newOrderTab, null);
 		clientTab.setLayout(null);
 		
-		JList listClients = new JList();
+		JList<String> listClients = new JList<String>();
 		listClients.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		listClients.setBounds(0, 0, 104, 231);
 		listClients.setModel(new AbstractListModel() {
@@ -348,8 +370,6 @@ public class MainWindow extends JFrame{
         });
 		
 		
-		
-		
 		JLabel lblAddBrand= new JLabel("ADD BRAND");
 		lblAddBrand.setBounds(283, 5, 100, 10);
 		partsTab.add(lblAddBrand);
@@ -398,33 +418,58 @@ public class MainWindow extends JFrame{
 		//add tabs to this frame
 		getContentPane().add(tabbedPane);
 		
+		
+		//consoleAreaGuiProperties
 		consoleTextArea = new JTextArea();
 		consoleTextArea.setEditable(false);
 		consoleTextArea.setRows(8);
 		Font f = new Font("Consolas",Font.PLAIN, 16);
 		consoleTextArea.setFont(f);
-		getContentPane().add(consoleTextArea, BorderLayout.SOUTH);
-		setLocationRelativeTo(null);
+		
+		//console area's scroll bar
+		JScrollPane consoleScroll = new JScrollPane(consoleTextArea);
+		consoleScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		getContentPane().add(consoleScroll, BorderLayout.SOUTH);
+	
+		
+		
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         providersTab.setLayout(null);
         JLabel lblActualProvider=new JLabel("Actual provider");
-        lblActualProvider.setBounds(400,1,100,10);
-
-        
-        
+        lblActualProvider.setBounds(400,1,100,10); 
 	}
-	private void btnAddPartActionPerformed(java.awt.event.ActionEvent evt) {                                         
-		Part part=new Part(txtPartName.getText(),(Brand) brands.getSelectedItem(), (Manufacturer)Manufactures.getSelectedItem(), db, console);
-    }  
-	private void btnAddBrandActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        Brand brand=new Brand(txtBrandName.getText(),db,console);
-        brands.addItem(brand);
-	}  
-	private void btnAddManufacturerActionPerformed(java.awt.event.ActionEvent evt) {                                         
-		Manufacturer manufact=new Manufacturer(txtManufacturerName.getText(),db,console);
-        Manufactures.addItem(manufact);
-	}  
+	
+	/*
+	 * Methods to get data from the DB for the different views
+	 */
+	
+	//which TAB?
+	private void loadTabsStuff(){
+		Component tab = tabbedPane.getSelectedComponent();
+		String tName = tab.getName();
+
+		switch (tName){
+			case "clientTab":
+				//loadClientStuff();
+			case "partsTab":
+				loadPartsStuff();
+			case "ordersTab":
+				//loadOrdersStuff();
+			case "providersTab":
+				//loadProvidersStuff();
+		}
+	}	
+	
+	private void loadPartsStuff() {
+		loadComboBrand();
+		loadComboManufactures();
+	}
+	
+	//--<<<<<<
+	
+	
+	
 	private void loadComboBrand(){
 		try{
 			//look for the brand in the database and set them in the combobox
@@ -454,6 +499,20 @@ public class MainWindow extends JFrame{
 			console.errorMsg(ex.getStackTrace().toString());
 		}
 	}
+	
+	
+	private void btnAddPartActionPerformed(java.awt.event.ActionEvent evt) {                                         
+		Part part=new Part(txtPartName.getText(),(Brand) brands.getSelectedItem(), (Manufacturer)Manufactures.getSelectedItem(), db, console);
+    }  
+	private void btnAddBrandActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        Brand brand=new Brand(txtBrandName.getText(),db,console);
+        brands.addItem(brand);
+	}  
+	private void btnAddManufacturerActionPerformed(java.awt.event.ActionEvent evt) {                                         
+		Manufacturer manufact=new Manufacturer(txtManufacturerName.getText(),db,console);
+        Manufactures.addItem(manufact);
+	} 
+	
 	
 	public static void main(String args[]){
 		//open main window
