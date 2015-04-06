@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.JButton;
@@ -8,56 +7,27 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.*;
-
 import dataBase.Brand;
-import dataBase.Client;
 import dataBase.DataBase;
 import dataBase.Manufacturer;
 import dataBase.Part;
-
 import javax.swing.JTabbedPane;
-
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-
-import javax.swing.JFormattedTextField;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.GridLayout;
-
 import logic.Console;
-
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
-
-import java.awt.FlowLayout;
-
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
-
-import java.awt.event.ActionListener;
-import java.awt.Color;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
-
 import javax.swing.JLabel;
-import javax.swing.border.CompoundBorder;
-import javax.swing.ListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.JMenuItem;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
