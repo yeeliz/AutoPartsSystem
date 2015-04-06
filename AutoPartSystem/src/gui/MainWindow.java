@@ -46,6 +46,7 @@ import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.border.CompoundBorder;
@@ -90,8 +91,10 @@ public class MainWindow extends JFrame{
 	private JButton btnAddManufacturer;
 	private JButton btnAddPart;
 	private JButton btnAddBrand;
-	private JComboBox<Manufacturer> Manufactures;
+	
+	private JComboBox<Manufacturer> manufactures;
 	private JComboBox<Brand> brands;
+	
 	private JPanel providersInfo;
 	
 	public MainWindow(){
@@ -356,9 +359,9 @@ public class MainWindow extends JFrame{
 		lblManufactures.setBounds(49, 95, 100, 10);
 		partsTab.add(lblManufactures);
 		
-		Manufactures=new JComboBox<Manufacturer>();
-		Manufactures.setBounds(138, 95, 100, 19);
-		partsTab.add(Manufactures);
+		manufactures=new JComboBox<Manufacturer>();
+		manufactures.setBounds(138, 95, 100, 19);
+		partsTab.add(manufactures);
 		
 		btnAddPart=new JButton("Add");
 		btnAddPart.setBounds(49, 123, 60, 19);
@@ -461,48 +464,33 @@ public class MainWindow extends JFrame{
 		}
 	}	
 	
+	//reload comboBox's from DB
 	private void loadPartsStuff() {
 		loadComboBrand();
 		loadComboManufactures();
+	}	
+	
+	
+	private void loadComboBrand(){
+		ArrayList<Brand> brandList = db.getAllBrands();
+		brands.removeAllItems();
+		
+		for(Brand brand : brandList)
+			brands.addItem(brand);
+	}
+	private void loadComboManufactures(){
+		ArrayList<Manufacturer> manuList = db.getAllManufactures();
+		manufactures.removeAllItems();
+		
+		for(Manufacturer manufacturer : manuList)
+			manufactures.addItem(manufacturer);
 	}
 	
 	//--<<<<<<
 	
 	
-	
-	private void loadComboBrand(){
-		try{
-			//look for the brand in the database and set them in the combobox
-			String query="Select * from [Marca]";
-			PreparedStatement pst=db.getDbConnection().prepareStatement(query);
-			ResultSet rs=pst.executeQuery();
-			while(rs.next()){
-				Brand brand=new Brand(rs.getString("Nombre"));
-				brands.addItem(brand);
-			}
-		}catch (Exception ex){
-			console.errorMsg(ex.getStackTrace().toString());
-		}
-		
-	}
-	private void loadComboManufactures(){
-		try{
-			//look for the brand in the database and set them in the combobox
-			String query="Select * from [Fabricante]";
-			PreparedStatement pst=db.getDbConnection().prepareStatement(query);
-			ResultSet rs=pst.executeQuery();
-			while(rs.next()){
-				Manufacturer manufact=new Manufacturer(rs.getString("Nombre"));
-				Manufactures.addItem(manufact);
-			}
-		}catch (Exception ex){
-			console.errorMsg(ex.getStackTrace().toString());
-		}
-	}
-	
-	
 	private void btnAddPartActionPerformed(java.awt.event.ActionEvent evt) {                                         
-		Part part=new Part(txtPartName.getText(),(Brand) brands.getSelectedItem(), (Manufacturer)Manufactures.getSelectedItem(), db, console);
+		Part part=new Part(txtPartName.getText(),(Brand) brands.getSelectedItem(), (Manufacturer)manufactures.getSelectedItem(), db, console);
     }  
 	private void btnAddBrandActionPerformed(java.awt.event.ActionEvent evt) {                                         
         Brand brand=new Brand(txtBrandName.getText(),db,console);
@@ -510,7 +498,7 @@ public class MainWindow extends JFrame{
 	}  
 	private void btnAddManufacturerActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Manufacturer manufact=new Manufacturer(txtManufacturerName.getText(),db,console);
-        Manufactures.addItem(manufact);
+        manufactures.addItem(manufact);
 	} 
 	
 	

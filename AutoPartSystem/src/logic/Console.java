@@ -15,13 +15,18 @@ public class Console {
 	}
 	
 	public void errorMsg(String msg){
-		printConsole("An ERROR has occured!");
+		printConsole("V--ERROR!--V");
 		printConsole(msg);
+	}
+	
+	public void errorMsg(){
+		printConsole("ERROR. Could not do last request!");
 	}
 	
 	public void printConsole(String msg){
 		console.append("[" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + 
 				calendar.get(Calendar.MINUTE)+"] << " + msg + "\n");
-		
 	}
+	
+
 }

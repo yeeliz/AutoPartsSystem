@@ -2,9 +2,10 @@ package dataBase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import javax.swing.JTextArea;
+import java.util.ArrayList;
 
 import logic.Console;
 
@@ -51,5 +52,49 @@ public class DataBase {
 	}
 	public Connection getDbConnection(){
 		return dbConnection;
+	}
+	
+	public ArrayList<Brand> getAllBrands(){
+		ArrayList<Brand> values = new ArrayList<Brand>();
+		try{
+			//look for the brand in the database
+			String query="Select * from [Marca]";
+			PreparedStatement pst=getDbConnection().prepareStatement(query);
+			
+			console.printConsole("Getting all brand Names");
+			
+			ResultSet rs=pst.executeQuery();
+			
+			while(rs.next()){
+				Brand brand=new Brand(rs.getString("Nombre"));
+				values.add(brand);
+			}
+		}catch (Exception ex){
+			console.errorMsg();
+		}
+		
+		return values;
+	}
+
+	public ArrayList<Manufacturer> getAllManufactures() {
+		ArrayList<Manufacturer> values = new ArrayList<Manufacturer>();
+		try{
+			//look for the brand in the database
+			String query="Select * from [Fabricante]";
+			PreparedStatement pst=getDbConnection().prepareStatement(query);
+			
+			console.printConsole("Getting all Manufacturer Names");
+			
+			ResultSet rs=pst.executeQuery();
+			
+			while(rs.next()){
+				Manufacturer m=new Manufacturer(rs.getString("Nombre"));
+				values.add(m);
+			}
+		}catch (Exception ex){
+			console.errorMsg();
+		}
+		
+		return values;
 	}
 }
