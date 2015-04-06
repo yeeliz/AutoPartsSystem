@@ -64,7 +64,7 @@ public class MainWindow extends JFrame{
 	private Console console;
 	
 	//db stuff
-	private DataBase db = new DataBase(console); //pass console so db can show msg's
+	private DataBase db ;
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -79,18 +79,22 @@ public class MainWindow extends JFrame{
 	private JTextField txtPartName;
 	private JTextField txtBrandName;
 	private JTextField txtManufacturerName;
+	private JTextField txtProviderName;
 	private JButton btnAddManufacturer;
 	private JButton btnAddPart;
 	private JButton btnAddBrand;
 	private JComboBox<Manufacturer> Manufactures;
 	private JComboBox<Brand> brands;
+	private JPanel providersInfo;
+	
 	public MainWindow(){
 		createGui();
 		
 		console =  new Console(this.consoleTextArea);
+		db=new DataBase(console); //pass console so db can show msg's
+		db.connect();
 		loadComboBrand();
 		loadComboManufactures();
-		db.connect();
 	}
 	
 	
@@ -106,50 +110,78 @@ public class MainWindow extends JFrame{
 		JComponent clientTab = new JPanel();
 		JComponent partsTab = new JPanel();
 		JComponent ordersTab = new JPanel();
+		JComponent providersTab=new JPanel();
 		
-		partsTab.addMouseListener(new MouseAdapter() {// empty implementation of all
-            // MouseListener`s methods
-		public void mousePressed(MouseEvent e) {
-			System.out.println(e.getX() + "," + e.getY());
-		}
-		});
+		
 		//tabs
 		tabbedPane.addTab("Client", clientTab);
 		tabbedPane.addTab("Parts", partsTab);
 		tabbedPane.addTab("Orders", ordersTab);
+		tabbedPane.addTab("Providers",providersTab);
 		ordersTab.setLayout(null);
 		
 		JTabbedPane nestedTabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 		nestedTabbedPane.setBounds(0, 0, 679, 269);
 		ordersTab.add(nestedTabbedPane);
 		
-		JPanel providerTab = new JPanel();
-		nestedTabbedPane.addTab("Providers", null, providerTab, null);
-		providerTab.setLayout(null);
+		JTabbedPane proviOppsTabbedPane=new JTabbedPane(JTabbedPane.LEFT);
+		proviOppsTabbedPane.setBounds(0, 0, 679, 269);
+		providersTab.add(proviOppsTabbedPane);
+		
+		JPanel newProviderTab = new JPanel();
+		proviOppsTabbedPane.addTab("New", null, newProviderTab , null);
+		newProviderTab.setLayout(null);
+		
+		newProviderTab.addMouseListener(new MouseAdapter() {// empty implementation of all
+            // MouseListener`s methods
+		public void mousePressed(MouseEvent e) {
+			System.out.println(e.getX() + "," + e.getY());
+		}
+		});
+		
+		JLabel lblNewProvider=new JLabel("New Provider");
+		lblNewProvider.setBounds(100,1,100,15);
+		lblNewProvider.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		newProviderTab.add(lblNewProvider);
+		
+		JLabel lblProviderName=new JLabel("Name:");
+		lblProviderName.setBounds(49,23,100,10);
+		newProviderTab.add(lblProviderName);
+		
+		txtProviderName=new JTextField();
+		txtProviderName.setBounds(99, 23, 100, 19);
+		txtProviderName.setColumns(10);
+		newProviderTab.add(txtProviderName);
+		
+		
+		
+		JPanel searchProviderTab = new JPanel();
+		proviOppsTabbedPane.addTab("Seach", null, searchProviderTab, null);
+		searchProviderTab.setLayout(null);
 		
 		JLabel lbSearch = new JLabel("Search Provider");
 		lbSearch.setFont(new Font("Consolas", Font.PLAIN, 16));
 		lbSearch.setBounds(199, 11, 141, 27);
-		providerTab.add(lbSearch);
+		searchProviderTab.add(lbSearch);
 		
 		JLabel lblPartName = new JLabel("Part Name:");
 		lblPartName.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblPartName.setBounds(109, 54, 80, 14);
-		providerTab.add(lblPartName);
+		searchProviderTab.add(lblPartName);
 		
 		TfPartName = new JTextField();
 		TfPartName.setBounds(199, 53, 155, 20);
-		providerTab.add(TfPartName);
+		searchProviderTab.add(TfPartName);
 		TfPartName.setColumns(10);
 		
 		JButton btnSearch = new JButton("Search");
 		btnSearch.setBounds(377, 52, 89, 23);
-		providerTab.add(btnSearch);
+		searchProviderTab.add(btnSearch);
 		
 		JLabel lbResults = new JLabel("Results\r\n");
 		lbResults.setFont(new Font("Consolas", Font.PLAIN, 14));
 		lbResults.setBounds(238, 77, 99, 53);
-		providerTab.add(lbResults);
+		searchProviderTab.add(lbResults);
 		
 		//Table show provider results
 		TableColumn temp = new TableColumn();
@@ -163,7 +195,7 @@ public class MainWindow extends JFrame{
 		
 		tableResults.setBounds(109, 127, 348, 100);
 		
-		providerTab.add(tableResults);
+		searchProviderTab.add(tableResults);
 		
 		JTabbedPane newOrderTab = new JTabbedPane(JTabbedPane.TOP);
 		nestedTabbedPane.addTab("New Order", null, newOrderTab, null);
@@ -374,6 +406,13 @@ public class MainWindow extends JFrame{
 		getContentPane().add(consoleTextArea, BorderLayout.SOUTH);
 		setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
+        providersTab.setLayout(null);
+        JLabel lblActualProvider=new JLabel("Actual provider");
+        lblActualProvider.setBounds(400,1,100,10);
+
+        
+        
 	}
 	private void btnAddPartActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Part part=new Part(txtPartName.getText(),(Brand) brands.getSelectedItem(), (Manufacturer)Manufactures.getSelectedItem(), db, console);
