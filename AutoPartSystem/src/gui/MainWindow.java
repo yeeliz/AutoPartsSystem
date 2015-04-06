@@ -237,16 +237,16 @@ public class MainWindow extends JFrame{
 		clientTab.add(lblId);
 		
 		textField = new JTextField();
-		textField.setBounds(163, 43, 152, 20);
+		textField.setBounds(173, 43, 152, 20);
 		clientTab.add(textField);
 		textField.setColumns(10);
 		
-		JLabel lblFullName = new JLabel("Full Name");
-		lblFullName.setBounds(114, 83, 46, 14);
+		JLabel lblFullName = new JLabel("Full \r\nName");
+		lblFullName.setBounds(114, 83, 60, 14);
 		clientTab.add(lblFullName);
 		
 		txtClientFullName = new JTextField();
-		txtClientFullName.setBounds(163, 80, 152, 20);
+		txtClientFullName.setBounds(173, 80, 152, 20);
 		clientTab.add(txtClientFullName);
 		txtClientFullName.setColumns(10);
 		
@@ -255,12 +255,12 @@ public class MainWindow extends JFrame{
 		clientTab.add(lblCity);
 		
 		txtClientCity = new JTextField();
-		txtClientCity.setBounds(163, 111, 152, 20);
+		txtClientCity.setBounds(173, 111, 152, 20);
 		clientTab.add(txtClientCity);
 		txtClientCity.setColumns(10);
 		
 		JLabel lblAddress = new JLabel("Address:");
-		lblAddress.setBounds(114, 139, 46, 14);
+		lblAddress.setBounds(114, 139, 75, 14);
 		clientTab.add(lblAddress);
 		
 		JTextArea txtClientAddress = new JTextArea();
@@ -289,20 +289,20 @@ public class MainWindow extends JFrame{
 		clientTab.add(lblNewLabel);
 		
 		JLabel lblManagerName = new JLabel("Manager Name:");
-		lblManagerName.setBounds(366, 105, 79, 14);
+		lblManagerName.setBounds(356, 114, 89, 14);
 		clientTab.add(lblManagerName);
 		
 		textField_1 = new JTextField();
-		textField_1.setBounds(455, 102, 152, 20);
+		textField_1.setBounds(455, 111, 152, 20);
 		clientTab.add(textField_1);
 		textField_1.setColumns(10);
 		
 		JLabel lblManagerId = new JLabel("Manager ID:");
-		lblManagerId.setBounds(376, 139, 69, 14);
+		lblManagerId.setBounds(366, 139, 69, 14);
 		clientTab.add(lblManagerId);
 		
 		txtManagerID = new JTextField();
-		txtManagerID.setBounds(454, 136, 153, 20);
+		txtManagerID.setBounds(455, 136, 153, 20);
 		clientTab.add(txtManagerID);
 		txtManagerID.setColumns(10);
 		
