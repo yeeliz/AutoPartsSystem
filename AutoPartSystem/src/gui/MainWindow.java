@@ -18,6 +18,7 @@ import dataBase.DataBase;
 import dataBase.Manufacturer;
 import dataBase.Part;
 import dataBase.Person;
+import dataBase.Provider;
 
 import javax.swing.JTabbedPane;
 
@@ -39,6 +40,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.text.MaskFormatter;
+import javax.swing.JFormattedTextField;
+
 
 public class MainWindow extends JFrame{
 	
@@ -75,14 +79,16 @@ public class MainWindow extends JFrame{
 	private JTextField txtBrandName;
 	private JTextField txtManufacturerName;
 	private JTextField txtProviderName;
-	private JButton btnAddManufacturer;
-	private JButton btnAddPart;
-	private JButton btnAddBrand;
+	private JTextField txtContactProviderName;
+	private JTextField txtDirectionProvider;
+	private JTextField txtCityProvider;
+	private JFormattedTextField txtProviderPhone;
+	private JFormattedTextField txtProviderPhone2;
+	private JComboBox<Provider> providers;
+	
 	
 	private JComboBox<Manufacturer> manufactures;
 	private JComboBox<Brand> brands;
-	
-	private JPanel providersInfo;
 	
 	public MainWindow(){
 		createGui();
@@ -162,12 +168,102 @@ public class MainWindow extends JFrame{
 		newProviderTab.add(lblProviderName);
 		
 		txtProviderName=new JTextField();
-		txtProviderName.setBounds(99, 23, 100, 19);
+		txtProviderName.setBounds(142, 23, 100, 19);
 		txtProviderName.setColumns(10);
 		newProviderTab.add(txtProviderName);
 		
+		JLabel lblContactProviderName=new JLabel("Contact Name:");
+		lblContactProviderName.setBounds(49, 43, 100, 10);
+		newProviderTab.add(lblContactProviderName);
+		
+		txtContactProviderName= new JTextField();
+		txtContactProviderName.setBounds(142,43,100,19);
+		txtContactProviderName.setColumns(10);
+		newProviderTab.add(txtContactProviderName);
+		
+		JLabel lblDireccionProvider=new JLabel("Direccion:");
+		lblDireccionProvider.setBounds(49,63,100,10);
+		newProviderTab.add(lblDireccionProvider);
+		
+		txtDirectionProvider=new JTextField();
+		txtDirectionProvider.setBounds(142,63,100,19);
+		txtDirectionProvider.setColumns(10);
+		newProviderTab.add(txtDirectionProvider);
+		
+		JLabel lblCiudadProvider= new JLabel("Ciudad:");
+		lblCiudadProvider.setBounds(49,83,100,10);
+		newProviderTab.add(lblCiudadProvider);
+		
+		txtCityProvider= new JTextField();
+		txtCityProvider.setBounds(142,83,100,19);
+		txtCityProvider.setColumns(10);
+		newProviderTab.add(txtCityProvider);
+		
+		JLabel lblNumber= new JLabel("Number:");
+		lblNumber.setBounds(49,103,100,10);
+		newProviderTab.add(lblNumber);
+		MaskFormatter mf = null;
+		
+		try{
+			mf= new MaskFormatter("(###) ####-####");
+			mf.setPlaceholderCharacter('_');
+			txtProviderPhone= new JFormattedTextField(mf);
+			txtProviderPhone.setBounds(142,103,100,19);
+			newProviderTab.add(txtProviderPhone);
+		}catch(Exception ex){
+			System.out.println(ex.getStackTrace().toString());
+		}
+		
+		JButton btnAddProvider= new JButton("Add provider");
+		btnAddProvider.setBounds(49,133,120,19);
+		newProviderTab.add(btnAddProvider);
+		btnAddProvider.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	btnAddProviderActionPerformed(evt);
+            }
+        });
 		
 		
+		JLabel lblNewPhoneToProvider=new JLabel("New Phone to provider");
+		lblNewPhoneToProvider.setBounds(100,174,150,15);
+		lblNewPhoneToProvider.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		newProviderTab.add(lblNewPhoneToProvider);
+		
+		JLabel lblProvider=new JLabel("Provider:");
+		lblProvider.setBounds(49, 194, 100, 10);
+		newProviderTab.add(lblProvider);
+		
+		providers= new JComboBox<Provider>();
+		providers.setBounds(142, 194, 100, 19);
+		newProviderTab.add(providers);
+		
+		JLabel lblNumber2= new JLabel("Number:");
+		lblNumber2.setBounds(49,214,100,10);
+		newProviderTab.add(lblNumber2);
+		
+		txtProviderPhone2= new JFormattedTextField(mf);
+		txtProviderPhone2.setBounds(142,214,100,19);
+		newProviderTab.add(txtProviderPhone2);
+		
+		
+		JButton btnAddPhoneToProvider= new JButton("Add");
+		btnAddPhoneToProvider.setBounds(49,234,60,19);
+		newProviderTab.add(btnAddPhoneToProvider);
+		btnAddPhoneToProvider.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	btnAddPhoneToProviderActionPerformed(evt);
+            }
+        });
+		
+		
+		
+		
+		
+		
+		
+		
+		
+				
 		JPanel searchProviderTab = new JPanel();
 		proviOppsTabbedPane.addTab("Seach", null, searchProviderTab, null);
 		searchProviderTab.setLayout(null);
@@ -365,7 +461,7 @@ public class MainWindow extends JFrame{
 		manufactures.setBounds(138, 95, 100, 19);
 		partsTab.add(manufactures);
 		
-		btnAddPart=new JButton("Add");
+		JButton btnAddPart=new JButton("Add");
 		btnAddPart.setBounds(49, 123, 60, 19);
 		partsTab.add(btnAddPart);
 		btnAddPart.addActionListener(new java.awt.event.ActionListener() {
@@ -388,7 +484,7 @@ public class MainWindow extends JFrame{
 		partsTab.add(txtBrandName);
 		txtBrandName.setColumns(10);
 		
-		btnAddBrand=new JButton("Add");
+		JButton btnAddBrand=new JButton("Add");
 		btnAddBrand.setBounds(283, 59, 60, 19);
 		partsTab.add(btnAddBrand);
 		btnAddBrand.addActionListener(new java.awt.event.ActionListener() {
@@ -411,7 +507,7 @@ public class MainWindow extends JFrame{
 		partsTab.add(txtManufacturerName);
 		txtManufacturerName.setColumns(10);
 		
-		btnAddManufacturer=new JButton("Add");
+		JButton btnAddManufacturer=new JButton("Add");
 		btnAddManufacturer.setBounds(486, 59, 60, 19);
 		partsTab.add(btnAddManufacturer);
 		btnAddManufacturer.addActionListener(new java.awt.event.ActionListener() {
@@ -462,7 +558,7 @@ public class MainWindow extends JFrame{
 			case "ordersTab":
 				//loadOrdersStuff();
 			case "providersTab":
-				//loadProvidersStuff();
+				loadProvidersStuff();
 		}
 	}	
 	
@@ -470,7 +566,10 @@ public class MainWindow extends JFrame{
 	private void loadPartsStuff() {
 		loadComboBrand();
 		loadComboManufactures();
-	}	
+	}
+	private void loadProvidersStuff(){
+		//loadComboProviders();		
+	}
 	
 	
 	private void loadComboBrand(){
@@ -516,6 +615,7 @@ public class MainWindow extends JFrame{
 			console.printConsole("Non personal not implemented");
 		}
 	}
+
 	
 	private void btnAddPartActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Part part=new Part(txtPartName.getText(),(Brand) brands.getSelectedItem(), (Manufacturer)manufactures.getSelectedItem(), db, console);
@@ -524,6 +624,13 @@ public class MainWindow extends JFrame{
         Brand brand=new Brand(txtBrandName.getText(),db,console);
         brands.addItem(brand);
 	}  
+	private void btnAddProviderActionPerformed(java.awt.event.ActionEvent evt) {      
+		Provider provider=new Provider(txtProviderName.getText(),txtContactProviderName.getText(),
+				txtDirectionProvider.getText(),txtCityProvider.getText(),txtProviderPhone.getText(),db,console);
+	}
+	private void btnAddPhoneToProviderActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+	} 
 	private void btnAddManufacturerActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Manufacturer manufact=new Manufacturer(txtManufacturerName.getText(),db,console);
         manufactures.addItem(manufact);
