@@ -14,6 +14,7 @@ import javax.swing.event.*;
 
 import dataBase.Brand;
 import dataBase.Client;
+import dataBase.Company;
 import dataBase.DataBase;
 import dataBase.Manufacturer;
 import dataBase.Part;
@@ -593,15 +594,23 @@ public class MainWindow extends JFrame{
 	 * Client gui event/action section
 	 */
 	private void updateClientBtn(java.awt.event.ActionEvent evt){
-		if(this.clientTypeComboBox.getSelectedItem().toString().compareTo("Personal") == 0){
+
+		int id = -1;
+		int managerId = -1;
+		try{
+			id = Integer.parseInt(txtFieldID.getText().toString());
+		}catch(Exception e){
+			console.printConsole("Could not parse Identification to int");
+		}
 		
-			int id = -1;
-			try{
-				id = Integer.parseInt(txtFieldID.getText().toString());
-			}catch(Exception e){
-				console.printConsole("Could not parse ID to int");
-			}
-			
+		try{
+			managerId = Integer.parseInt(txtManagerID.getText().toString());
+		}catch(Exception e){
+			console.printConsole("Could not parse ManagerID to int");
+		}
+		
+		//personal Client
+		if(this.clientTypeComboBox.getSelectedItem().toString().compareTo("Personal") == 0){
 			//get info
 			Person per = new Person(db, this.txtClientFullName.getText(),
 					this.txtClientAddress.getText(), 
@@ -611,8 +620,16 @@ public class MainWindow extends JFrame{
 			//save it to the server
 			console.printConsole("Saving Personal Client to DB");
 			per.addClient();
-		}else{
-			console.printConsole("Non personal not implemented");
+		}else{ //business Client
+			//get info
+			Company per = new Company(db, this.txtClientFullName.getText(),
+					this.txtClientAddress.getText(), 
+					this.clientStateComboBox.getSelectedItem().toString(),
+				this.txtClientCity.getText(), id, managerId);
+			
+			//save it to the server
+			console.printConsole("Saving a COMPANY type Client to DB");
+			per.addClient();
 		}
 	}
 
