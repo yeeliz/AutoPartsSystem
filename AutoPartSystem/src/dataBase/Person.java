@@ -11,13 +11,18 @@ public class Person extends Client{
 
 	public Person(DataBase db, String fullName, String address, 
 			String state,int id,String city){
-		super(db);
+		this.db = db;
 		this.fullName = fullName;
 		this.state = state;
 		this.isPerson = true;
 		this.address = address;
 		this.city = city;
 		this.id = id;
+	}
+	
+	//used as a partial fill for listing
+	public Person(String name){
+		this.fullName = name;
 	}
 	
 	@Override

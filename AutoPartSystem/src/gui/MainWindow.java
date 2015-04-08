@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.*;
 
@@ -70,6 +71,8 @@ public class MainWindow extends JFrame{
 	private JComboBox clientStateComboBox;
 	private JTextField txtClientCity;
 	private JTextField txtManagerID;
+	private JList<String> jListClients;
+	ArrayList<Object> modelClientList = new ArrayList<Object>();
 	//--<<
 	
 	private JTextField TfPartName;
@@ -97,9 +100,12 @@ public class MainWindow extends JFrame{
 		console =  new Console(this.consoleTextArea);
 		db=new DataBase(console); //pass console so db can show msg's
 		db.connect();
+		
+		this.loadClientStuff();
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	private void createGui(){
 		setTitle("Autopart System");
 	    setSize(700,500);
@@ -256,11 +262,7 @@ public class MainWindow extends JFrame{
             }
         });
 		
-		
-		
-		
-		
-		
+
 		
 		
 		
@@ -316,19 +318,20 @@ public class MainWindow extends JFrame{
 		/*
 		 * Begin Client GUI stuff
 		 */
-		JList<String> listClients = new JList<String>();
-		listClients.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		listClients.setBounds(0, 0, 104, 231);
-		listClients.setModel(new AbstractListModel() {
-			String[] values = new String[] {"New Client"};
+		
+		ListModel clientListModel = new AbstractListModel() {
 			public int getSize() {
-				return values.length;
+				return modelClientList.size();
 			}
 			public Object getElementAt(int index) {
-				return values[index];
+				return modelClientList.get(index);
 			}
-		});
-		clientTab.add(listClients);
+		};
+		modelClientList.add((String) "New Client");
+		jListClients = new JList(clientListModel);
+		jListClients.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		jListClients.setBounds(0, 0, 104, 231);
+		clientTab.add(jListClients);
 		
 		//type of client
 		JLabel lblType = new JLabel("Type:");
@@ -430,8 +433,7 @@ public class MainWindow extends JFrame{
 		partsTab.setLayout(null);
 		//---<<<< END OF CLIENT TAB
 		
-		
-		
+	
 		
 		JLabel lblAddPart= new JLabel("ADD PART");
 		lblAddPart.setBounds(49, 5, 100, 10);
@@ -553,7 +555,7 @@ public class MainWindow extends JFrame{
 
 		switch (tName){
 			case "clientTab":
-				//loadClientStuff();
+				loadClientStuff();
 			case "partsTab":
 				loadPartsStuff();
 			case "ordersTab":
@@ -562,6 +564,17 @@ public class MainWindow extends JFrame{
 				loadProvidersStuff();
 		}
 	}	
+	
+	private void loadClientStuff(){
+		//fill JClientList
+		ArrayList<Client> clientList = db.getAllClients();
+		
+		for(Client client : clientList){
+			if(!modelClientList.contains(client))
+				modelClientList.add(client);
+			System.out.println(client.toString());
+		}
+	}
 	
 	//reload comboBox's from DB
 	private void loadPartsStuff() {
@@ -631,6 +644,9 @@ public class MainWindow extends JFrame{
 			console.printConsole("Saving a COMPANY type Client to DB");
 			per.addClient();
 		}
+		
+		//add it to client list
+		this.loadClientStuff();
 	}
 
 	

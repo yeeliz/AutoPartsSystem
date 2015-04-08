@@ -97,4 +97,34 @@ public class DataBase {
 		
 		return values;
 	}
+	
+	public ArrayList<Client> getAllClients(){
+		ArrayList<Client> values = new ArrayList<Client>();
+		Person per;
+		Company comp;
+		try{
+			//look for the brand in the database
+			String query="Select * from [Cliente]";
+			PreparedStatement pst=getDbConnection().prepareStatement(query);
+			
+			console.printConsole("Getting all Client Names");
+			
+			ResultSet rs=pst.executeQuery();
+			
+			while(rs.next()){
+				if(rs.getBoolean("EsPersona")){
+					per =new Person(rs.getString("Nombre"));
+					values.add(per);
+				}else{
+					comp = new Company(rs.getString("Nombre"));
+					values.add(comp);
+				}
+			}
+		}catch (Exception ex){
+			console.errorMsg();
+			System.out.println(ex.toString());
+		}
+		
+		return values;
+	}
 }

@@ -13,7 +13,7 @@ public class Company extends Client{
 	public Company(DataBase db, String fullName, 
 			String address, String state, String city, 
 			int businessId, int managerId) {
-		super(db);
+		this.db = db;
 		this.isPerson = false;
 		this.fullName = fullName;
 		this.state = state;
@@ -21,6 +21,11 @@ public class Company extends Client{
 		this.city = city;
 		this.businessId = businessId;
 		this.managerId = managerId;
+	}
+	
+	//used as a partial fill for listing
+	public Company(String name){
+		this.fullName = name;
 	}
 
 	/*

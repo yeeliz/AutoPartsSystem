@@ -13,10 +13,7 @@ public abstract class Client {
 	protected boolean isPerson;
 	 
 	protected DataBase db;
-	 
-	public Client(DataBase db){
-		this.db = db;
-	}
+
 	 
 	/*
 	 * Add this client to the DataBase
@@ -42,4 +39,8 @@ public abstract class Client {
 	
 	//Add data specific to subClass
 	protected abstract void addSubData();
+	
+	public String toString(){
+		return this.fullName;
+	}
 }
