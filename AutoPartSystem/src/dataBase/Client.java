@@ -19,21 +19,21 @@ public abstract class Client {
 	}
 	 
 	/*
-	 * Add this client to the Data base
+	 * Add this client to the DataBase
 	 */
 	public void addClient(){
 		try{
 			Connection dbConnection = db.getDbConnection();
-			String query = "INSERT INTO [Cliente] (Nombre, Estado, EsPersona) VALUES (?)";
+			String query = "INSERT INTO [Cliente] (Nombre, Estado, EsPersona) VALUES (?,?,?)";
 			PreparedStatement pst = dbConnection.prepareStatement(query);
 			
 			pst.setString(1, this.fullName);
 			pst.setString(2, this.state);
-			pst.setBoolean(3, this.isPerson);
+			pst.setBoolean(3,this.isPerson );
 			pst.executeUpdate();	
-			
-			db.console.printConsole("Inserted general cliente info into Client table.");
 			pst.close();
+			db.console.printConsole("Inserted general cliente info into Client table.");
+			
 			this.addSubData(); //add the data in subClass
 		}catch(Exception ex){ //need to add custom msg's
 			db.console.errorMsg(ex.toString());

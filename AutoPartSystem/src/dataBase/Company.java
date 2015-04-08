@@ -1,13 +1,12 @@
 package dataBase;
 
-import java.sql.PreparedStatement;
 
 public class Company extends Client{
 
 
-	public Company(DataBase db) {
+	public Company(DataBase db, String fullName, String address, String state) {
 		super(db);
-		// TODO Auto-generated constructor stub
+		this.isPerson = false;
 	}
 
 	/*

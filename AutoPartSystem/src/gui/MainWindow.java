@@ -11,20 +11,29 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.*;
+
 import dataBase.Brand;
+import dataBase.Client;
 import dataBase.DataBase;
 import dataBase.Manufacturer;
 import dataBase.Part;
+import dataBase.Person;
+
 import javax.swing.JTabbedPane;
+
 import java.awt.event.MouseEvent;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
+
 import logic.Console;
+
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
 import javax.swing.border.EtchedBorder;
+
 import java.util.ArrayList;
+
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -46,14 +55,22 @@ public class MainWindow extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JTabbedPane tabbedPane;
 	
+	//Client Tab Vars
+	JComboBox clientTypeComboBox;
+	private JButton btnUpdate;
+	private JButton btnSelect;
+	private JTextField txtFieldID;
+	private JTextField txtClientFullName;
+	private JTextArea txtClientAddress;
+	private JComboBox clientStateComboBox;
+	private JTextField txtClientCity;
+	private JTextField txtManagerID;
+	//--<<
+	
 	private JTextField TfPartName;
 	private JTable tableResults;
 	private DefaultTableModel model;
-	private JTextField textField;
-	private JTextField txtClientFullName;
-	private JTextField txtClientCity;
 	private JTextField textField_1;
-	private JTextField txtManagerID;
 	private JTextField txtPartName;
 	private JTextField txtBrandName;
 	private JTextField txtManufacturerName;
@@ -196,6 +213,12 @@ public class MainWindow extends JFrame{
 		nestedTabbedPane.addTab("New Order", null, newOrderTab, null);
 		clientTab.setLayout(null);
 		
+		
+		
+		
+		/*
+		 * Begin Client GUI stuff
+		 */
 		JList<String> listClients = new JList<String>();
 		listClients.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		listClients.setBounds(0, 0, 104, 231);
@@ -210,31 +233,28 @@ public class MainWindow extends JFrame{
 		});
 		clientTab.add(listClients);
 		
-		JButton btnSelect = new JButton("Select");
-		btnSelect.setBounds(10, 235, 89, 23);
-		clientTab.add(btnSelect);
-		
-		JButton btnUpdate = new JButton("Update");
-		btnUpdate.setBounds(580, 235, 89, 23);
-		clientTab.add(btnUpdate);
-		
+		//type of client
 		JLabel lblType = new JLabel("Type:");
 		lblType.setBounds(114, 3, 46, 14);
 		clientTab.add(lblType);
 		
-		JComboBox clientTypeComboBox = new JComboBox();
+		clientTypeComboBox = new JComboBox();
 		clientTypeComboBox.setModel(new DefaultComboBoxModel(new String[] {"Personal", "Business"}));
 		clientTypeComboBox.setBounds(163, 0, 76, 20);
 		clientTab.add(clientTypeComboBox);
+		
+		btnSelect = new JButton("Select");
+		btnSelect.setBounds(10, 235, 89, 23);
+		clientTab.add(btnSelect);
 		
 		JLabel lblId = new JLabel("ID:");
 		lblId.setBounds(114, 46, 46, 14);
 		clientTab.add(lblId);
 		
-		textField = new JTextField();
-		textField.setBounds(173, 43, 152, 20);
-		clientTab.add(textField);
-		textField.setColumns(10);
+		txtFieldID = new JTextField();
+		txtFieldID.setBounds(173, 43, 152, 20);
+		clientTab.add(txtFieldID);
+		txtFieldID.setColumns(10);
 		
 		JLabel lblFullName = new JLabel("Full \r\nName");
 		lblFullName.setBounds(114, 83, 60, 14);
@@ -258,7 +278,7 @@ public class MainWindow extends JFrame{
 		lblAddress.setBounds(114, 139, 75, 14);
 		clientTab.add(lblAddress);
 		
-		JTextArea txtClientAddress = new JTextArea();
+		txtClientAddress = new JTextArea();
 		txtClientAddress.setBounds(114, 164, 201, 48);
 		clientTab.add(txtClientAddress);
 		
@@ -270,7 +290,7 @@ public class MainWindow extends JFrame{
 		lblState.setBounds(114, 239, 46, 14);
 		clientTab.add(lblState);
 		
-		JComboBox clientStateComboBox = new JComboBox();
+		clientStateComboBox = new JComboBox();
 		clientStateComboBox.setModel(new DefaultComboBoxModel(new String[] {"ACTIVE", "INACTIVE", "SUSPENDED"}));
 		clientStateComboBox.setBounds(164, 236, 75, 20);
 		clientTab.add(clientStateComboBox);
@@ -301,7 +321,19 @@ public class MainWindow extends JFrame{
 		clientTab.add(txtManagerID);
 		txtManagerID.setColumns(10);
 		
+		btnUpdate = new JButton("Update");
+		btnUpdate.setBounds(580, 235, 89, 23);
+		clientTab.add(btnUpdate);
+		btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	updateClientBtn(evt);
+            }
+        });
+		
 		partsTab.setLayout(null);
+		//---<<<< END OF CLIENT TAB
+		
+		
 		
 		
 		JLabel lblAddPart= new JLabel("ADD PART");
@@ -458,6 +490,32 @@ public class MainWindow extends JFrame{
 	
 	//--<<<<<<
 	
+	/*
+	 * Client gui event/action section
+	 */
+	private void updateClientBtn(java.awt.event.ActionEvent evt){
+		if(this.clientTypeComboBox.getSelectedItem().toString().compareTo("Personal") == 0){
+		
+			int id = -1;
+			try{
+				id = Integer.parseInt(txtFieldID.getText().toString());
+			}catch(Exception e){
+				console.printConsole("Could not parse ID to int");
+			}
+			
+			//get info
+			Person per = new Person(db, this.txtClientFullName.getText(),
+					this.txtClientAddress.getText(), 
+					this.clientStateComboBox.getSelectedItem().toString(),
+					id,this.txtClientCity.getText());
+			
+			//save it to the server
+			console.printConsole("Saving Personal Client to DB");
+			per.addClient();
+		}else{
+			console.printConsole("Non personal not implemented");
+		}
+	}
 	
 	private void btnAddPartActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Part part=new Part(txtPartName.getText(),(Brand) brands.getSelectedItem(), (Manufacturer)manufactures.getSelectedItem(), db, console);
