@@ -7,26 +7,33 @@ public class Part{
 	// Notes: fix the price problem
 	// check a solution for parameters
 	// check a 
-	private String name, price;
+	private String name;
 	private DataBase db;
 	private logic.Console console; 
+	private Manufacturer madeBy;
 	public Part(String pName,Brand pBrand, Manufacturer pMadeBy, DataBase pDb
 			,logic.Console pConsole){
 		name=pName;
-		price="0";
 		db=pDb;
 		console=pConsole;
-		insertInDB(pBrand, pMadeBy);
+		madeBy=pMadeBy;
+		insertInDB(pBrand);
 	}
-	private void insertInDB(Brand pBrand, Manufacturer pMadeBy){
+	public Part(String pName, DataBase pDb
+			,logic.Console pConsole){
+		name=pName;
+		db=pDb;
+		console=pConsole;
+	}
+
+	private void insertInDB(Brand pBrand){
 		try{
 			Connection dbConnection=db.getDbConnection();
-			String query = "INSERT INTO [Parte] (Nombre,Precio, Fabricante) VALUES (?,?,?)";
+			String query = "INSERT INTO [Parte] (Nombre,Fabricante) VALUES (?,?)";
 			PreparedStatement  pst = dbConnection.prepareStatement(query);
 			pst.setString(1, name);
-			pst.setInt(2, Integer.parseInt(price));
-			pst.setString(3, pMadeBy.toString());
-			if (name!="" && price!=""){
+			pst.setString(2, madeBy.toString());
+			if (name!=""){
 				pst.executeUpdate();
 			}else{
 				throw new Exception("No name or price");
@@ -56,7 +63,7 @@ public class Part{
 			console.errorMsg(ex.toString());
 		}
 	}
-	public String getName(){
+	public String toString(){
 		return name;
 	}
 }

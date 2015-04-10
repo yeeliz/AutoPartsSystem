@@ -91,9 +91,13 @@ public class MainWindow extends JFrame{
 	private JFormattedTextField txtProviderPhone;
 	private JFormattedTextField txtProviderPhone2;
 	private JComboBox<Provider> providers;
+	private JComboBox<Provider> comboProvidersInPartsTab;
+	private JComboBox<Part> comboPartsInPartsTab;
+
 	
 	
-	private JComboBox<Manufacturer> manufactures;
+	private JComboBox<Manufacturer> Manufacturers;
+	private JComboBox<Manufacturer> Manufacturers2;
 	private JComboBox<Brand> brands;
 	
 	public MainWindow(){
@@ -125,13 +129,19 @@ public class MainWindow extends JFrame{
 		ordersTab.setName("ordersTab");
 		JComponent providersTab=new JPanel();
 		providersTab.setName("providersTab");
+		JComponent automobileTab=new JPanel();
+		automobileTab.setName("Automobiles");
+		JComponent manufacturersTab=new JPanel();
+		manufacturersTab.setName("Manufacturers");
 		
 		
 		//tabs
+		tabbedPane.addTab("Orders", ordersTab);
 		tabbedPane.addTab("Client", clientTab);
 		tabbedPane.addTab("Parts", partsTab);
-		tabbedPane.addTab("Orders", ordersTab);
 		tabbedPane.addTab("Providers",providersTab);
+		tabbedPane.addTab("Automobiles",automobileTab);
+		tabbedPane.addTab("Manufacturers",manufacturersTab);
 		ordersTab.setLayout(null);
 				
 	     /*
@@ -458,13 +468,13 @@ public class MainWindow extends JFrame{
 		brands.setBounds(138, 59, 100, 19);
 		partsTab.add(brands);
 		
-		JLabel lblManufactures= new JLabel("Manufactures:");
-		lblManufactures.setBounds(49, 95, 100, 10);
-		partsTab.add(lblManufactures);
+		JLabel lblManufacturers= new JLabel("Manufacturers:");
+		lblManufacturers.setBounds(49, 95, 100, 10);
+		partsTab.add(lblManufacturers);
 		
-		manufactures=new JComboBox<Manufacturer>();
-		manufactures.setBounds(138, 95, 100, 19);
-		partsTab.add(manufactures);
+		Manufacturers=new JComboBox<Manufacturer>();
+		Manufacturers.setBounds(138, 95, 100, 19);
+		partsTab.add(Manufacturers);
 		
 		JButton btnAddPart=new JButton("Add");
 		btnAddPart.setBounds(49, 123, 60, 19);
@@ -499,27 +509,7 @@ public class MainWindow extends JFrame{
         });
 		
 		
-		JLabel lblAddManufacturer= new JLabel("ADD MANUFACTURER");
-		lblAddManufacturer.setBounds(486, 5, 150, 10);
-		partsTab.add(lblAddManufacturer);
 		
-		JLabel lblManufacturerName= new JLabel("Manufac Name:");
-		lblManufacturerName.setBounds(486, 32, 100, 10);
-		partsTab.add(lblManufacturerName);
-		
-		txtManufacturerName=new JTextField();
-		txtManufacturerName.setBounds(581,27, 100, 19);
-		partsTab.add(txtManufacturerName);
-		txtManufacturerName.setColumns(10);
-		
-		JButton btnAddManufacturer=new JButton("Add");
-		btnAddManufacturer.setBounds(486, 59, 60, 19);
-		partsTab.add(btnAddManufacturer);
-		btnAddManufacturer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddManufacturerActionPerformed(evt);
-            }
-        });
 		
 		JLabel lblAddProviderForAPart=new JLabel("Add Provider for a part");
 		lblAddProviderForAPart.setFont(new Font("Consolas", Font.PLAIN, 14));
@@ -530,16 +520,16 @@ public class MainWindow extends JFrame{
 		lblParts.setBounds(340,135,100,15);
 		partsTab.add(lblParts);
 		
-		JComboBox<Part> comboPartsInPartsTab =new JComboBox<Part>();
-		comboPartsInPartsTab.setBounds(420,135,220,15);
+		comboPartsInPartsTab =new JComboBox<Part>();
+		comboPartsInPartsTab.setBounds(420,135,220,19);
 		partsTab.add(comboPartsInPartsTab);
 
 		JLabel  lblProviders= new JLabel("Provider:");
 		lblProviders.setBounds(340,155,100,15);
 		partsTab.add(lblProviders);
 		
-		JComboBox<Provider> comboProvidersInPartsTab =new JComboBox<Provider>();
-		comboProvidersInPartsTab.setBounds(420,155,220,15);
+		comboProvidersInPartsTab =new JComboBox<Provider>();
+		comboProvidersInPartsTab.setBounds(420,155,220,19);
 		partsTab.add(comboProvidersInPartsTab);
 		
 		JLabel lblCost=new JLabel("Cost:");
@@ -572,9 +562,43 @@ public class MainWindow extends JFrame{
         });
 		
 		
+		/*
+		 *Begin automobile tab stuff 
+		 * 
+		 */
+		automobileTab.setLayout(null);
+		
+		JLabel lblCreateAutomobile= new JLabel("CREATE AUTOMOBILE");
+		lblCreateAutomobile.setBounds(200, 20, 220, 15);
+		automobileTab.add(lblCreateAutomobile);
 		
 		
+		/*
+		 *Begin Manufacturers tab stuff 
+		 * 
+		 */
+		manufacturersTab.setLayout(null);
+		JLabel lblAddManufacturer= new JLabel("ADD MANUFACTURER");
+		lblAddManufacturer.setBounds(200, 5, 150, 10);
+		manufacturersTab.add(lblAddManufacturer);
 		
+		JLabel lblManufacturerName= new JLabel("Manufac Name:");
+		lblManufacturerName.setBounds(200, 32, 100, 10);
+		manufacturersTab.add(lblManufacturerName);
+		
+		txtManufacturerName=new JTextField();
+		txtManufacturerName.setBounds(350,27, 100, 19);
+		manufacturersTab.add(txtManufacturerName);
+		txtManufacturerName.setColumns(10);
+		
+		JButton btnAddManufacturer=new JButton("Add");
+		btnAddManufacturer.setBounds(200, 59, 60, 19);
+		manufacturersTab.add(btnAddManufacturer);
+		btnAddManufacturer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddManufacturerActionPerformed(evt);
+            }
+        });
 		
 		//add tabs to this frame
 		getContentPane().add(tabbedPane);
@@ -636,7 +660,9 @@ public class MainWindow extends JFrame{
 	//reload comboBox's from DB
 	private void loadPartsStuff() {
 		loadComboBrand();
-		loadComboManufactures();
+		loadComboManufacturers();
+		loadComboParts();
+		loadComboProvider();
 	}
 	private void loadProvidersStuff(){
 		ArrayList<Provider> providerList = db.getAllProviders();
@@ -644,6 +670,18 @@ public class MainWindow extends JFrame{
 		
 		for(Provider provider: providerList)
 			providers.addItem(provider);
+	}
+	private void loadComboParts(){
+		ArrayList<Part> partsList = db.getAllParts();
+		comboPartsInPartsTab.removeAllItems();
+		for(Part part: partsList)
+			comboPartsInPartsTab.addItem(part);
+	}
+	private void loadComboProvider(){
+		ArrayList<Provider> providerList = db.getAllProviders();
+		providers.removeAllItems();
+		for(Provider provider: providerList)
+			comboProvidersInPartsTab.addItem(provider);		
 	}
 	
 	
@@ -654,12 +692,16 @@ public class MainWindow extends JFrame{
 		for(Brand brand : brandList)
 			brands.addItem(brand);
 	}
-	private void loadComboManufactures(){
-		ArrayList<Manufacturer> manuList = db.getAllManufactures();
-		manufactures.removeAllItems();
+	private void loadComboManufacturers(){
+		ArrayList<Manufacturer> manuList = db.getAllManufacturers();
+		Manufacturers.removeAllItems();
 		
 		for(Manufacturer manufacturer : manuList)
-			manufactures.addItem(manufacturer);
+		{
+			Manufacturers.addItem(manufacturer); //this combo is on the tab parts
+			Manufacturers2.addItem(manufacturer); //this combo is on the Automobile tab 
+			
+		}
 	}
 	
 	//--<<<<<<
@@ -712,7 +754,7 @@ public class MainWindow extends JFrame{
 
 	
 	private void btnAddPartActionPerformed(java.awt.event.ActionEvent evt) {                                         
-		Part part=new Part(txtPartName.getText(),(Brand) brands.getSelectedItem(), (Manufacturer)manufactures.getSelectedItem(), db, console);
+		Part part=new Part(txtPartName.getText(),(Brand) brands.getSelectedItem(), (Manufacturer)Manufacturers.getSelectedItem(), db, console);
     }  
 	private void btnAddBrandActionPerformed(java.awt.event.ActionEvent evt) {                                         
         Brand brand=new Brand(txtBrandName.getText(),db,console);
@@ -728,10 +770,21 @@ public class MainWindow extends JFrame{
 	} 
 	private void btnAddManufacturerActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Manufacturer manufact=new Manufacturer(txtManufacturerName.getText(),db,console);
-        manufactures.addItem(manufact);
+        Manufacturers.addItem(manufact);
 	} 
 	private void btnAssociateActionPerformed(java.awt.event.ActionEvent evt){
-		db.associatePartWithProvider();
+		try{
+			int profit=Integer.parseInt(txtProfit.getText());
+			try{
+				int cost=Integer.parseInt(txtCost.getText());
+				db.associatePartWithProvider((Part)comboPartsInPartsTab.getSelectedItem(),
+						(Provider)comboProvidersInPartsTab.getSelectedItem(),profit,cost);
+			}catch(Exception ex2){
+				console.errorMsg("Invalid cost value");
+			}
+		}catch(Exception ex){
+			console.errorMsg("Invalid profit value");
+		}
 	}
 	
 	

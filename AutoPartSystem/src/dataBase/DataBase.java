@@ -76,7 +76,7 @@ public class DataBase {
 		return values;
 	}
 
-	public ArrayList<Manufacturer> getAllManufactures() {
+	public ArrayList<Manufacturer> getAllManufacturers() {
 		ArrayList<Manufacturer> values = new ArrayList<Manufacturer>();
 		try{
 			//look for the brand in the database
@@ -120,6 +120,26 @@ public class DataBase {
 		}
 		return values;
 	}
+	public ArrayList<Part> getAllParts(){
+		//doesn't take the name of the manufacturer
+		ArrayList<Part> values = new ArrayList<Part>();
+		try{
+			//look for the brand in the database
+			String query="Select * from [Parte]";
+			PreparedStatement pst=dbConnection.prepareStatement(query);
+			
+			console.printConsole("Getting all parts");
+			
+			ResultSet rs=pst.executeQuery();
+			while(rs.next()){				
+				Part p=new Part(rs.getString("Nombre"),this,console);
+				values.add(p);
+			}
+		}catch (Exception ex){
+			console.errorMsg("Not able to load all the providers");
+		}
+		return values;
+	}
 	
 	public ArrayList<Client> getAllClients(){
 		ArrayList<Client> values = new ArrayList<Client>();
@@ -150,22 +170,21 @@ public class DataBase {
 		
 		return values;
 	}
-	public void associatePartWithProvider(Part pPart,Provider pProvider){
+	public void associatePartWithProvider(Part pPart,Provider pProvider,int  pProfitPorcentage,int pCost){
 		try{
-			Connection dbConnection = db.getDbConnection();
-			String query = "INSERT INTO [Marca] (Nombre) VALUES (?)";
+			String query = "INSERT INTO [PartesPorProveedor] (IDProveedor,NombreParte,PorcentajeDeGanancia,Precio) "
+					+ "VALUES (?,?,?,?)";
 			PreparedStatement pst = dbConnection.prepareStatement(query);
-			pst.setString(1, name);
-			if(name!=""){
-				pst.executeUpdate();	
-			}else{
-				//need to show msg's to console too 
-				throw new Exception("No name to create a brand");
-			}
+			pst.setInt(1, pProvider.getId());
+			pst.setString(2,pPart.toString());
+			pst.setInt(3,pProfitPorcentage);
+			pst.setInt(4,pCost);
+			pst.executeUpdate();
 			pst.close();
 		}catch(Exception ex){
 			//we need write our own custom msg
-			console.errorMsg(ex.toString());
+			System.out.println(ex.toString());
+			console.errorMsg("Not able to insert provider");
 		}
 	}
 }
