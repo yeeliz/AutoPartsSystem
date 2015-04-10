@@ -241,7 +241,7 @@ public class MainWindow extends JFrame{
 		newProviderTab.add(lblProvider);
 		
 		providers= new JComboBox<Provider>();
-		providers.setBounds(142, 194, 100, 19);
+		providers.setBounds(142, 194, 200, 19);
 		newProviderTab.add(providers);
 		
 		JLabel lblNumber2= new JLabel("Number:");
@@ -582,7 +582,11 @@ public class MainWindow extends JFrame{
 		loadComboManufactures();
 	}
 	private void loadProvidersStuff(){
-		//loadComboProviders();		
+		ArrayList<Provider> providerList = db.getAllProviders();
+		providers.removeAllItems();
+		
+		for(Provider provider: providerList)
+			providers.addItem(provider);
 	}
 	
 	
@@ -662,7 +666,8 @@ public class MainWindow extends JFrame{
 				txtDirectionProvider.getText(),txtCityProvider.getText(),txtProviderPhone.getText(),db,console);
 	}
 	private void btnAddPhoneToProviderActionPerformed(java.awt.event.ActionEvent evt) {                                         
-
+		Provider selected=(Provider)providers.getSelectedItem();
+		selected.addPhoneNumber(txtProviderPhone2.getText());
 	} 
 	private void btnAddManufacturerActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Manufacturer manufact=new Manufacturer(txtManufacturerName.getText(),db,console);

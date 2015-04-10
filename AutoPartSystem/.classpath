@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="C:/Program Files/Microsoft JDBC Driver 4.0 for SQL Server/sqljdbc_4.0/enu/sqljdbc4.jar">
+	<classpathentry kind="lib" path="C:/Users/Joshua/Dropbox/Universidad/III semestre/Bases de Datos/Proyecto 1 autos/JBCD/Microsoft JDBC Driver 4.0 for SQL Server/sqljdbc_4.0/enu/sqljdbc4.jar" sourcepath="">
 		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Users/Joshua/Dropbox/Universidad/III%20semestre/Bases%20de%20Datos/Proyecto%201%20autos/JBCD/Microsoft%20JDBC%20Driver%204.0%20for%20SQL%20Server/"/>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="AutoPartSystem/dll"/>
 		</attributes>
 	</classpathentry>

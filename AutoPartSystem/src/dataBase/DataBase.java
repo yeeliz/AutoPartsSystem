@@ -59,7 +59,7 @@ public class DataBase {
 		try{
 			//look for the brand in the database
 			String query="Select * from [Marca]";
-			PreparedStatement pst=getDbConnection().prepareStatement(query);
+			PreparedStatement pst=dbConnection.prepareStatement(query);
 			
 			console.printConsole("Getting all brand Names");
 			
@@ -81,7 +81,7 @@ public class DataBase {
 		try{
 			//look for the brand in the database
 			String query="Select * from [Fabricante]";
-			PreparedStatement pst=getDbConnection().prepareStatement(query);
+			PreparedStatement pst=dbConnection.prepareStatement(query);
 			
 			console.printConsole("Getting all Manufacturer Names");
 			
@@ -97,6 +97,29 @@ public class DataBase {
 		
 		return values;
 	}
+	public ArrayList<Provider> getAllProviders() {
+		ArrayList<Provider> values = new ArrayList<Provider>();
+		try{
+			//look for the brand in the database
+			String query="Select * from [Proveedor]";
+			PreparedStatement pst=dbConnection.prepareStatement(query);
+			
+			console.printConsole("Getting all providers");
+			
+			ResultSet rs=pst.executeQuery();
+			System.out.println("Here i am");
+			while(rs.next()){				
+				Provider p=new Provider(rs.getString("Nombre"),rs.getString("NombreContacto"),
+						rs.getString("Direccion"),rs.getString("Ciudad"),rs.getInt("ID"),this,console);
+
+
+				values.add(p);
+			}
+		}catch (Exception ex){
+			console.errorMsg("Not able to load all the providers");
+		}
+		return values;
+	}
 	
 	public ArrayList<Client> getAllClients(){
 		ArrayList<Client> values = new ArrayList<Client>();
@@ -105,7 +128,7 @@ public class DataBase {
 		try{
 			//look for the brand in the database
 			String query="Select * from [Cliente]";
-			PreparedStatement pst=getDbConnection().prepareStatement(query);
+			PreparedStatement pst=dbConnection.prepareStatement(query);
 			
 			console.printConsole("Getting all Client Names");
 			
@@ -121,7 +144,7 @@ public class DataBase {
 				}
 			}
 		}catch (Exception ex){
-			console.errorMsg();
+			console.errorMsg("Not able to get all the Clients");
 			System.out.println(ex.toString());
 		}
 		
