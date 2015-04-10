@@ -86,6 +86,8 @@ public class MainWindow extends JFrame{
 	private JTextField txtContactProviderName;
 	private JTextField txtDirectionProvider;
 	private JTextField txtCityProvider;
+	private JTextField txtCost;
+	private JTextField txtProfit;
 	private JFormattedTextField txtProviderPhone;
 	private JFormattedTextField txtProviderPhone2;
 	private JComboBox<Provider> providers;
@@ -158,7 +160,7 @@ public class MainWindow extends JFrame{
 		proviOppsTabbedPane.addTab("New", null, newProviderTab , null);
 		newProviderTab.setLayout(null);
 		
-		newProviderTab.addMouseListener(new MouseAdapter() {// empty implementation of all
+		partsTab.addMouseListener(new MouseAdapter() {// empty implementation of all
             // MouseListener`s methods
 		public void mousePressed(MouseEvent e) {
 			System.out.println(e.getX() + "," + e.getY());
@@ -519,6 +521,61 @@ public class MainWindow extends JFrame{
             }
         });
 		
+		JLabel lblAddProviderForAPart=new JLabel("Add Provider for a part");
+		lblAddProviderForAPart.setFont(new Font("Consolas", Font.PLAIN, 14));
+		lblAddProviderForAPart.setBounds(340, 115, 220, 15);
+		partsTab.add(lblAddProviderForAPart);
+		
+		JLabel  lblParts= new JLabel("Part:");
+		lblParts.setBounds(340,135,100,15);
+		partsTab.add(lblParts);
+		
+		JComboBox<Part> comboPartsInPartsTab =new JComboBox<Part>();
+		comboPartsInPartsTab.setBounds(420,135,220,15);
+		partsTab.add(comboPartsInPartsTab);
+
+		JLabel  lblProviders= new JLabel("Provider:");
+		lblProviders.setBounds(340,155,100,15);
+		partsTab.add(lblProviders);
+		
+		JComboBox<Provider> comboProvidersInPartsTab =new JComboBox<Provider>();
+		comboProvidersInPartsTab.setBounds(420,155,220,15);
+		partsTab.add(comboProvidersInPartsTab);
+		
+		JLabel lblCost=new JLabel("Cost:");
+		lblCost.setBounds(340,175,100,15);
+		partsTab.add(lblCost);
+		
+		txtCost=new JTextField();
+		txtCost.setBounds(420,175,220,15);
+		txtCost.setColumns(10);
+		partsTab.add(txtCost);
+		
+		
+		JLabel lblProfit= new JLabel("Profit %: ");
+		lblProfit.setBounds(340,195,100,15);
+		partsTab.add(lblProfit);
+		
+		txtProfit=new JTextField();
+		txtProfit.setBounds(420,195,220,15);
+		txtProfit.setColumns(10);
+		partsTab.add(txtProfit);
+		
+		JButton btnAssociate=new JButton("Associate");
+		btnAssociate.setBounds(340,220,100,19);
+		partsTab.add(btnAssociate);
+		
+		btnAssociate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAssociateActionPerformed(evt);
+            }
+        });
+		
+		
+		
+		
+		
+		
 		//add tabs to this frame
 		getContentPane().add(tabbedPane);
 		
@@ -673,6 +730,9 @@ public class MainWindow extends JFrame{
 		Manufacturer manufact=new Manufacturer(txtManufacturerName.getText(),db,console);
         manufactures.addItem(manufact);
 	} 
+	private void btnAssociateActionPerformed(java.awt.event.ActionEvent evt){
+		db.associatePartWithProvider();
+	}
 	
 	
 	public static void main(String args[]){

@@ -56,4 +56,7 @@ public class Part{
 			console.errorMsg(ex.toString());
 		}
 	}
+	public String getName(){
+		return name;
+	}
 }

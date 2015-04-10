@@ -124,6 +124,8 @@ public class Provider {
 	public String toString(){
 		return name+", "+city;
 	}
-
-	
+	public int getId(){
+		return id;
+	}
+		
 }
