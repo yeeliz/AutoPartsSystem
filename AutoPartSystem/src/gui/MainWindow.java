@@ -621,6 +621,12 @@ public class MainWindow extends JFrame{
 		btnAddAutomobile.setBounds(200,130,100,19);
 		automobileTab.add(btnAddAutomobile);
 		
+		btnAddAutomobile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddAutomobileActionPerformed(evt);
+            }
+        });
+
 		/*
 		 *Begin Manufacturers tab stuff 
 		 * 
@@ -685,12 +691,19 @@ public class MainWindow extends JFrame{
 		switch (tName){
 			case "clientTab":
 				loadClientStuff();
+				break;
 			case "partsTab":
 				loadPartsStuff();
+				break;
 			case "ordersTab":
 				//loadOrdersStuff();
+				break;
 			case "providersTab":
 				loadProvidersStuff();
+				break;
+			case "automobilesTab":
+				loadAutomobileStuff();
+				break;
 		}
 	}	
 	
@@ -719,6 +732,9 @@ public class MainWindow extends JFrame{
 		for(Provider provider: providerList)
 			providers.addItem(provider);
 	}
+	private void loadAutomobileStuff(){
+		loadComboManufacturers();
+	}
 	private void loadComboParts(){
 		ArrayList<Part> partsList = db.getAllParts();
 		comboPartsInPartsTab.removeAllItems();
@@ -743,11 +759,12 @@ public class MainWindow extends JFrame{
 	private void loadComboManufacturers(){
 		ArrayList<Manufacturer> manuList = db.getAllManufacturers();
 		Manufacturers.removeAllItems();
-		
+		comboManufacturersOfAutomobile.removeAllItems();
 		for(Manufacturer manufacturer : manuList)
 		{
 			Manufacturers.addItem(manufacturer); //this combo is on the tab parts
-			
+			comboManufacturersOfAutomobile.addItem(manufacturer); //this combo is on the Automobile tab 
+
 		}
 	}
 	
@@ -862,7 +879,13 @@ public class MainWindow extends JFrame{
 	private void btnAddPhoneToProviderActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Provider selected=(Provider)providers.getSelectedItem();
 		selected.addPhoneNumber(txtProviderPhone2.getText());
-	} 
+	}
+	private void btnAddAutomobileActionPerformed(java.awt.event.ActionEvent evt) {                                         
+		Automobile automobile= new Automobile(txtModel.getText(),txtDetail.getText(),
+				Integer.valueOf(txtFabricationYear.getText()),
+				(Manufacturer)comboManufacturersOfAutomobile.getSelectedItem(),
+				db,console);
+	}
 	private void btnAddManufacturerActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Manufacturer manufact=new Manufacturer(txtManufacturerName.getText(),db,console);
         Manufacturers.addItem(manufact);
