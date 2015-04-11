@@ -80,7 +80,7 @@ public class MainWindow extends JFrame{
 	//--<<
 	
 	private JTextField TfPartName;
-	private JTable tableResults;
+	private JTable searchResults;
 	private DefaultTableModel model;
 	private JTextField txtContactName;
 	private JTextField txtPartName;
@@ -106,6 +106,7 @@ public class MainWindow extends JFrame{
 	
 	private JComboBox<Manufacturer> Manufacturers;
 	private JComboBox<Brand> brands;
+	private JTable orderTable;
 	
 	public MainWindow(){
 		createGui();
@@ -282,54 +283,71 @@ public class MainWindow extends JFrame{
             }
         });
 		
+		//Table show provider results
+		model = new DefaultTableModel(); 
+		//add default columns
+		model.addColumn("Name");
+		model.addColumn("Identifier");
+		model.addRow(new Object[]{"Name", "Provider"});
+		
 
 		
 		
 		
 				
 		JPanel searchProviderTab = new JPanel();
-		proviOppsTabbedPane.addTab("Seach", null, searchProviderTab, null);
+		nestedTabbedPane.addTab("New tab", null, searchProviderTab, null);
 		searchProviderTab.setLayout(null);
 		
-		JLabel lbSearch = new JLabel("Search Provider");
+		JLabel lbSearch = new JLabel("Search/Select Provider");
 		lbSearch.setFont(new Font("Consolas", Font.PLAIN, 16));
-		lbSearch.setBounds(199, 11, 141, 27);
+		lbSearch.setBounds(0, 0, 225, 27);
 		searchProviderTab.add(lbSearch);
 		
 		JLabel lblPartName = new JLabel("Part Name:");
 		lblPartName.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPartName.setBounds(109, 54, 80, 14);
+		lblPartName.setBounds(10, 27, 80, 14);
 		searchProviderTab.add(lblPartName);
 		
 		TfPartName = new JTextField();
-		TfPartName.setBounds(199, 53, 155, 20);
+		TfPartName.setBounds(93, 26, 155, 20);
 		searchProviderTab.add(TfPartName);
 		TfPartName.setColumns(10);
 		
 		JButton btnSearch = new JButton("Search");
-		btnSearch.setBounds(377, 52, 89, 23);
+		btnSearch.setBounds(258, 25, 89, 23);
 		searchProviderTab.add(btnSearch);
 		
 		JLabel lbResults = new JLabel("Results\r\n");
 		lbResults.setFont(new Font("Consolas", Font.PLAIN, 14));
-		lbResults.setBounds(238, 77, 99, 53);
+		lbResults.setBounds(10, 74, 99, 53);
 		searchProviderTab.add(lbResults);
+		searchResults = new JTable();
+		searchResults.setModel(model);
 		
-		//Table show provider results
-		model = new DefaultTableModel(); 
-		tableResults = new JTable();
-		tableResults.setModel(model);
-		//add default columns
-		model.addColumn("Name");
-		model.addColumn("Identifier");
-		model.addRow(new Object[]{"Name", "Provider"});
+		searchResults.setBounds(77, 74, 261, 104);
 		
-		tableResults.setBounds(109, 127, 348, 100);
+		searchProviderTab.add(searchResults);
 		
-		searchProviderTab.add(tableResults);
+		JButton btnAgregar = new JButton("Agregar");
+		btnAgregar.setBounds(249, 189, 89, 23);
+		searchProviderTab.add(btnAgregar);
 		
-		JTabbedPane newOrderTab = new JTabbedPane(JTabbedPane.TOP);
-		nestedTabbedPane.addTab("New Order", null, newOrderTab, null);
+		orderTable = new JTable();
+		orderTable.setBounds(347, 74, 261, 104);
+		searchProviderTab.add(orderTable);
+		
+		JButton btnOrder = new JButton("Order");
+		btnOrder.setBounds(519, 189, 89, 23);
+		searchProviderTab.add(btnOrder);
+		
+		JComboBox orderClientBox = new JComboBox();
+		orderClientBox.setBounds(430, 26, 162, 20);
+		searchProviderTab.add(orderClientBox);
+		
+		JLabel lblClient = new JLabel("Client:");
+		lblClient.setBounds(386, 29, 46, 14);
+		searchProviderTab.add(lblClient);
 		clientTab.setLayout(null);	
 		
 		

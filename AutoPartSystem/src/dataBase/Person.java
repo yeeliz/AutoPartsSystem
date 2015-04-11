@@ -66,7 +66,7 @@ public class Person extends Client{
 	}
 
 	@Override
-	public void fillClient() {
+	public void fillClient(){
 		db.console.printConsole("Obteniendo los datos del Cliente tipo persona");
 		
 		try{
