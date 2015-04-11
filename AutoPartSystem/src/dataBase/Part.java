@@ -39,8 +39,6 @@ public class Part{
 				throw new Exception("No name or price");
 			}
 			pst.close();
-			//is a database bug, in the parameter they can fill with a big sql server
-			//code to be excecuted !!!!!
 			query = " declare @BrandName varchar(50) "
 					+ " declare @PartName varchar(50) "
 					+ " set @BrandName =?"

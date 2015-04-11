@@ -76,6 +76,28 @@ public class DataBase {
 		return values;
 	}
 
+	public ArrayList<Automobile> getAllAutomobile(){
+		ArrayList<Automobile> values = new ArrayList<Automobile>();
+		try{
+			//look for the brand in the database
+			String query="Select * from [Automovil]";
+			PreparedStatement pst=dbConnection.prepareStatement(query);
+			
+			console.printConsole("Getting all brand Names");
+			
+			ResultSet rs=pst.executeQuery();
+			
+			while(rs.next()){
+				Automobile a=new Automobile(rs.getString("Modelo"),rs.getString("Detalle"),
+						rs.getDate("AnioDeFabricacion"),this,console);
+			values.add(a);
+			}
+		}catch (Exception ex){
+			console.errorMsg();
+		}
+		
+		return values;
+	}
 	public ArrayList<Manufacturer> getAllManufacturers() {
 		ArrayList<Manufacturer> values = new ArrayList<Manufacturer>();
 		try{
@@ -185,6 +207,20 @@ public class DataBase {
 			//we need write our own custom msg
 			System.out.println(ex.toString());
 			console.errorMsg("Not able to insert provider");
+		}
+	}
+	public void associatePartWithAutomobile(Part pPart,Automobile pAutomobile){
+		try{
+			String query="INSERT INTO [PartesDeAutomovil] (NombreParte,ModeloAutomovil)"
+					+ "VALUES(?,?)";
+			PreparedStatement pst=dbConnection.prepareStatement(query);
+			pst.setString(1,pPart.toString());
+			pst.setString(2,pAutomobile.toString());
+			pst.executeUpdate();
+			pst.close();
+		}catch(Exception ex){
+			System.out.println(ex.toString());
+			console.printConsole("Not able to make de association, maybe already exist");
 		}
 	}
 }
