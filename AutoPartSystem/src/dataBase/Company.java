@@ -5,10 +5,8 @@ import java.sql.PreparedStatement;
 
 
 public class Company extends Client{
-	private int businessId;
 	private int telephone;
-	private String address, contactName, contactDoes;
-	private String city;
+	private String contactName, contactDoes;
 
 	public Company(DataBase db, String fullName, 
 			String address, String state, String city, 
@@ -19,7 +17,7 @@ public class Company extends Client{
 		this.state = state;
 		this.address = address;
 		this.city = city;
-		this.businessId = businessId;
+		this.id = businessId;
 		this.contactDoes = contactDoes;
 		this.telephone = telephone;
 		this.contactName = contactName;
@@ -46,7 +44,7 @@ public class Company extends Client{
 			PreparedStatement pst = dbConnection.prepareStatement(query);
 			
 			
-			pst.setInt(1, this.businessId);
+			pst.setInt(1, this.id);
 			pst.setString(2, this.fullName);
 			pst.setString(3, this.address);
 			pst.setString(4, this.city);
@@ -80,6 +78,20 @@ public class Company extends Client{
 		
 		
 		
+	}
+
+	@Override
+	public void fillClient() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String getContactName() {
+		return this.contactName;
+	}
+
+	public String getContactDoes() {
+		return this.contactDoes;
 	}
 
 

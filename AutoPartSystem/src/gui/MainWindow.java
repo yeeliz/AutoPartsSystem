@@ -13,6 +13,7 @@ import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.*;
 
+import dataBase.Automobile;
 import dataBase.Brand;
 import dataBase.Client;
 import dataBase.Company;
@@ -30,6 +31,7 @@ import java.awt.Component;
 import java.awt.Font;
 
 import logic.Console;
+import logic.Parser;
 
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
@@ -53,6 +55,7 @@ public class MainWindow extends JFrame{
 
 	//logic stuff
 	private Console console;
+	private Parser parser;
 	
 	//db stuff
 	private DataBase db ;
@@ -89,6 +92,10 @@ public class MainWindow extends JFrame{
 	private JTextField txtCityProvider;
 	private JTextField txtCost;
 	private JTextField txtProfit;
+	private JTextField txtModel;
+	private JTextField txtDetail;
+	private JTextField txtFabricationYear;
+	private JComboBox<Manufacturer> comboManufacturersOfAutomobile;
 	private JFormattedTextField txtProviderPhone;
 	private JFormattedTextField txtProviderPhone2;
 	private JComboBox<Provider> providers;
@@ -98,13 +105,13 @@ public class MainWindow extends JFrame{
 	
 	
 	private JComboBox<Manufacturer> Manufacturers;
-	private JComboBox<Manufacturer> Manufacturers2;
 	private JComboBox<Brand> brands;
 	
 	public MainWindow(){
 		createGui();
 		
 		console =  new Console(this.consoleTextArea);
+		parser = new Parser(console);
 		db=new DataBase(console); //pass console so db can show msg's
 		db.connect();
 		
@@ -131,9 +138,9 @@ public class MainWindow extends JFrame{
 		JComponent providersTab=new JPanel();
 		providersTab.setName("providersTab");
 		JComponent automobileTab=new JPanel();
-		automobileTab.setName("Automobiles");
+		automobileTab.setName("automobilesTab");
 		JComponent manufacturersTab=new JPanel();
-		manufacturersTab.setName("Manufacturers");
+		manufacturersTab.setName("manufacturersTab");
 		
 		
 		//tabs
@@ -354,10 +361,6 @@ public class MainWindow extends JFrame{
 		clientTypeComboBox.setBounds(163, 0, 89, 20);
 		clientTab.add(clientTypeComboBox);
 		
-		btnSelect = new JButton("Select");
-		btnSelect.setBounds(10, 235, 89, 23);
-		clientTab.add(btnSelect);
-		
 		JLabel lblId = new JLabel("ID:");
 		lblId.setBounds(114, 46, 46, 14);
 		clientTab.add(lblId);
@@ -403,7 +406,7 @@ public class MainWindow extends JFrame{
 		
 		clientStateComboBox = new JComboBox();
 		clientStateComboBox.setModel(new DefaultComboBoxModel(new String[] {"ACTIVE", "INACTIVE", "SUSPENDED"}));
-		clientStateComboBox.setBounds(164, 236, 75, 20);
+		clientStateComboBox.setBounds(164, 236, 88, 20);
 		clientTab.add(clientStateComboBox);
 		
 		txtTels = new JTextArea();
@@ -414,7 +417,7 @@ public class MainWindow extends JFrame{
 		lblNewLabel.setBounds(356, 80, 76, 14);
 		clientTab.add(lblNewLabel);
 		
-		JLabel lblManagerName = new JLabel("Manager Name:");
+		JLabel lblManagerName = new JLabel("Manager Name:") ;
 		lblManagerName.setBounds(356, 114, 89, 14);
 		clientTab.add(lblManagerName);
 		
@@ -441,10 +444,18 @@ public class MainWindow extends JFrame{
             }
         });
 		
+		btnSelect = new JButton("Select");
+		btnSelect.setBounds(10, 235, 89, 23);
+		clientTab.add(btnSelect);
+		btnSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	selectClientBtn(evt);
+            }
+        });
+		
 		partsTab.setLayout(null);
 		//---<<<< END OF CLIENT TAB
 		
-	
 		
 		JLabel lblAddPart= new JLabel("ADD PART");
 		lblAddPart.setBounds(49, 5, 100, 10);
@@ -571,6 +582,44 @@ public class MainWindow extends JFrame{
 		lblCreateAutomobile.setBounds(200, 20, 220, 15);
 		automobileTab.add(lblCreateAutomobile);
 		
+		JLabel lblModel=new JLabel("Model:");
+		lblModel.setBounds(200,50,100,10);
+		automobileTab.add(lblModel);
+		
+		txtModel=new JTextField();
+		txtModel.setBounds(350,50,200,19);
+		txtModel.setColumns(10);
+		automobileTab.add(txtModel);
+		
+		JLabel lblDetail = new JLabel("Detail:");
+		lblDetail.setBounds(200,70,100,10);
+		automobileTab.add(lblDetail);
+		
+		txtDetail= new JTextField();
+		txtDetail.setBounds(350,70,200,19);
+		txtDetail.setColumns(10);
+		automobileTab.add(txtDetail);
+		
+		JLabel lblFabricationYear=new JLabel("Fabrication Year:");
+		lblFabricationYear.setBounds(200,90,200,10);
+		automobileTab.add(lblFabricationYear);
+		
+		txtFabricationYear=new JTextField();
+		txtFabricationYear.setBounds(350,90,200,19);
+		txtFabricationYear.setColumns(10);
+		automobileTab.add(txtFabricationYear);
+		
+		JLabel lblAutomobileManufacturer=new JLabel("Manufacturer:");
+		lblAutomobileManufacturer.setBounds(200,110,150,10);
+		automobileTab.add(lblAutomobileManufacturer);
+		
+		comboManufacturersOfAutomobile=new JComboBox<Manufacturer>();
+		comboManufacturersOfAutomobile.setBounds(350,110,200,19);
+		automobileTab.add(comboManufacturersOfAutomobile);
+		
+		JButton btnAddAutomobile=new JButton("Add");
+		btnAddAutomobile.setBounds(200,130,100,19);
+		automobileTab.add(btnAddAutomobile);
 		
 		/*
 		 *Begin Manufacturers tab stuff 
@@ -654,7 +703,6 @@ public class MainWindow extends JFrame{
 				modelClientList.add(client);
 		
 		modelClientList.add((String) "New Client");
-	
 	}
 	
 	//reload comboBox's from DB
@@ -699,7 +747,6 @@ public class MainWindow extends JFrame{
 		for(Manufacturer manufacturer : manuList)
 		{
 			Manufacturers.addItem(manufacturer); //this combo is on the tab parts
-			Manufacturers2.addItem(manufacturer); //this combo is on the Automobile tab 
 			
 		}
 	}
@@ -709,38 +756,71 @@ public class MainWindow extends JFrame{
 	/*
 	 * Client gui event/action section
 	 */
+	private void selectClientBtn(java.awt.event.ActionEvent evt){
+		int selected = jListClients.getSelectedIndex();
+	
+		if(modelClientList.size() == selected + 1){
+			System.out.println("New Client selected");
+			this.txtClientFullName.setEditable(true);
+			this.clientTypeComboBox.setEnabled(true);
+		}else{
+			this.txtClientFullName.setEditable(false); //we can't edit this
+			//maybe we should be able to edit this?
+			this.clientTypeComboBox.setEnabled(false);
+			//get selected client name
+			String clientName = this.modelClientList.get(selected).toString();
+			
+			Client client;
+			//if it is a person type client
+			if(this.modelClientList.get(selected).getClass().toString().contains("Person")){
+				Person per = new Person(db, clientName);
+				per.fillClient();
+				client = per;
+			}else{
+				Company comp = new Company(clientName);
+				comp.fillClient();
+				client = comp;
+				try{
+					this.txtContactName.setText(comp.getContactName());
+					this.txtContactDoes.setText(comp.getContactDoes());
+				}catch(Exception e){
+					console.printConsole("one or more of the business fields is null!");
+				}
+			}
+			
+		    try{
+				this.txtFieldID.setText(client.getId());
+				this.txtClientFullName.setText(client.getFullName());
+				this.txtClientCity.setText(client.getCity());
+				this.txtClientAddress.setText(client.getAddress());
+				this.txtTels.setText(client.getTels());
+		    }catch(Exception e){
+		    	console.printConsole("One or more of the client fields is null!");
+		    }
+		    
+		    //set the state of the client (ACTIVE, etc)
+		    this.clientStateComboBox.getModel().setSelectedItem(client.getState());
+		}
+	}
+	
 	private void updateClientBtn(java.awt.event.ActionEvent evt){
 
 		int id = -1;
+		ArrayList<Integer> telephones;
 		try{
 			id = Integer.parseInt(txtFieldID.getText().toString());
 		}catch(Exception e){
 			console.printConsole("Could not parse Identification to int");
+			return;
 		}
 		
 		//Parse TEL's
-		ArrayList<Integer> telephones = new <Integer>ArrayList();
-		String tels = this.txtTels.getText();
+		telephones= parser.telParser(this.txtTels.getText());
 		
-		try{
-			if(!tels.contains("\n")){
-				telephones.add(Integer.parseInt(tels));
-			}else{
-				while(tels.contains("\n")){
-					telephones.add(Integer.parseInt(tels.substring(0,tels.indexOf("\n"))));
-					tels = tels.substring(tels.indexOf("\n") + 1, tels.length());
-				}
-				telephones.add(Integer.parseInt(tels));
-				
-			}
-		}catch(Exception e){
-			console.errorMsg("Could not parse tels to int");
-		}
 		
 		//personal Client
 		if(this.clientTypeComboBox.getSelectedItem().toString().compareTo("Personal") == 0){
 			//get info
-			
 			
 			Person per = new Person(db, this.txtClientFullName.getText(),
 					this.txtClientAddress.getText(), 
@@ -756,7 +836,7 @@ public class MainWindow extends JFrame{
 					this.txtClientAddress.getText(), 
 					this.clientStateComboBox.getSelectedItem().toString(),
 				this.txtClientCity.getText(), id, this.txtContactDoes.getText(),
-				tels.indexOf(0), this.txtContactName.getText());
+				telephones.indexOf(0), this.txtContactName.getText());
 			
 			//save it to the server
 			console.printConsole("Saving a COMPANY type Client to DB");
@@ -764,7 +844,7 @@ public class MainWindow extends JFrame{
 		}
 		
 		//add it to client list
-		this.loadClientStuff();
+		//this.loadClientStuff();
 	}
 
 	

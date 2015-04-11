@@ -2,15 +2,12 @@ package dataBase;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Person extends Client{
 	
-	private int id;
-	private String address;
-	private String city;
-	private ArrayList<Integer> telephones; 
 
 	public Person(DataBase db, String fullName, String address, 
 			String state,int id,String city, ArrayList<Integer> telephones){
@@ -26,6 +23,11 @@ public class Person extends Client{
 	
 	//used as a partial fill for listing
 	public Person(String name){
+		this.fullName = name;
+	}
+	
+	public Person(DataBase db, String name){
+		this.db = db;
 		this.fullName = name;
 	}
 	
@@ -61,5 +63,49 @@ public class Person extends Client{
 			pst.executeUpdate();
 			pst.close();
 		}
+	}
+
+	@Override
+	public void fillClient() {
+		db.console.printConsole("Obteniendo los datos del Cliente tipo persona");
+		
+		try{
+			Connection dbConnection = db.getDbConnection();
+			String sql = "SELECT c.*, p.* FROM Cliente c "+
+			"INNER JOIN Persona p ON c.Nombre = p.Nombre " +
+			"WHERE c.Nombre = ? ";
+	       
+			PreparedStatement pst=dbConnection.prepareStatement(sql);
+			
+			//pass the variable PK we want to the query
+			pst.setString(1, this.fullName.toString());			
+			
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()){
+				this.state  = rs.getString("Estado");
+	           	this.isPerson = rs.getBoolean("EsPersona");
+	           	this.id = rs.getInt("Cedula");
+	           	this.address = rs.getString("Direccion");
+	           	this.city = rs.getString("Ciudad");
+			}
+			pst.close();
+			
+			//Now we need to get the telephone numbers
+			sql = "SELECT * FROM Telefonos WHERE NombrePersona = ?";
+			
+			pst=dbConnection.prepareStatement(sql);
+			pst.setString(1, this.fullName);
+			
+			rs = pst.executeQuery();
+			while(rs.next()){
+				this.telephones.add(rs.getInt("Numero"));
+			}
+			pst.close();
+			
+		}catch(Exception e){
+	    	 db.console.errorMsg();
+	    	 System.out.println(e);
+	     }
+		
 	}
 }
