@@ -69,8 +69,9 @@ public class MainWindow extends JFrame{
 	private JTextField txtClientFullName;
 	private JTextArea txtClientAddress;
 	private JComboBox clientStateComboBox;
+	private JTextArea txtTels;
 	private JTextField txtClientCity;
-	private JTextField txtManagerID;
+	private JTextField txtContactDoes;
 	private JList<String> jListClients;
 	ArrayList<Object> modelClientList = new ArrayList<Object>();
 	//--<<
@@ -78,7 +79,7 @@ public class MainWindow extends JFrame{
 	private JTextField TfPartName;
 	private JTable tableResults;
 	private DefaultTableModel model;
-	private JTextField textField_1;
+	private JTextField txtContactName;
 	private JTextField txtPartName;
 	private JTextField txtBrandName;
 	private JTextField txtManufacturerName;
@@ -107,7 +108,7 @@ public class MainWindow extends JFrame{
 		db=new DataBase(console); //pass console so db can show msg's
 		db.connect();
 		
-		this.loadClientStuff();
+		//this.loadClientStuff();
 	}
 	
 	
@@ -322,9 +323,7 @@ public class MainWindow extends JFrame{
 		
 		JTabbedPane newOrderTab = new JTabbedPane(JTabbedPane.TOP);
 		nestedTabbedPane.addTab("New Order", null, newOrderTab, null);
-		clientTab.setLayout(null);
-		
-		
+		clientTab.setLayout(null);	
 		
 		
 		/*
@@ -339,7 +338,7 @@ public class MainWindow extends JFrame{
 				return modelClientList.get(index);
 			}
 		};
-		modelClientList.add((String) "New Client");
+		
 		jListClients = new JList(clientListModel);
 		jListClients.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		jListClients.setBounds(0, 0, 104, 231);
@@ -352,7 +351,7 @@ public class MainWindow extends JFrame{
 		
 		clientTypeComboBox = new JComboBox();
 		clientTypeComboBox.setModel(new DefaultComboBoxModel(new String[] {"Personal", "Business"}));
-		clientTypeComboBox.setBounds(163, 0, 76, 20);
+		clientTypeComboBox.setBounds(163, 0, 89, 20);
 		clientTab.add(clientTypeComboBox);
 		
 		btnSelect = new JButton("Select");
@@ -407,7 +406,7 @@ public class MainWindow extends JFrame{
 		clientStateComboBox.setBounds(164, 236, 75, 20);
 		clientTab.add(clientStateComboBox);
 		
-		JTextArea txtTels = new JTextArea();
+		txtTels = new JTextArea();
 		txtTels.setBounds(417, 3, 123, 59);
 		clientTab.add(txtTels);
 		
@@ -419,19 +418,19 @@ public class MainWindow extends JFrame{
 		lblManagerName.setBounds(356, 114, 89, 14);
 		clientTab.add(lblManagerName);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(455, 111, 152, 20);
-		clientTab.add(textField_1);
-		textField_1.setColumns(10);
+		txtContactName = new JTextField();
+		txtContactName.setBounds(455, 111, 152, 20);
+		clientTab.add(txtContactName);
+		txtContactName.setColumns(10);
 		
-		JLabel lblManagerId = new JLabel("Manager ID:");
-		lblManagerId.setBounds(366, 139, 69, 14);
+		JLabel lblManagerId = new JLabel("Cargo:");
+		lblManagerId.setBounds(399, 139, 46, 14);
 		clientTab.add(lblManagerId);
 		
-		txtManagerID = new JTextField();
-		txtManagerID.setBounds(455, 136, 153, 20);
-		clientTab.add(txtManagerID);
-		txtManagerID.setColumns(10);
+		txtContactDoes = new JTextField();
+		txtContactDoes.setBounds(455, 136, 153, 20);
+		clientTab.add(txtContactDoes);
+		txtContactDoes.setColumns(10);
 		
 		btnUpdate = new JButton("Update");
 		btnUpdate.setBounds(580, 235, 89, 23);
@@ -649,12 +648,13 @@ public class MainWindow extends JFrame{
 	private void loadClientStuff(){
 		//fill JClientList
 		ArrayList<Client> clientList = db.getAllClients();
+		modelClientList.clear(); //clear list first
 		
-		for(Client client : clientList){
-			if(!modelClientList.contains(client))
+		for(Client client : clientList)
 				modelClientList.add(client);
-			System.out.println(client.toString());
-		}
+		
+		modelClientList.add((String) "New Client");
+	
 	}
 	
 	//reload comboBox's from DB
@@ -712,36 +712,51 @@ public class MainWindow extends JFrame{
 	private void updateClientBtn(java.awt.event.ActionEvent evt){
 
 		int id = -1;
-		int managerId = -1;
 		try{
 			id = Integer.parseInt(txtFieldID.getText().toString());
 		}catch(Exception e){
 			console.printConsole("Could not parse Identification to int");
 		}
 		
+		//Parse TEL's
+		ArrayList<Integer> telephones = new <Integer>ArrayList();
+		String tels = this.txtTels.getText();
+		
 		try{
-			managerId = Integer.parseInt(txtManagerID.getText().toString());
+			if(!tels.contains("\n")){
+				telephones.add(Integer.parseInt(tels));
+			}else{
+				while(tels.contains("\n")){
+					telephones.add(Integer.parseInt(tels.substring(0,tels.indexOf("\n"))));
+					tels = tels.substring(tels.indexOf("\n") + 1, tels.length());
+				}
+				telephones.add(Integer.parseInt(tels));
+				
+			}
 		}catch(Exception e){
-			console.printConsole("Could not parse ManagerID to int");
+			console.errorMsg("Could not parse tels to int");
 		}
 		
 		//personal Client
 		if(this.clientTypeComboBox.getSelectedItem().toString().compareTo("Personal") == 0){
 			//get info
+			
+			
 			Person per = new Person(db, this.txtClientFullName.getText(),
 					this.txtClientAddress.getText(), 
 					this.clientStateComboBox.getSelectedItem().toString(),
-					id,this.txtClientCity.getText());
+					id,this.txtClientCity.getText(), telephones);
 			
 			//save it to the server
 			console.printConsole("Saving Personal Client to DB");
 			per.addClient();
 		}else{ //business Client
-			//get info
+			
 			Company per = new Company(db, this.txtClientFullName.getText(),
 					this.txtClientAddress.getText(), 
 					this.clientStateComboBox.getSelectedItem().toString(),
-				this.txtClientCity.getText(), id, managerId);
+				this.txtClientCity.getText(), id, this.txtContactDoes.getText(),
+				tels.indexOf(0), this.txtContactName.getText());
 			
 			//save it to the server
 			console.printConsole("Saving a COMPANY type Client to DB");

@@ -2,15 +2,18 @@ package dataBase;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Person extends Client{
 	
 	private int id;
 	private String address;
 	private String city;
+	private ArrayList<Integer> telephones; 
 
 	public Person(DataBase db, String fullName, String address, 
-			String state,int id,String city){
+			String state,int id,String city, ArrayList<Integer> telephones){
 		this.db = db;
 		this.fullName = fullName;
 		this.state = state;
@@ -18,6 +21,7 @@ public class Person extends Client{
 		this.address = address;
 		this.city = city;
 		this.id = id;
+		this.telephones = telephones;
 	}
 	
 	//used as a partial fill for listing
@@ -39,8 +43,23 @@ public class Person extends Client{
 			pst.executeUpdate();	
 			pst.close();
 			db.console.printConsole("Inserted Personal Client subclass data into PERSONA table.");
+			
+			addTelephones();
+			db.console.printConsole("Personal client telephones added!");
 		}catch(Exception ex){ //need to add custom msg's
 			db.console.errorMsg(ex.toString());
+		}
+	}
+	
+	private void addTelephones() throws SQLException{
+		Connection dbConnection = db.getDbConnection();
+		String query = "INSERT INTO [Telefonos] (NombrePersona, numero) VALUES (?,?)";
+		for(Integer tel : telephones){
+			PreparedStatement pst = dbConnection.prepareStatement(query);
+			pst.setString(1, this.fullName);
+			pst.setInt(2, tel);
+			pst.executeUpdate();
+			pst.close();
 		}
 	}
 }

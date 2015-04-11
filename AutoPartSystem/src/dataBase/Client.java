@@ -27,7 +27,7 @@ public abstract class Client {
 			pst.setString(1, this.fullName);
 			pst.setString(2, this.state);
 			pst.setBoolean(3,this.isPerson );
-			pst.executeUpdate();	
+			pst.executeUpdate();
 			pst.close();
 			db.console.printConsole("Inserted general cliente info into Client table.");
 			
