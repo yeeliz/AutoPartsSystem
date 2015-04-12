@@ -76,6 +76,71 @@ public class DataBase {
 		return values;
 	}
 
+	public ArrayList<Automobile> getAllAutomobile(){
+		ArrayList<Automobile> values = new ArrayList<Automobile>();
+		try{
+			//look for the brand in the database
+			String query="Select * from [Automovil]";
+			PreparedStatement pst=dbConnection.prepareStatement(query);
+			
+			console.printConsole("Getting all brand Names");
+			
+			ResultSet rs=pst.executeQuery();
+			
+			while(rs.next()){
+				Automobile a=new Automobile(rs.getString("Modelo"),rs.getString("Detalle"),
+						rs.getDate("AnioDeFabricacion"),this,console);
+			values.add(a);
+			}
+		}catch (Exception ex){
+			console.errorMsg();
+		}
+		
+		return values;
+	}
+	public ArrayList<PartPerProvider> getAllPartsPerProvider(){
+		ArrayList<PartPerProvider> values = new ArrayList<PartPerProvider>();
+		try{
+			//look for the brand in the database
+			String query="Select * from [PartesPorProveedor]";
+			PreparedStatement pst=dbConnection.prepareStatement(query);
+			
+			console.printConsole("Getting all Parts per Provider");
+			
+			ResultSet rs=pst.executeQuery();
+			
+			while(rs.next()){
+				PartPerProvider p=new PartPerProvider(rs.getInt("ID"), rs.getString("NombreParte"),
+						rs.getInt("IDProveedor"),this);
+				values.add(p);
+			}
+		}catch (Exception ex){
+			console.errorMsg("Not able to get all PartPerProvider");
+		}
+		
+		return values;
+	}
+	public String getProviderName(int ID){
+		String name="";
+		try{
+			//look for the brand in the database
+			String query="SELECT Nombre FROM [Proveedor]"
+					+ " WHERE ID=?";
+			PreparedStatement pst=dbConnection.prepareStatement(query);
+			pst.setInt(1,ID);
+			console.printConsole("Getting Provider Name");
+			ResultSet rs=pst.executeQuery();
+			
+			while(rs.next()){
+				name=rs.getString("Nombre");				
+			}
+		}catch (Exception ex){
+			console.errorMsg();
+		}
+		
+		return name;
+		
+	}
 	public ArrayList<Manufacturer> getAllManufacturers() {
 		ArrayList<Manufacturer> values = new ArrayList<Manufacturer>();
 		try{
@@ -170,26 +235,23 @@ public class DataBase {
 		
 		return values;
 	}
-	public void associatePartWithProvider(Part pPart,Provider pProvider,int  pProfitPorcentage,int pCost){
+	public void associatePartWithAutomobile(Part pPart,Automobile pAutomobile){
 		try{
-			String query = "INSERT INTO [PartesPorProveedor] (IDProveedor,NombreParte,PorcentajeDeGanancia,Precio) "
-					+ "VALUES (?,?,?,?)";
-			PreparedStatement pst = dbConnection.prepareStatement(query);
-			pst.setInt(1, pProvider.getId());
-			pst.setString(2,pPart.toString());
-			pst.setInt(3,pProfitPorcentage);
-			pst.setInt(4,pCost);
+			String query="INSERT INTO [PartesDeAutomovil] (NombreParte,ModeloAutomovil)"
+					+ "VALUES(?,?)";
+			PreparedStatement pst=dbConnection.prepareStatement(query);
+			pst.setString(1,pPart.toString());
+			pst.setString(2,pAutomobile.toString());
 			pst.executeUpdate();
 			pst.close();
 		}catch(Exception ex){
-			//we need write our own custom msg
 			System.out.println(ex.toString());
-			console.errorMsg("Not able to insert provider");
+			console.printConsole("Not able to make de association, maybe already exist");
 		}
 	}
 	
-	public ArrayList<Order> getProvidersSellPart(String partName){
-		ArrayList<Order> order = new ArrayList<Order>();
+	public ArrayList<PartPerProvider> getProvidersSellPart(String partName){
+		ArrayList<PartPerProvider> order = new ArrayList<PartPerProvider>();
 		
 		try{
 		String query = "SELECT * FROM PartesPorProveedor " +
@@ -206,7 +268,7 @@ public class DataBase {
 			String partsName = rs.getString("NombreParte");
 			int price = rs.getInt("Precio");
 			
-			Order or = new Order(idProvider, partsName, price);
+			PartPerProvider or = new PartPerProvider(idProvider, partsName, price);
 			order.add(or);
 		}
 		

@@ -24,15 +24,15 @@ public class Automobile {
 		console=pConsole;
 		insertInDB();
 	}
-//	@SuppressWarnings("deprecation")
-//	public Automobile(String pModel,String pDetail,int pYear,
-//			DataBase pDb,logic.Console pConsole){ //this constructor is for loading from the database
-//		model=pModel;
-//		detail=pDetail;
-//		fabricationYear=new Date(pYear,1,1);
-//		db=pDb;
-//		console=pConsole;
-//	}
+	@SuppressWarnings("deprecation")
+	public Automobile(String pModel,String pDetail,Date pYear,
+			DataBase pDb,logic.Console pConsole){ //this constructor is for loading from the database
+		model=pModel;
+		detail=pDetail;
+		fabricationYear=pYear;
+		db=pDb;
+		console=pConsole;
+	}
 	private void insertInDB(){
 		try{
 			//verify the date !!!

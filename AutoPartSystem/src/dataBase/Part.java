@@ -39,8 +39,6 @@ public class Part{
 				throw new Exception("No name or price");
 			}
 			pst.close();
-			//is a database bug, in the parameter they can fill with a big sql server
-			//code to be excecuted !!!!!
 			query = " declare @BrandName varchar(50) "
 					+ " declare @PartName varchar(50) "
 					+ " set @BrandName =?"
@@ -53,7 +51,8 @@ public class Part{
 			pst.close();
 			console.printConsole("The insertion of the Part has done");
 		}	catch(Exception ex){
-			console.errorMsg(ex.toString());
+			System.out.println(ex.toString());
+			console.errorMsg("Not able to insert a part, maybe the name already exist");
 		}
 	}
 	private void deleteFromDb(){
