@@ -2,10 +2,11 @@ package dataBase;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 
 public class Company extends Client{
-	private int telephone;
+	private int telephone, contactsId;
 	private String contactName, contactDoes;
 
 	public Company(DataBase db, String fullName, 
@@ -62,7 +63,7 @@ public class Company extends Client{
 	private void addManager(){
 		try{
 			Connection dbConnection = db.getDbConnection();
-			String query = "INSERT INTO [Engargado] (Nombre,Telefono,Cargo,Organizacion) VALUES (?,?,?,?)";
+			String query = "INSERT INTO [Encargado] (Nombre,Telefono,Cargo,Organizacion) VALUES (?,?,?,?)";
 			PreparedStatement pst = dbConnection.prepareStatement(query);
 			
 			pst.setString(1, this.contactName);
@@ -82,7 +83,47 @@ public class Company extends Client{
 
 	@Override
 	public void fillClient() {
-		// TODO Auto-generated method stub
+		db.console.printConsole("Obteniendo los datos del Cliente tipo Empresarial");
+		
+		try{
+			Connection dbConnection = db.getDbConnection();
+			String sql = "SELECT c.*, p.* FROM Cliente c "+
+			"INNER JOIN Organizaciones o ON c.Nombre = o.Nombre " +
+			"WHERE c.Nombre = ? ";
+	       
+			PreparedStatement pst=dbConnection.prepareStatement(sql);
+			
+			//pass the variable PK we want to the query
+			pst.setString(1, this.fullName.toString());			
+			
+			
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()){
+				this.state  = rs.getString("Estado");
+	           	this.isPerson = rs.getBoolean("EsPersona");
+	           	this.id = rs.getInt("CedulaJuridica");
+	           	this.address = rs.getString("Direccion");
+	           	this.city = rs.getString("Ciudad");
+	           	this.contactsId = rs.getInt("IDEncargado");
+			}
+			pst.close();
+			
+			//Now we need to get copany contacts info
+			sql = "SELECT * FROM Encargado En WHERE ID = ?";
+			
+			pst=dbConnection.prepareStatement(sql);
+			pst.setInt(1, this.contactsId);
+			
+			rs = pst.executeQuery();
+			while(rs.next()){
+				this.telephones.add(rs.getInt("Numero"));
+			}
+			pst.close();
+			
+		}catch(Exception e){
+	    	 db.console.errorMsg();
+	    	 System.out.println(e);
+	     }
 		
 	}
 

@@ -19,6 +19,7 @@ import dataBase.Client;
 import dataBase.Company;
 import dataBase.DataBase;
 import dataBase.Manufacturer;
+import dataBase.Order;
 import dataBase.Part;
 import dataBase.Person;
 import dataBase.Provider;
@@ -58,7 +59,7 @@ public class MainWindow extends JFrame{
 	private Parser parser;
 	
 	//db stuff
-	private DataBase db ;
+	private DataBase db;
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -107,6 +108,8 @@ public class MainWindow extends JFrame{
 	private JComboBox<Manufacturer> Manufacturers;
 	private JComboBox<Brand> brands;
 	private JTable orderTable;
+	private JTextField txtOrderVehicleModel;
+	private JTextField textField;
 	
 	public MainWindow(){
 		createGui();
@@ -165,11 +168,85 @@ public class MainWindow extends JFrame{
 	      }
 	    });
 		
-		//--<<<<<<
+		JLabel lbSearch = new JLabel("Search/Select Provider");
+		lbSearch.setBounds(10, 11, 225, 27);
+		ordersTab.add(lbSearch);
+		lbSearch.setFont(new Font("Consolas", Font.PLAIN, 16));
 		
-		JTabbedPane nestedTabbedPane = new JTabbedPane(JTabbedPane.LEFT);
-		nestedTabbedPane.setBounds(0, 0, 679, 269);
-		ordersTab.add(nestedTabbedPane);
+		JLabel lblPartName = new JLabel("Part Name:");
+		lblPartName.setBounds(10, 44, 80, 14);
+		ordersTab.add(lblPartName);
+		lblPartName.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		
+		TfPartName = new JTextField();
+		TfPartName.setBounds(95, 42, 155, 20);
+		ordersTab.add(TfPartName);
+		TfPartName.setColumns(10);
+		
+		JButton btnSearch = new JButton("Search");
+		btnSearch.setBounds(274, 42, 89, 23);
+		ordersTab.add(btnSearch);
+		
+		
+		//Table show provider results
+		model = new DefaultTableModel(); 
+		//add default columns
+		model.addColumn("Name");
+		model.addColumn("Identifier");
+		model.addRow(new Object[]{"Name", "Provider"});
+		clientTab.setLayout(null);	
+		
+		JLabel lbResults = new JLabel("Results\r\n");
+		lbResults.setBounds(10, 104, 99, 53);
+		ordersTab.add(lbResults);
+		lbResults.setFont(new Font("Consolas", Font.PLAIN, 14));
+		searchResults = new JTable();
+		searchResults.setBounds(69, 117, 261, 104);
+		ordersTab.add(searchResults);
+		searchResults.setModel(model);
+		
+		JButton btnAgregar = new JButton("Add");
+		btnAgregar.setBounds(241, 233, 89, 23);
+		ordersTab.add(btnAgregar);
+		
+		orderTable = new JTable();
+		orderTable.setBounds(387, 120, 261, 104);
+		ordersTab.add(orderTable);
+		
+		JButton btnOrder = new JButton("Order");
+		btnOrder.setBounds(544, 233, 89, 23);
+		ordersTab.add(btnOrder);
+		
+		JComboBox orderClientBox = new JComboBox();
+		orderClientBox.setBounds(490, 11, 162, 20);
+		ordersTab.add(orderClientBox);
+		
+		JLabel lblClient = new JLabel("Client:");
+		lblClient.setBounds(429, 11, 46, 14);
+		ordersTab.add(lblClient);
+		
+		JLabel lblVehiculo = new JLabel("Vehicle:");
+		lblVehiculo.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblVehiculo.setBounds(10, 73, 58, 14);
+		ordersTab.add(lblVehiculo);
+		
+		txtOrderVehicleModel = new JTextField();
+		txtOrderVehicleModel.setBounds(103, 83, 86, 20);
+		ordersTab.add(txtOrderVehicleModel);
+		txtOrderVehicleModel.setColumns(10);
+		
+		JLabel lblModel_1 = new JLabel("Model:");
+		lblModel_1.setBounds(68, 86, 46, 14);
+		ordersTab.add(lblModel_1);
+		
+		JLabel lblYear = new JLabel("Year:");
+		lblYear.setBounds(199, 86, 46, 14);
+		ordersTab.add(lblYear);
+		
+		textField = new JTextField();
+		textField.setBounds(233, 83, 86, 20);
+		ordersTab.add(textField);
+		textField.setColumns(10);
 		
 		JTabbedPane proviOppsTabbedPane=new JTabbedPane(JTabbedPane.LEFT);
 		proviOppsTabbedPane.setBounds(0, 0, 679, 269);
@@ -283,72 +360,7 @@ public class MainWindow extends JFrame{
             }
         });
 		
-		//Table show provider results
-		model = new DefaultTableModel(); 
-		//add default columns
-		model.addColumn("Name");
-		model.addColumn("Identifier");
-		model.addRow(new Object[]{"Name", "Provider"});
-		
 
-		
-		
-		
-				
-		JPanel searchProviderTab = new JPanel();
-		nestedTabbedPane.addTab("New tab", null, searchProviderTab, null);
-		searchProviderTab.setLayout(null);
-		
-		JLabel lbSearch = new JLabel("Search/Select Provider");
-		lbSearch.setFont(new Font("Consolas", Font.PLAIN, 16));
-		lbSearch.setBounds(0, 0, 225, 27);
-		searchProviderTab.add(lbSearch);
-		
-		JLabel lblPartName = new JLabel("Part Name:");
-		lblPartName.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPartName.setBounds(10, 27, 80, 14);
-		searchProviderTab.add(lblPartName);
-		
-		TfPartName = new JTextField();
-		TfPartName.setBounds(93, 26, 155, 20);
-		searchProviderTab.add(TfPartName);
-		TfPartName.setColumns(10);
-		
-		JButton btnSearch = new JButton("Search");
-		btnSearch.setBounds(258, 25, 89, 23);
-		searchProviderTab.add(btnSearch);
-		
-		JLabel lbResults = new JLabel("Results\r\n");
-		lbResults.setFont(new Font("Consolas", Font.PLAIN, 14));
-		lbResults.setBounds(10, 74, 99, 53);
-		searchProviderTab.add(lbResults);
-		searchResults = new JTable();
-		searchResults.setModel(model);
-		
-		searchResults.setBounds(77, 74, 261, 104);
-		
-		searchProviderTab.add(searchResults);
-		
-		JButton btnAgregar = new JButton("Agregar");
-		btnAgregar.setBounds(249, 189, 89, 23);
-		searchProviderTab.add(btnAgregar);
-		
-		orderTable = new JTable();
-		orderTable.setBounds(347, 74, 261, 104);
-		searchProviderTab.add(orderTable);
-		
-		JButton btnOrder = new JButton("Order");
-		btnOrder.setBounds(519, 189, 89, 23);
-		searchProviderTab.add(btnOrder);
-		
-		JComboBox orderClientBox = new JComboBox();
-		orderClientBox.setBounds(430, 26, 162, 20);
-		searchProviderTab.add(orderClientBox);
-		
-		JLabel lblClient = new JLabel("Client:");
-		lblClient.setBounds(386, 29, 46, 14);
-		searchProviderTab.add(lblClient);
-		clientTab.setLayout(null);	
 		
 		
 		/*
@@ -787,10 +799,19 @@ public class MainWindow extends JFrame{
 	}
 	
 	//--<<<<<<
+
 	
 	/*
 	 * Client gui event/action section
 	 */
+	
+	//get all providers that have x part
+	private void searchProvidersFromPart(){
+		String partName = "Knife";
+		
+		ArrayList<Order> order = db.getProvidersSellPart(partName);
+	}
+	
 	private void selectClientBtn(java.awt.event.ActionEvent evt){
 		int selected = jListClients.getSelectedIndex();
 	

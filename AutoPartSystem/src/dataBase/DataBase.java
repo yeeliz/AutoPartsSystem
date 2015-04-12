@@ -187,4 +187,33 @@ public class DataBase {
 			console.errorMsg("Not able to insert provider");
 		}
 	}
+	
+	public ArrayList<Order> getProvidersSellPart(String partName){
+		ArrayList<Order> order = new ArrayList<Order>();
+		
+		try{
+		String query = "SELECT * FROM PartesPorProveedor " +
+		"WHERE NombreParte LIKE ?";
+		
+		PreparedStatement pst = dbConnection.prepareStatement(query);	
+		pst.setString(1, partName);
+		console.printConsole("Getting all Providers with that part");
+		
+		ResultSet rs=pst.executeQuery();
+		
+		while(rs.next()){
+			int idProvider = rs.getInt("IDProveedor");
+			String partsName = rs.getString("NombreParte");
+			int price = rs.getInt("Precio");
+			
+			Order or = new Order(idProvider, partsName, price);
+			order.add(or);
+		}
+		
+		}catch(Exception e){
+			console.errorMsg("Not able to get providers for that part from DB");
+		}
+		
+		return order;
+	}
 }

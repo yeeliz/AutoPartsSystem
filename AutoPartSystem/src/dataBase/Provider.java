@@ -50,6 +50,7 @@ public class Provider {
 		loadPhoneNumbers();
 		System.out.println("Here Joshua");		
 	}
+
 	public void addPhoneNumber(String pNumber){
 		try{
 			Connection dbConnection = db.getDbConnection();
