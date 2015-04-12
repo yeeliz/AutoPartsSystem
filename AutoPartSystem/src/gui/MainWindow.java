@@ -141,6 +141,9 @@ public class MainWindow extends JFrame{
 	private void createGui(){
 		setTitle("Autopart System");
 	    setSize(700,500);
+	    
+	    
+	    
 		
 		/*
 		 * Tabs for multiple views
@@ -151,24 +154,109 @@ public class MainWindow extends JFrame{
 		clientTab.setName("clientTab");
 		JComponent partsTab = new JPanel();
 		partsTab.setName("partsTab");
-		JComponent ordersTab = new JPanel();
-		ordersTab.setName("ordersTab");
 		JComponent providersTab=new JPanel();
 		providersTab.setName("providersTab");
 		JComponent automobileTab=new JPanel();
 		automobileTab.setName("automobilesTab");
 		JComponent manufacturersTab=new JPanel();
 		manufacturersTab.setName("manufacturersTab");
+		JComponent ordersTab = new JPanel();
+		ordersTab.setName("ordersTab");
 		
 		
 		//tabs
 		tabbedPane.addTab("Orders", ordersTab);
+		ordersTab.setLayout(null);
+		
+		JLabel lblPartName = new JLabel("Part Name (Filter):");
+		lblPartName.setBounds(10, 198, 121, 14);
+		ordersTab.add(lblPartName);
+		lblPartName.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		
+		TfPartName = new JTextField();
+		TfPartName.setBounds(10, 223, 121, 20);
+		ordersTab.add(TfPartName);
+		TfPartName.setColumns(10);
+		
+		JButton btnSearch = new JButton("Search");
+		btnSearch.setBounds(303, 42, 89, 23);
+		ordersTab.add(btnSearch);
+		
+		//Table show provider results
+		model = new DefaultTableModel(); 
+		//add default columns
+		model.addColumn("Name");
+		model.addColumn("Identifier");
+		model.addRow(new Object[]{"Name", "Provider"});
+		clientTab.setLayout(null);
+		
+		JLabel lbResults = new JLabel("Results\r\n");
+		lbResults.setBounds(10, 53, 99, 53);
+		ordersTab.add(lbResults);
+		lbResults.setFont(new Font("Consolas", Font.PLAIN, 14));
+		searchResults = new JTable();
+		searchResults.setBounds(69, 83, 261, 104);
+		ordersTab.add(searchResults);
+		searchResults.setModel(model);
+		
+		JButton btnAgregar = new JButton("Add");
+		btnAgregar.setBounds(250, 196, 89, 23);
+		ordersTab.add(btnAgregar);
+		
+		orderTable = new JTable();
+		orderTable.setBounds(391, 83, 261, 104);
+		ordersTab.add(orderTable);
+		
+		JButton btnOrder = new JButton("Order");
+		btnOrder.setBounds(568, 196, 89, 23);
+		ordersTab.add(btnOrder);
+		
+		orderClientBox = new JComboBox<Client>();
+		orderClientBox.setBounds(490, 11, 162, 20);
+		ordersTab.add(orderClientBox);
+		
+		JLabel lblClient = new JLabel("Client:");
+		lblClient.setBounds(429, 11, 46, 14);
+		ordersTab.add(lblClient);
+		
+		JLabel lblVehiculo = new JLabel("Vehicle:");
+		lblVehiculo.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblVehiculo.setBounds(10, 13, 58, 14);
+		ordersTab.add(lblVehiculo);
+		
+		txtOrderVehicleModel = new JTextField();
+		txtOrderVehicleModel.setBounds(69, 43, 86, 20);
+		ordersTab.add(txtOrderVehicleModel);
+		txtOrderVehicleModel.setColumns(10);
+		
+		JLabel lblModel_1 = new JLabel("Model:");
+		lblModel_1.setBounds(22, 46, 46, 14);
+		ordersTab.add(lblModel_1);
+		
+		JLabel lblYear = new JLabel("Year:");
+		lblYear.setBounds(165, 46, 46, 14);
+		ordersTab.add(lblYear);
+		
+		textField = new JTextField();
+		textField.setBounds(207, 43, 86, 20);
+		ordersTab.add(textField);
+		textField.setColumns(10);
+		
+		JButton btnFilterParts = new JButton("Filter");
+		btnFilterParts.setBounds(141, 222, 89, 23);
+		ordersTab.add(btnFilterParts);
+		
+		JLabel lblPartsByVehicle = new JLabel("Parts by Vehicle");
+		lblPartsByVehicle.setBounds(297, 17, 122, 14);
+		ordersTab.add(lblPartsByVehicle);
 		tabbedPane.addTab("Client", clientTab);
 		tabbedPane.addTab("Parts", partsTab);
+		
+		
+
 		tabbedPane.addTab("Providers",providersTab);
 		tabbedPane.addTab("Automobiles",automobileTab);
 		tabbedPane.addTab("Manufacturers",manufacturersTab);
-		ordersTab.setLayout(null);
 				
 	     /*
 	        * Tab Listener
@@ -182,85 +270,8 @@ public class MainWindow extends JFrame{
 	      }
 	    });
 		
-		JLabel lbSearch = new JLabel("Search/Select Provider");
-		lbSearch.setBounds(10, 11, 225, 27);
-		ordersTab.add(lbSearch);
-		lbSearch.setFont(new Font("Consolas", Font.PLAIN, 16));
 		
-		JLabel lblPartName = new JLabel("Part Name:");
-		lblPartName.setBounds(10, 44, 80, 14);
-		ordersTab.add(lblPartName);
-		lblPartName.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		
-		TfPartName = new JTextField();
-		TfPartName.setBounds(95, 42, 155, 20);
-		ordersTab.add(TfPartName);
-		TfPartName.setColumns(10);
-		
-		JButton btnSearch = new JButton("Search");
-		btnSearch.setBounds(274, 42, 89, 23);
-		ordersTab.add(btnSearch);
-		
-		
-		//Table show provider results
-		model = new DefaultTableModel(); 
-		//add default columns
-		model.addColumn("Name");
-		model.addColumn("Identifier");
-		model.addRow(new Object[]{"Name", "Provider"});
-		clientTab.setLayout(null);	
-		
-		JLabel lbResults = new JLabel("Results\r\n");
-		lbResults.setBounds(10, 104, 99, 53);
-		ordersTab.add(lbResults);
-		lbResults.setFont(new Font("Consolas", Font.PLAIN, 14));
-		searchResults = new JTable();
-		searchResults.setBounds(69, 117, 261, 104);
-		ordersTab.add(searchResults);
-		searchResults.setModel(model);
-		
-		JButton btnAgregar = new JButton("Add");
-		btnAgregar.setBounds(241, 233, 89, 23);
-		ordersTab.add(btnAgregar);
-		
-		orderTable = new JTable();
-		orderTable.setBounds(387, 120, 261, 104);
-		ordersTab.add(orderTable);
-		
-		JButton btnOrder = new JButton("Order");
-		btnOrder.setBounds(544, 233, 89, 23);
-		ordersTab.add(btnOrder);
-		
-		orderClientBox = new JComboBox<Client>();
-		orderClientBox.setBounds(490, 11, 162, 20);
-		ordersTab.add(orderClientBox);
-		
-		JLabel lblClient = new JLabel("Client:");
-		lblClient.setBounds(429, 11, 46, 14);
-		ordersTab.add(lblClient);
-		
-		JLabel lblVehiculo = new JLabel("Vehicle:");
-		lblVehiculo.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblVehiculo.setBounds(10, 73, 58, 14);
-		ordersTab.add(lblVehiculo);
-		
-		txtOrderVehicleModel = new JTextField();
-		txtOrderVehicleModel.setBounds(103, 83, 86, 20);
-		ordersTab.add(txtOrderVehicleModel);
-		txtOrderVehicleModel.setColumns(10);
-		
-		JLabel lblModel_1 = new JLabel("Model:");
-		lblModel_1.setBounds(68, 86, 46, 14);
-		ordersTab.add(lblModel_1);
-		
-		JLabel lblYear = new JLabel("Year:");
-		lblYear.setBounds(199, 86, 46, 14);
-		ordersTab.add(lblYear);
-		
-		textField = new JTextField();
-		textField.setBounds(233, 83, 86, 20);
-		ordersTab.add(textField);
-		textField.setColumns(10);
+	
 		
 		JTabbedPane proviOppsTabbedPane=new JTabbedPane(JTabbedPane.LEFT);
 		proviOppsTabbedPane.setBounds(0, 0, 679, 269);
