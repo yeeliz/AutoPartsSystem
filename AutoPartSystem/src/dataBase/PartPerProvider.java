@@ -106,7 +106,7 @@ public PartPerProvider(int pId,String pPartName,int providerID, int price,
 	public String toString(){
 		return partName+", "+providerName;
 	}
-	public String getName() {
+	public String getProviderName() {
 		// TODO Auto-generated method stub
 		return this.providerName;
 	}

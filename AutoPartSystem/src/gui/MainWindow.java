@@ -254,6 +254,12 @@ public class MainWindow extends JFrame{
 		JButton btnFilterParts = new JButton("Filter");
 		btnFilterParts.setBounds(141, 222, 89, 23);
 		ordersTab.add(btnFilterParts);
+		btnFilterParts.addActionListener(new java.awt.event.ActionListener() {
+	            public void actionPerformed(java.awt.event.ActionEvent evt) {
+	            	btnFilterByPart(evt);
+	            }
+	        }
+			);
 		
 		JLabel lblPartsByVehicle = new JLabel("Parts by Vehicle");
 		lblPartsByVehicle.setBounds(297, 17, 122, 14);
@@ -879,8 +885,9 @@ public class MainWindow extends JFrame{
 	
 	private void clearSearchTable(){
 		int numRows = this.searchResultsModel.getRowCount();
-		for(int i = 1; i< numRows; i++)
-			this.searchResultsModel.removeRow(i);
+		System.out.println(numRows);
+		for(int i = numRows; i >= 2; i--)
+			this.searchResultsModel.removeRow(i-1);
 	}
 	
 	private void loadPartsStuff() {
@@ -987,16 +994,22 @@ public class MainWindow extends JFrame{
 			
 			//add all the parts with their provider
 			for(PartPerProvider ppp: partProvider){
-				searchResultsModel.addRow(new Object[]{part, ppp.getName()
+				searchResultsModel.addRow(new Object[]{part, ppp.getProviderName()
 						,ppp.getProviderId(), ppp.getPrice()});
 			}
 		}
 	}
 	
-	private void filterProvidersByPart(){
+	private void btnFilterByPart(ActionEvent evt){
+		clearSearchTable();
 		String partName = this.txtOrderPartName.getText();
 		
-		ArrayList<PartPerProvider> ppp = db.getProvidersSellPart(partName);
+		ArrayList<PartPerProvider> partProvider = db.getProvidersSellPart(partName);
+		//add all the parts with their provider
+		for(PartPerProvider ppp: partProvider){
+			searchResultsModel.addRow(new Object[]{partName, ppp.getProviderName()
+					,ppp.getProviderId(), ppp.getPrice()});
+		}
 	}
 	
 	private void selectClientBtn(java.awt.event.ActionEvent evt){
