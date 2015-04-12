@@ -51,7 +51,8 @@ public class Part{
 			pst.close();
 			console.printConsole("The insertion of the Part has done");
 		}	catch(Exception ex){
-			console.errorMsg(ex.toString());
+			System.out.println(ex.toString());
+			console.errorMsg("Not able to insert a part, maybe the name already exist");
 		}
 	}
 	private void deleteFromDb(){

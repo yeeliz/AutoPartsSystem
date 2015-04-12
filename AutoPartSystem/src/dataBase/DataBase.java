@@ -98,6 +98,49 @@ public class DataBase {
 		
 		return values;
 	}
+	public ArrayList<PartPerProvider> getAllPartsPerProvider(){
+		ArrayList<PartPerProvider> values = new ArrayList<PartPerProvider>();
+		try{
+			//look for the brand in the database
+			String query="Select * from [PartesPorProveedor]";
+			PreparedStatement pst=dbConnection.prepareStatement(query);
+			
+			console.printConsole("Getting all Parts per Provider");
+			
+			ResultSet rs=pst.executeQuery();
+			
+			while(rs.next()){
+				PartPerProvider p=new PartPerProvider(rs.getInt("ID"), rs.getString("NombreParte"),
+						rs.getInt("IDProveedor"),this, console);
+				values.add(p);
+			}
+		}catch (Exception ex){
+			console.errorMsg("Not able to get all PartPerProvider");
+		}
+		
+		return values;
+	}
+	public String getProviderName(int ID){
+		String name="";
+		try{
+			//look for the brand in the database
+			String query="SELECT Nombre FROM [Proveedor]"
+					+ " WHERE ID=?";
+			PreparedStatement pst=dbConnection.prepareStatement(query);
+			pst.setInt(1,ID);
+			console.printConsole("Getting Provider Name");
+			ResultSet rs=pst.executeQuery();
+			
+			while(rs.next()){
+				name=rs.getString("Nombre");				
+			}
+		}catch (Exception ex){
+			console.errorMsg();
+		}
+		
+		return name;
+		
+	}
 	public ArrayList<Manufacturer> getAllManufacturers() {
 		ArrayList<Manufacturer> values = new ArrayList<Manufacturer>();
 		try{
@@ -191,23 +234,6 @@ public class DataBase {
 		}
 		
 		return values;
-	}
-	public void associatePartWithProvider(Part pPart,Provider pProvider,int  pProfitPorcentage,int pCost){
-		try{
-			String query = "INSERT INTO [PartesPorProveedor] (IDProveedor,NombreParte,PorcentajeDeGanancia,Precio) "
-					+ "VALUES (?,?,?,?)";
-			PreparedStatement pst = dbConnection.prepareStatement(query);
-			pst.setInt(1, pProvider.getId());
-			pst.setString(2,pPart.toString());
-			pst.setInt(3,pProfitPorcentage);
-			pst.setInt(4,pCost);
-			pst.executeUpdate();
-			pst.close();
-		}catch(Exception ex){
-			//we need write our own custom msg
-			System.out.println(ex.toString());
-			console.errorMsg("Not able to insert provider");
-		}
 	}
 	public void associatePartWithAutomobile(Part pPart,Automobile pAutomobile){
 		try{
