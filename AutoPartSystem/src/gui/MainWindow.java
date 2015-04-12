@@ -83,6 +83,12 @@ public class MainWindow extends JFrame{
 	ArrayList<Object> modelClientList = new ArrayList<Object>();
 	//--<<
 	
+	
+	//Orders TAB Vars
+	JComboBox<Client> orderClientBox;
+	//--<<
+	
+	
 	private JTextField TfPartName;
 	private JTable searchResults;
 	private DefaultTableModel model;
@@ -126,7 +132,8 @@ public class MainWindow extends JFrame{
 		db=new DataBase(console); //pass console so db can show msg's
 		db.connect();
 		
-		//this.loadClientStuff();
+		//first tab to show needs to preload
+		this.loadOrdersStuff();
 	}
 	
 	
@@ -224,7 +231,7 @@ public class MainWindow extends JFrame{
 		btnOrder.setBounds(544, 233, 89, 23);
 		ordersTab.add(btnOrder);
 		
-		JComboBox orderClientBox = new JComboBox();
+		orderClientBox = new JComboBox<Client>();
 		orderClientBox.setBounds(490, 11, 162, 20);
 		ordersTab.add(orderClientBox);
 		
@@ -813,7 +820,7 @@ public class MainWindow extends JFrame{
 				loadPartsStuff();
 				break;
 			case "ordersTab":
-				//loadOrdersStuff();
+				loadOrdersStuff();
 				break;
 			case "providersTab":
 				loadProvidersStuff();
@@ -823,6 +830,8 @@ public class MainWindow extends JFrame{
 				break;
 		}
 	}	
+	
+	//reload TAB's GUI contents from DB
 	
 	private void loadClientStuff(){
 		//fill JClientList
@@ -835,7 +844,10 @@ public class MainWindow extends JFrame{
 		modelClientList.add((String) "New Client");
 	}
 	
-	//reload comboBox's from DB
+	private void loadOrdersStuff(){
+		loadComboClients();
+	}
+	
 	private void loadPartsStuff() {
 		loadComboBrand();
 		loadComboManufacturers();
@@ -854,6 +866,14 @@ public class MainWindow extends JFrame{
 	private void loadAutomobileStuff(){
 		loadComboManufacturers();
 	}
+	
+	private void loadComboClients(){
+		ArrayList<Client> client = db.getAllClients();
+		orderClientBox.removeAllItems();
+		for(Client c: client)
+			orderClientBox.addItem(c);	
+	}
+	
 	private void loadComboParts(){
 		ArrayList<Part> partsList = db.getAllParts();
 		comboPartsToAssociateWithProvider.removeAllItems();
