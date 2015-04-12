@@ -34,7 +34,6 @@ public class PartPerProvider {
 		db=pDb;
 		console=db.console;
 		providerName=db.getProviderName(providerID);
-
 	}
 	
 	
