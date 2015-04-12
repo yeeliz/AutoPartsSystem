@@ -28,6 +28,11 @@ public class Company extends Client{
 	public Company(String name){
 		this.fullName = name;
 	}
+	
+	public Company(DataBase db, String name){
+		this.fullName = name;
+		this.db = db;
+	}
 
 	/*
 	 * Add Company specific data Called from super
@@ -39,7 +44,7 @@ public class Company extends Client{
 			
 			Connection dbConnection = db.getDbConnection();
 			String query = "DECLARE @ID int\n" +
-			"SELECT @ID = @@IDENTITY FROM [Engargado]\n" +
+			"SELECT @ID = @@IDENTITY FROM [Encargado]\n" +
 			"INSERT INTO [Organizaciones] (CedulaJuridica, Nombre, Direccion, Ciudad, IDEncargado)"+
 			"VALUES (?,?,?,?,@ID)";
 			PreparedStatement pst = dbConnection.prepareStatement(query);
@@ -76,10 +81,56 @@ public class Company extends Client{
 		}catch(Exception ex){ //need to add custom msg's
 			db.console.errorMsg(ex.toString());
 		}
-		
-		
-		
 	}
+	
+	protected void updateSubData(){
+		try{
+			updateManager();
+			
+			Connection dbConnection = db.getDbConnection();
+			String query ="UPDATE [Organizaciones] "+
+			"SET CedulaJuridica = ?, Direccion = ?, Ciudad = ? "
+			+ "WHERE Nombre = ?";
+			PreparedStatement pst = dbConnection.prepareStatement(query);
+			
+			
+			pst.setInt(1, this.id);
+			
+			pst.setString(2, this.address);
+			pst.setString(3, this.city);
+			pst.setString(4, this.fullName);
+			
+			pst.executeUpdate();	
+			pst.close();
+			db.console.printConsole("Updated BUSINESS Client subclass data into PERSONA table.");
+			
+			
+		}catch(Exception ex){ //need to add custom msg's
+			db.console.errorMsg(ex.toString());
+		}
+	}
+	
+	private void updateManager(){
+		try{
+			Connection dbConnection = db.getDbConnection();
+			String query = "UPDATE [Encargado] " +
+			"SET Nombre = ?, Telefono = ?, Cargo = ?, Organizacion = ? " +
+			"WHERE ID = ?";
+			PreparedStatement pst = dbConnection.prepareStatement(query);
+			
+			pst.setString(1, this.contactName);
+			pst.setInt(2, this.telephone);
+			pst.setString(3, this.contactDoes);
+			pst.setString(4, this.fullName);//Business Name
+			pst.setInt(5, this.contactsId);
+			pst.executeUpdate();
+			pst.close();
+			db.console.printConsole("Updated Business Manager");
+		}catch(Exception ex){ //need to add custom msg's
+			db.console.errorMsg(ex.toString());
+		}
+	}
+	
 
 	@Override
 	public void fillClient() {
@@ -87,7 +138,7 @@ public class Company extends Client{
 		
 		try{
 			Connection dbConnection = db.getDbConnection();
-			String sql = "SELECT c.*, p.* FROM Cliente c "+
+			String sql = "SELECT c.*, o.* FROM Cliente c "+
 			"INNER JOIN Organizaciones o ON c.Nombre = o.Nombre " +
 			"WHERE c.Nombre = ? ";
 	       
@@ -116,7 +167,7 @@ public class Company extends Client{
 			
 			rs = pst.executeQuery();
 			while(rs.next()){
-				this.telephones.add(rs.getInt("Numero"));
+				this.telephones.add(rs.getInt("Telefono"));
 			}
 			pst.close();
 			

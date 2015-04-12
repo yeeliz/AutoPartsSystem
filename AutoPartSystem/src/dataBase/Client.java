@@ -41,10 +41,34 @@ public abstract class Client {
 		}
 	}
 	
+	public void updateClient(){
+		try{
+			Connection dbConnection = db.getDbConnection();
+			String query = "UPDATE [Cliente] " +
+			"SET Estado = ?, EsPersona = ? " +
+			"WHERE Nombre = ?";
+			PreparedStatement pst = dbConnection.prepareStatement(query);
+			
+			pst.setString(1, this.state);
+			pst.setBoolean(2,this.isPerson );
+			pst.setString(3, this.fullName);
+			pst.executeUpdate();
+			pst.close();
+			db.console.printConsole("Updated general cliente info into Client table.");
+			
+			updateSubData(); //add the data in subClass
+		}catch(Exception ex){ //need to add custom msg's
+			db.console.errorMsg("Error Updating general client");
+			System.out.println(ex);
+		}
+	}
+	
 	public abstract void fillClient();
 	
 	//Add data specific to subClass
 	protected abstract void addSubData();
+	//Update specific data to SubClass
+	protected abstract void updateSubData();
 	
 	public String toString(){
 		return this.fullName;

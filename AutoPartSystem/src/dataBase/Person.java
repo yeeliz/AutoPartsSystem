@@ -53,6 +53,29 @@ public class Person extends Client{
 		}
 	}
 	
+	protected void updateSubData(){
+		try{
+			Connection dbConnection = db.getDbConnection();
+			String query = "UPDATE [Persona] "+
+			"SET Cedula = ?, Direccion = ?, Ciudad =? "+
+			"WHERE Nombre = ? ";
+			PreparedStatement pst = dbConnection.prepareStatement(query);
+			
+			pst.setInt(1, this.id);
+			pst.setString(2, this.address);
+			pst.setString(3, this.city);
+			pst.setString(4, this.fullName);
+			pst.executeUpdate();	
+			pst.close();
+			db.console.printConsole("Updated Personal Client subclass data into PERSONA table.");
+			
+			updateTels();
+			db.console.printConsole("Personal client telephones updated!");
+		}catch(Exception ex){ //need to add custom msg's
+			db.console.errorMsg(ex.toString());
+		}
+	}
+	
 	private void addTelephones() throws SQLException{
 		Connection dbConnection = db.getDbConnection();
 		String query = "INSERT INTO [Telefonos] (NombrePersona, numero) VALUES (?,?)";
@@ -60,6 +83,19 @@ public class Person extends Client{
 			PreparedStatement pst = dbConnection.prepareStatement(query);
 			pst.setString(1, this.fullName);
 			pst.setInt(2, tel);
+			pst.executeUpdate();
+			pst.close();
+		}
+	}
+	
+	private void updateTels() throws SQLException{
+		Connection dbConnection = db.getDbConnection();
+		String query = "UPDATE [Telefonos] "+
+		"SET numero = ? WHERE NombrePersona = ?";
+		for(Integer tel : telephones){
+			PreparedStatement pst = dbConnection.prepareStatement(query);
+			pst.setString(2, this.fullName);
+			pst.setInt(1, tel);
 			pst.executeUpdate();
 			pst.close();
 		}

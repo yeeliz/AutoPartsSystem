@@ -1020,9 +1020,7 @@ public class MainWindow extends JFrame{
 			this.txtClientFullName.setEditable(true);
 			this.clientTypeComboBox.setEnabled(true);
 		}else{
-			this.txtClientFullName.setEditable(false); //we can't edit this
-			//maybe we should be able to edit this?
-			this.clientTypeComboBox.setEnabled(false);
+			
 			//get selected client name
 			String clientName = this.modelClientList.get(selected).toString();
 			
@@ -1033,10 +1031,11 @@ public class MainWindow extends JFrame{
 				per.fillClient();
 				client = per;
 			}else{
-				Company comp = new Company(clientName);
+				Company comp = new Company(db, clientName);
 				comp.fillClient();
 				client = comp;
 				try{
+					this.clientTypeComboBox.getModel().setSelectedItem("Business");;
 					this.txtContactName.setText(comp.getContactName());
 					this.txtContactDoes.setText(comp.getContactDoes());
 				}catch(Exception e){
@@ -1053,7 +1052,9 @@ public class MainWindow extends JFrame{
 		    }catch(Exception e){
 		    	console.printConsole("One or more of the client fields is null!");
 		    }
-		    
+		    this.txtClientFullName.setEditable(false); //we can't edit this
+			//maybe we should be able to edit this?
+			this.clientTypeComboBox.setEnabled(false);
 		    //set the state of the client (ACTIVE, etc)
 		    this.clientStateComboBox.getModel().setSelectedItem(client.getState());
 		}
@@ -1073,22 +1074,22 @@ public class MainWindow extends JFrame{
 		//Parse TEL's
 		telephones= parser.telParser(this.txtTels.getText());
 		
-		
+		Client per;
 		//personal Client
 		if(this.clientTypeComboBox.getSelectedItem().toString().compareTo("Personal") == 0){
 			//get info
 			
-			Person per = new Person(db, this.txtClientFullName.getText(),
+			per = new Person(db, this.txtClientFullName.getText(),
 					this.txtClientAddress.getText(), 
 					this.clientStateComboBox.getSelectedItem().toString(),
 					id,this.txtClientCity.getText(), telephones);
 			
 			//save it to the server
 			console.printConsole("Saving Personal Client to DB");
-			per.addClient();
+			
 		}else{ //business Client
 			
-			Company per = new Company(db, this.txtClientFullName.getText(),
+			per = new Company(db, this.txtClientFullName.getText(),
 					this.txtClientAddress.getText(), 
 					this.clientStateComboBox.getSelectedItem().toString(),
 				this.txtClientCity.getText(), id, this.txtContactDoes.getText(),
@@ -1096,11 +1097,15 @@ public class MainWindow extends JFrame{
 			
 			//save it to the server
 			console.printConsole("Saving a COMPANY type Client to DB");
-			per.addClient();
+			
 		}
 		
-		//add it to client list
-		//this.loadClientStuff();
+		if(this.txtClientFullName.isEditable()){
+			per.addClient();
+			this.txtClientFullName.setEditable(false);
+		}else{
+			per.updateClient();
+		}
 	}
 	
 	private void btnAddPartActionPerformed(java.awt.event.ActionEvent evt) {                                         
