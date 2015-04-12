@@ -34,15 +34,19 @@ public class PartPerProvider {
 		db=pDb;
 		console=db.console;
 		providerName=db.getProviderName(providerID);
-
 	}
 	
-	
-	public PartPerProvider(int idProvider, String partsName, int price) {
-		partName = partsName;
+public PartPerProvider(int pId,String pPartName,int providerID, int price,
+		DataBase pDb){
+		
+		partName=pPartName;
+		id=pId;
+		db=pDb;
+		console=db.console;
+		providerName=db.getProviderName(providerID);
 		cost = price;
-		providerName=db.getProviderName(idProvider);
 	}
+	
 	public void insertInDB(){
 		try{
 			String query = "INSERT INTO [PartesPorProveedor] (IDProveedor,NombreParte,PorcentajeDeGanancia,Precio) "
@@ -60,6 +64,7 @@ public class PartPerProvider {
 			console.errorMsg("Not able to insert Asociate");
 		}
 	}
+	
 	public void getID(){
 
 		try{
@@ -100,6 +105,18 @@ public class PartPerProvider {
 	}
 	public String toString(){
 		return partName+", "+providerName;
+	}
+	public String getName() {
+		// TODO Auto-generated method stub
+		return this.providerName;
+	}
+	
+	public int getProviderId(){
+		return this.id;
+	}
+	
+	public int getPrice(){
+		return this.cost;
 	}
 	
 }

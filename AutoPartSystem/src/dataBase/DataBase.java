@@ -89,7 +89,7 @@ public class DataBase {
 			
 			while(rs.next()){
 				Automobile a=new Automobile(rs.getString("Modelo"),rs.getString("Detalle"),
-						rs.getDate("AnioDeFabricacion"),this,console);
+						rs.getInt("AnioDeFabricacion"),this,console);
 			values.add(a);
 			}
 		}catch (Exception ex){
@@ -235,13 +235,14 @@ public class DataBase {
 		
 		return values;
 	}
-	public void associatePartWithAutomobile(Part pPart,Automobile pAutomobile){
+	public void associatePartWithAutomobile(Part pPart,Automobile pAutomobile, int  anioFrabricacion){
 		try{
-			String query="INSERT INTO [PartesDeAutomovil] (NombreParte,ModeloAutomovil)"
-					+ "VALUES(?,?)";
+			String query="INSERT INTO [PartesDeAutomovil] (NombreParte,ModeloAutomovil, AnioFabricacion)"
+					+ "VALUES(?,?,?)";
 			PreparedStatement pst=dbConnection.prepareStatement(query);
 			pst.setString(1,pPart.toString());
 			pst.setString(2,pAutomobile.toString());
+			pst.setInt(3, anioFrabricacion);
 			pst.executeUpdate();
 			pst.close();
 		}catch(Exception ex){
@@ -254,28 +255,62 @@ public class DataBase {
 		ArrayList<PartPerProvider> order = new ArrayList<PartPerProvider>();
 		
 		try{
-		String query = "SELECT * FROM PartesPorProveedor " +
-		"WHERE NombreParte LIKE ?";
-		
-		PreparedStatement pst = dbConnection.prepareStatement(query);	
-		pst.setString(1, partName);
-		console.printConsole("Getting all Providers with that part");
-		
-		ResultSet rs=pst.executeQuery();
-		
-		while(rs.next()){
-			int idProvider = rs.getInt("IDProveedor");
-			String partsName = rs.getString("NombreParte");
-			int price = rs.getInt("Precio");
+			String query = "SELECT * FROM PartesPorProveedor " +
+			"WHERE NombreParte = ?";
 			
-			PartPerProvider or = new PartPerProvider(idProvider, partsName, price);
-			order.add(or);
-		}
+			PreparedStatement pst = dbConnection.prepareStatement(query);	
+			pst.setString(1, partName);
+			console.printConsole("Getting all Providers with that part");
+			
+			ResultSet rs=pst.executeQuery();
+			
+			while(rs.next()){
+				int tId = rs.getInt("ID");
+				int idProvider = rs.getInt("IDProveedor");
+				String partsName = rs.getString("NombreParte");
+				int price = rs.getInt("Precio");
+				
+				PartPerProvider or = new PartPerProvider(idProvider, 
+						partsName,tId, price, this);
+				order.add(or);
+			}
 		
 		}catch(Exception e){
 			console.errorMsg("Not able to get providers for that part from DB");
+			System.out.println(e);
 		}
 		
 		return order;
+	}
+
+	public ArrayList<String> getAllPartsForAutoMobile(String model, String year) {
+		ArrayList<String> partNames = new ArrayList<String>();
+		
+		
+		String sql = "SELECT * FROM PartesDeAutoMovil " +
+		"WHERE ModeloAutomovil = ? AND AnioFabricacion = ? ";
+		try{
+			PreparedStatement pst= dbConnection.prepareStatement(sql);
+			
+			//pass the variable PK we want to the query
+			pst.setString(1, model);
+			pst.setString(2, year);
+			
+			console.printConsole("Obtaining all parts for a Vehicle of model: " +
+			model + " and year: " + year);
+			
+			ResultSet rs=pst.executeQuery();
+			
+			while(rs.next()){
+				partNames.add(rs.getString("NombreParte"));
+				
+			}
+			
+		}catch(Exception e){
+			console.errorMsg(e + "");
+		}
+		
+		
+		return partNames;
 	}
 }

@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 public class Automobile {
 	private String model;
 	private String detail;
-	private java.sql.Date fabricationYear;
+	private int fabricationYear;
 	private Manufacturer manufacturer;
 	private logic.Console console;
 	private DataBase db;
@@ -18,14 +18,14 @@ public class Automobile {
 			//for inserting into the database
 		model=pModel;
 		detail=pDetail;
-		fabricationYear=new Date(pYear,1,1);
+		fabricationYear= pYear;
 		manufacturer=pManufacturer;
 		db=pDb;
 		console=pConsole;
 		insertInDB();
 	}
 	@SuppressWarnings("deprecation")
-	public Automobile(String pModel,String pDetail,Date pYear,
+	public Automobile(String pModel,String pDetail,int pYear,
 			DataBase pDb,logic.Console pConsole){ //this constructor is for loading from the database
 		model=pModel;
 		detail=pDetail;
@@ -42,7 +42,7 @@ public class Automobile {
 			PreparedStatement pst = dbConnection.prepareStatement(query);
 			pst.setString(1, model);
 			pst.setString(2, detail);
-			pst.setDate(3, fabricationYear);
+			pst.setInt(3, fabricationYear);
 			pst.setString(4, manufacturer.toString());
 			pst.executeUpdate();	
 			console.printConsole("Automobile inserted");
@@ -55,6 +55,10 @@ public class Automobile {
 	}
 	public String toString(){
 		return model;
+	}
+	public Integer getFrabricacionYear() {
+		// TODO Auto-generated method stub
+		return this.fabricationYear;
 	}
 
 }

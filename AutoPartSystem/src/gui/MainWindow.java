@@ -80,18 +80,22 @@ public class MainWindow extends JFrame{
 	private JTextField txtClientCity;
 	private JTextField txtContactDoes;
 	private JList<String> jListClients;
-	ArrayList<Object> modelClientList = new ArrayList<Object>();
+	private ArrayList<Object> modelClientList = new ArrayList<Object>();
 	//--<<
 	
 	
 	//Orders TAB Vars
-	JComboBox<Client> orderClientBox;
+	private JComboBox<Client> orderClientBox;
+	private JButton btnSearch;
+	private JTable orderTable;
+	private JTextField txtOrderVehicleModel;
+	private JTextField txtOrderVehicleYear;
+	private DefaultTableModel searchResultsModel;
 	//--<<
 	
 	
-	private JTextField TfPartName;
+	private JTextField txtOrderPartName;
 	private JTable searchResults;
-	private DefaultTableModel model;
 	private JTextField txtContactName;
 	private JTextField txtPartName;
 	private JTextField txtBrandName;
@@ -114,14 +118,14 @@ public class MainWindow extends JFrame{
 	private JComboBox<Automobile> comboAutomobilesInPartsTab;
 	private JComboBox<Part> comboPartsToAssociateWithAutomobile;
 	private JComboBox<PartPerProvider> comboPartPerProvider ;
+	private JComboBox<Integer> partsYearComboBox;
 	
 	private JComboBox<Manufacturer> Manufacturers;
 	private JComboBox<Brand> brands;
 	private JTextField txtProfitInUpdate;
 	private JTextField txtCostInUpdate;
-	private JTable orderTable;
-	private JTextField txtOrderVehicleModel;
-	private JTextField textField;
+	
+
 
 	
 	public MainWindow(){
@@ -141,9 +145,7 @@ public class MainWindow extends JFrame{
 	private void createGui(){
 		setTitle("Autopart System");
 	    setSize(700,500);
-	    
-	    
-	    
+
 		
 		/*
 		 * Tabs for multiple views
@@ -173,31 +175,38 @@ public class MainWindow extends JFrame{
 		ordersTab.add(lblPartName);
 		lblPartName.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		TfPartName = new JTextField();
-		TfPartName.setBounds(10, 223, 121, 20);
-		ordersTab.add(TfPartName);
-		TfPartName.setColumns(10);
+		txtOrderPartName = new JTextField();
+		txtOrderPartName.setBounds(10, 223, 121, 20);
+		ordersTab.add(txtOrderPartName);
+		txtOrderPartName.setColumns(10);
 		
-		JButton btnSearch = new JButton("Search");
+		btnSearch = new JButton("Search");
 		btnSearch.setBounds(303, 42, 89, 23);
 		ordersTab.add(btnSearch);
+		btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	loadSearchResults(evt);
+            }
+        });
 		
 		//Table show provider results
-		model = new DefaultTableModel(); 
+		searchResultsModel = new DefaultTableModel(); 
 		//add default columns
-		model.addColumn("Name");
-		model.addColumn("Identifier");
-		model.addRow(new Object[]{"Name", "Provider"});
+		searchResultsModel.addColumn("PName");
+		searchResultsModel.addColumn("Provider");
+		searchResultsModel.addColumn("ProviderID");
+		searchResultsModel.addColumn("Price");
+		searchResultsModel.addRow(new Object[]{"PName", "Provider", "ProviderID", "Price"});
 		clientTab.setLayout(null);
 		
 		JLabel lbResults = new JLabel("Results\r\n");
-		lbResults.setBounds(10, 53, 99, 53);
+		lbResults.setBounds(10, 44, 99, 53);
 		ordersTab.add(lbResults);
 		lbResults.setFont(new Font("Consolas", Font.PLAIN, 14));
 		searchResults = new JTable();
-		searchResults.setBounds(69, 83, 261, 104);
+		searchResults.setBounds(20, 83, 361, 104);
 		ordersTab.add(searchResults);
-		searchResults.setModel(model);
+		searchResults.setModel(searchResultsModel);
 		
 		JButton btnAgregar = new JButton("Add");
 		btnAgregar.setBounds(250, 196, 89, 23);
@@ -237,10 +246,10 @@ public class MainWindow extends JFrame{
 		lblYear.setBounds(165, 46, 46, 14);
 		ordersTab.add(lblYear);
 		
-		textField = new JTextField();
-		textField.setBounds(207, 43, 86, 20);
-		ordersTab.add(textField);
-		textField.setColumns(10);
+		txtOrderVehicleYear = new JTextField();
+		txtOrderVehicleYear.setBounds(207, 43, 86, 20);
+		ordersTab.add(txtOrderVehicleYear);
+		txtOrderVehicleYear.setColumns(10);
 		
 		JButton btnFilterParts = new JButton("Filter");
 		btnFilterParts.setBounds(141, 222, 89, 23);
@@ -585,7 +594,7 @@ public class MainWindow extends JFrame{
 		mainPartsTab.add(comboAutomobilesInPartsTab);
 		
 		JButton btnAssociatePartAutomobile=new JButton("Associate");
-		btnAssociatePartAutomobile.setBounds(49,213, 100, 19);
+		btnAssociatePartAutomobile.setBounds(49,240, 100, 19);
 		mainPartsTab.add(btnAssociatePartAutomobile);
 		btnAssociatePartAutomobile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -658,6 +667,14 @@ public class MainWindow extends JFrame{
 		JButton btnAssociate=new JButton("Associate");
 		btnAssociate.setBounds(330,213,100,19);
 		mainPartsTab.add(btnAssociate);
+		
+		JLabel lblYear_1 = new JLabel("Year:");
+		lblYear_1.setBounds(49, 215, 46, 14);
+		mainPartsTab.add(lblYear_1);
+		
+		partsYearComboBox = new JComboBox();
+		partsYearComboBox.setBounds(120, 212, 200, 20);
+		mainPartsTab.add(partsYearComboBox);
 		
 		btnAssociate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -857,6 +874,13 @@ public class MainWindow extends JFrame{
 	
 	private void loadOrdersStuff(){
 		loadComboClients();
+		clearSearchTable();
+	}
+	
+	private void clearSearchTable(){
+		int numRows = this.searchResultsModel.getRowCount();
+		for(int i = 1; i< numRows; i++)
+			this.searchResultsModel.removeRow(i);
 	}
 	
 	private void loadPartsStuff() {
@@ -889,6 +913,7 @@ public class MainWindow extends JFrame{
 		ArrayList<Part> partsList = db.getAllParts();
 		comboPartsToAssociateWithProvider.removeAllItems();
 		comboPartsToAssociateWithAutomobile.removeAllItems();
+		
 		for(Part part: partsList){
 			comboPartsToAssociateWithProvider.addItem(part);
 			comboPartsToAssociateWithAutomobile.addItem(part);
@@ -904,8 +929,10 @@ public class MainWindow extends JFrame{
 	private void loadComboAutomobiles(){
 		ArrayList<Automobile> automobilesList = db.getAllAutomobile();
 		comboAutomobilesInPartsTab.removeAllItems();
+		this.partsYearComboBox.removeAllItems();
 		for(Automobile automobile: automobilesList){
 			comboAutomobilesInPartsTab.addItem(automobile);
+			this.partsYearComboBox.addItem(automobile.getFrabricacionYear());
 		}
 	}
 	private void loadComboProvider(){
@@ -943,8 +970,31 @@ public class MainWindow extends JFrame{
 	 */
 	
 	//get all providers that have x part
-	private void searchProvidersFromPart(){
-		String partName = "Knife";
+	private void loadSearchResults(ActionEvent evt){
+		clearSearchTable();
+		
+		String model = this.txtOrderVehicleModel.getText();
+		String year = this.txtOrderVehicleYear.getText();
+		
+		ArrayList<String> nameParts;
+		nameParts = db.getAllPartsForAutoMobile(model,year);
+		
+	
+		for(String part: nameParts){
+			//all providers with that part
+			ArrayList<PartPerProvider> partProvider;
+			partProvider = db.getProvidersSellPart(part);
+			
+			//add all the parts with their provider
+			for(PartPerProvider ppp: partProvider){
+				searchResultsModel.addRow(new Object[]{part, ppp.getName()
+						,ppp.getProviderId(), ppp.getPrice()});
+			}
+		}
+	}
+	
+	private void filterProvidersByPart(){
+		String partName = this.txtOrderPartName.getText();
 		
 		ArrayList<PartPerProvider> ppp = db.getProvidersSellPart(partName);
 	}
@@ -1039,7 +1089,6 @@ public class MainWindow extends JFrame{
 		//add it to client list
 		//this.loadClientStuff();
 	}
-
 	
 	private void btnAddPartActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Part part=new Part(txtPartName.getText(),(Brand) brands.getSelectedItem(), (Manufacturer)Manufacturers.getSelectedItem(), db, console);
@@ -1050,7 +1099,7 @@ public class MainWindow extends JFrame{
 	}  
 	private void btnAssociatePartAutomobileActionPerformed(java.awt.event.ActionEvent evt) {
 		db.associatePartWithAutomobile((Part)comboPartsToAssociateWithAutomobile.getSelectedItem(),
-				(Automobile)comboAutomobilesInPartsTab.getSelectedItem());
+				(Automobile)comboAutomobilesInPartsTab.getSelectedItem(),(int) this.partsYearComboBox.getSelectedItem());
 	}
 	private void btnAddProviderActionPerformed(java.awt.event.ActionEvent evt) {      
 		Provider provider=new Provider(txtProviderName.getText(),txtContactProviderName.getText(),
