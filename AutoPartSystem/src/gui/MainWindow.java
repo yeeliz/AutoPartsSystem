@@ -84,7 +84,7 @@ public class MainWindow extends JFrame{
 	//--<<
 	
 	private JTextField TfPartName;
-	private JTable tableResults;
+	private JTable searchResults;
 	private DefaultTableModel model;
 	private JTextField txtContactName;
 	private JTextField txtPartName;
@@ -113,6 +113,8 @@ public class MainWindow extends JFrame{
 	private JComboBox<Brand> brands;
 	private JTextField txtProfitInUpdate;
 	private JTextField txtCostInUpdate;
+	private JTable orderTable;
+
 	
 	public MainWindow(){
 		createGui();
@@ -184,51 +186,6 @@ public class MainWindow extends JFrame{
 		JTabbedPane partOppsTabbedPane=new JTabbedPane(JTabbedPane.LEFT);
 		partOppsTabbedPane.setBounds(0,0,679,269);
 		partsTab.add(partOppsTabbedPane);
-		
-		JPanel mainPartsTab = new JPanel();
-		partOppsTabbedPane.addTab("Main", null, mainPartsTab , null);
-		mainPartsTab.setLayout(null);
-		
-		JPanel updatePartsTab = new JPanel();
-		partOppsTabbedPane.addTab("Update", null, updatePartsTab , null);
-		updatePartsTab.setLayout(null);
-		
-		JLabel lblChangePartproviderData = new JLabel("CHANGE PART-PROVIDER DATA");
-		lblChangePartproviderData.setBounds(45, 22, 255, 22);
-		updatePartsTab.add(lblChangePartproviderData);
-		
-		JLabel lblProfitPorcentage = new JLabel("Profit Porcentage:");
-		lblProfitPorcentage.setBounds(212, 61, 174, 22);
-		updatePartsTab.add(lblProfitPorcentage);
-		
-		JLabel lblCost_1 = new JLabel("Cost:");
-		lblCost_1.setBounds(212, 95, 88, 22);
-		updatePartsTab.add(lblCost_1);
-		
-		JButton btnAplay = new JButton("Aplay");
-		btnAplay.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	btnAplayActionPerformed(evt);
-            }
-        });
-		
-		
-		btnAplay.setBounds(212, 131, 60, 19);
-		updatePartsTab.add(btnAplay);
-		
-		txtProfitInUpdate = new JTextField();
-		txtProfitInUpdate.setColumns(10);
-		txtProfitInUpdate.setBounds(305, 64, 100, 19);
-		updatePartsTab.add(txtProfitInUpdate);
-		
-		txtCostInUpdate = new JTextField();
-		txtCostInUpdate.setColumns(10);
-		txtCostInUpdate.setBounds(305, 96, 100, 19);
-		updatePartsTab.add(txtCostInUpdate);
-		
-		comboPartPerProvider = new JComboBox<PartPerProvider>();
-		comboPartPerProvider.setBounds(45, 62, 157, 21);
-		updatePartsTab.add(comboPartPerProvider);
 		
 		
 		JPanel newProviderTab = new JPanel();
@@ -343,54 +300,71 @@ public class MainWindow extends JFrame{
             }
         });
 		
+		//Table show provider results
+		model = new DefaultTableModel(); 
+		//add default columns
+		model.addColumn("Name");
+		model.addColumn("Identifier");
+		model.addRow(new Object[]{"Name", "Provider"});
+		
 
 		
 		
 		
 				
 		JPanel searchProviderTab = new JPanel();
-		proviOppsTabbedPane.addTab("Seach", null, searchProviderTab, null);
+		nestedTabbedPane.addTab("New tab", null, searchProviderTab, null);
 		searchProviderTab.setLayout(null);
 		
-		JLabel lbSearch = new JLabel("Search Provider");
+		JLabel lbSearch = new JLabel("Search/Select Provider");
 		lbSearch.setFont(new Font("Consolas", Font.PLAIN, 16));
-		lbSearch.setBounds(199, 11, 141, 27);
+		lbSearch.setBounds(0, 0, 225, 27);
 		searchProviderTab.add(lbSearch);
 		
 		JLabel lblPartName = new JLabel("Part Name:");
 		lblPartName.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPartName.setBounds(109, 54, 80, 14);
+		lblPartName.setBounds(10, 27, 80, 14);
 		searchProviderTab.add(lblPartName);
 		
 		TfPartName = new JTextField();
-		TfPartName.setBounds(199, 53, 155, 20);
+		TfPartName.setBounds(93, 26, 155, 20);
 		searchProviderTab.add(TfPartName);
 		TfPartName.setColumns(10);
 		
 		JButton btnSearch = new JButton("Search");
-		btnSearch.setBounds(377, 52, 89, 23);
+		btnSearch.setBounds(258, 25, 89, 23);
 		searchProviderTab.add(btnSearch);
 		
 		JLabel lbResults = new JLabel("Results\r\n");
 		lbResults.setFont(new Font("Consolas", Font.PLAIN, 14));
-		lbResults.setBounds(238, 77, 99, 53);
+		lbResults.setBounds(10, 74, 99, 53);
 		searchProviderTab.add(lbResults);
+		searchResults = new JTable();
+		searchResults.setModel(model);
 		
-		//Table show provider results
-		model = new DefaultTableModel(); 
-		tableResults = new JTable();
-		tableResults.setModel(model);
-		//add default columns
-		model.addColumn("Name");
-		model.addColumn("Identifier");
-		model.addRow(new Object[]{"Name", "Provider"});
+		searchResults.setBounds(77, 74, 261, 104);
 		
-		tableResults.setBounds(109, 127, 348, 100);
+		searchProviderTab.add(searchResults);
 		
-		searchProviderTab.add(tableResults);
+		JButton btnAgregar = new JButton("Agregar");
+		btnAgregar.setBounds(249, 189, 89, 23);
+		searchProviderTab.add(btnAgregar);
 		
-		JTabbedPane newOrderTab = new JTabbedPane(JTabbedPane.TOP);
-		nestedTabbedPane.addTab("New Order", null, newOrderTab, null);
+		orderTable = new JTable();
+		orderTable.setBounds(347, 74, 261, 104);
+		searchProviderTab.add(orderTable);
+		
+		JButton btnOrder = new JButton("Order");
+		btnOrder.setBounds(519, 189, 89, 23);
+		searchProviderTab.add(btnOrder);
+		
+		JComboBox orderClientBox = new JComboBox();
+		orderClientBox.setBounds(430, 26, 162, 20);
+		searchProviderTab.add(orderClientBox);
+		
+		JLabel lblClient = new JLabel("Client:");
+		lblClient.setBounds(386, 29, 46, 14);
+		searchProviderTab.add(lblClient);
 		clientTab.setLayout(null);	
 		
 		
@@ -520,6 +494,10 @@ public class MainWindow extends JFrame{
 		/*
 		 * Begin Part GUI stuff
 		 */
+		
+		JPanel mainPartsTab = new JPanel();
+		partOppsTabbedPane.addTab("Main", null, mainPartsTab , null);
+		mainPartsTab.setLayout(null);
 		JLabel lblAddPart= new JLabel("ADD PART");
 		lblAddPart.setBounds(49, 5, 100, 10);
 		mainPartsTab.add(lblAddPart);
@@ -589,7 +567,7 @@ public class MainWindow extends JFrame{
 		JLabel lblAddBrand= new JLabel("ADD BRAND");
 		lblAddBrand.setBounds(283, 5, 100, 10);
 		mainPartsTab.add(lblAddBrand);
-				
+		
 		JLabel lblBrandName= new JLabel("Brand Name:");
 		lblBrandName.setBounds(283, 32, 100, 10);
 		mainPartsTab.add(lblBrandName);
@@ -610,46 +588,46 @@ public class MainWindow extends JFrame{
 		
 		JLabel lblAddProviderForAPart=new JLabel("Add Provider for a part");
 		lblAddProviderForAPart.setFont(new Font("Consolas", Font.PLAIN, 14));
-		lblAddProviderForAPart.setBounds(340, 115, 220, 15);
+		lblAddProviderForAPart.setBounds(330, 108, 220, 15);
 		mainPartsTab.add(lblAddProviderForAPart);
 		
 		JLabel  lblParts= new JLabel("Part:");
-		lblParts.setBounds(340,135,100,15);
+		lblParts.setBounds(330,128,100,15);
 		mainPartsTab.add(lblParts);
 		
 		comboPartsToAssociateWithProvider =new JComboBox<Part>();
-		comboPartsToAssociateWithProvider.setBounds(400,135,220,19);
+		comboPartsToAssociateWithProvider.setBounds(390,128,220,19);
 		mainPartsTab.add(comboPartsToAssociateWithProvider);
-
+		
 		JLabel  lblProviders= new JLabel("Provider:");
-		lblProviders.setBounds(340,155,100,15);
+		lblProviders.setBounds(330,148,100,15);
 		mainPartsTab.add(lblProviders);
 		
 		comboProvidersInPartsTab =new JComboBox<Provider>();
-		comboProvidersInPartsTab.setBounds(400,155,220,19);
+		comboProvidersInPartsTab.setBounds(390,148,220,19);
 		mainPartsTab.add(comboProvidersInPartsTab);
 		
 		JLabel lblCost=new JLabel("Cost:");
-		lblCost.setBounds(340,175,100,15);
+		lblCost.setBounds(330,168,100,15);
 		mainPartsTab.add(lblCost);
 		
 		txtCost=new JTextField();
-		txtCost.setBounds(400,175,220,19);
+		txtCost.setBounds(390,168,220,19);
 		txtCost.setColumns(10);
 		mainPartsTab.add(txtCost);
 		
 		
 		JLabel lblProfit= new JLabel("Profit %: ");
-		lblProfit.setBounds(340,195,100,15);
+		lblProfit.setBounds(330,188,100,15);
 		mainPartsTab.add(lblProfit);
 		
 		txtProfit=new JTextField();
-		txtProfit.setBounds(400,195,220,19);
+		txtProfit.setBounds(390,188,220,19);
 		txtProfit.setColumns(10);
 		mainPartsTab.add(txtProfit);
 		
 		JButton btnAssociate=new JButton("Associate");
-		btnAssociate.setBounds(340,220,100,19);
+		btnAssociate.setBounds(330,213,100,19);
 		mainPartsTab.add(btnAssociate);
 		
 		btnAssociate.addActionListener(new java.awt.event.ActionListener() {
@@ -658,8 +636,46 @@ public class MainWindow extends JFrame{
             }
         });
 		
+		JPanel updatePartsTab = new JPanel();
+		partOppsTabbedPane.addTab("Update", null, updatePartsTab , null);
+		updatePartsTab.setLayout(null);
 		
-		JLabel lblUpdatePart=new JLabel("UPDATE PART INFORMATION");
+		JLabel lblChangePartproviderData = new JLabel("CHANGE PART-PROVIDER DATA");
+		lblChangePartproviderData.setBounds(45, 22, 255, 22);
+		updatePartsTab.add(lblChangePartproviderData);
+		
+		JLabel lblProfitPorcentage = new JLabel("Profit Porcentage:");
+		lblProfitPorcentage.setBounds(263, 62, 108, 22);
+		updatePartsTab.add(lblProfitPorcentage);
+		
+		JLabel lblCost_1 = new JLabel("Cost:");
+		lblCost_1.setBounds(263, 95, 88, 22);
+		updatePartsTab.add(lblCost_1);
+		
+		JButton btnAplay = new JButton("Aplay");
+		btnAplay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	btnAplayActionPerformed(evt);
+            }
+        });
+		
+		
+		btnAplay.setBounds(263, 128, 60, 19);
+		updatePartsTab.add(btnAplay);
+		
+		txtProfitInUpdate = new JTextField();
+		txtProfitInUpdate.setColumns(10);
+		txtProfitInUpdate.setBounds(376, 62, 100, 19);
+		updatePartsTab.add(txtProfitInUpdate);
+		
+		txtCostInUpdate = new JTextField();
+		txtCostInUpdate.setColumns(10);
+		txtCostInUpdate.setBounds(376, 96, 100, 19);
+		updatePartsTab.add(txtCostInUpdate);
+		
+		comboPartPerProvider = new JComboBox<PartPerProvider>();
+		comboPartPerProvider.setBounds(45, 63, 208, 21);
+		updatePartsTab.add(comboPartPerProvider);
 		
 		
 		/*
