@@ -914,8 +914,6 @@ public class MainWindow extends JFrame{
 		for(Provider provider: providerList)
 			comboProvidersInPartsTab.addItem(provider);		
 	}
-	
-	
 	private void loadComboBrand(){
 		ArrayList<Brand> brandList = db.getAllBrands();
 		brands.removeAllItems();
@@ -935,9 +933,6 @@ public class MainWindow extends JFrame{
 		}
 	}
 	
-	//--<<<<<<
-
-	
 	/*
 	 * Client gui event/action section
 	 */
@@ -948,7 +943,6 @@ public class MainWindow extends JFrame{
 		
 		ArrayList<PartPerProvider> ppp = db.getProvidersSellPart(partName);
 	}
-	
 	private void selectClientBtn(java.awt.event.ActionEvent evt){
 		int selected = jListClients.getSelectedIndex();
 	
@@ -995,7 +989,6 @@ public class MainWindow extends JFrame{
 		    this.clientStateComboBox.getModel().setSelectedItem(client.getState());
 		}
 	}
-	
 	private void updateClientBtn(java.awt.event.ActionEvent evt){
 
 		int id = -1;
@@ -1039,8 +1032,6 @@ public class MainWindow extends JFrame{
 		//add it to client list
 		//this.loadClientStuff();
 	}
-
-	
 	private void btnAddPartActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Part part=new Part(txtPartName.getText(),(Brand) brands.getSelectedItem(), (Manufacturer)Manufacturers.getSelectedItem(), db, console);
     }  
@@ -1089,8 +1080,6 @@ public class MainWindow extends JFrame{
 			console.errorMsg("Invalid profit value");
 		}
 	}
-	
-	
 	public static void main(String args[]){
 		//open main window
 		MainWindow mainWindow = new MainWindow();
