@@ -81,17 +81,17 @@ public class MainWindow extends JFrame{
 
 	private JTextField txtPartName;
 	private JTextField txtBrandName;
-	private JTextField txtManufacturerName;
+
 	private JTextField txtProviderName;
 	private JTextField txtContactProviderName;
 	private JTextField txtDirectionProvider;
 	private JTextField txtCityProvider;
 	private JTextField txtCost;
 	private JTextField txtProfit;
-	private JTextField txtModel;
-	private JTextField txtDetail;
-	private JTextField txtFabricationYear;
-	private JComboBox<Manufacturer> comboManufacturersOfAutomobile;
+	
+
+	
+	
 	private JFormattedTextField txtProviderPhone;
 	private JFormattedTextField txtProviderPhone2;
 	private JComboBox<Provider> providers;
@@ -110,6 +110,8 @@ public class MainWindow extends JFrame{
 
 	private OrdersTab orders;
 	private ClientTab clientsTb;
+	private AutomobilesTab autosTb;
+	private ManufacturersTab manuTb;
 	
 	public MainWindow(){
 		createGui();
@@ -121,6 +123,8 @@ public class MainWindow extends JFrame{
 		
 		orders = new OrdersTab(tabbedPane, db, console);
 		clientsTb = new ClientTab(tabbedPane, db, console);
+		autosTb = new AutomobilesTab(tabbedPane, db, console);
+		manuTb = new ManufacturersTab(tabbedPane, db, console);
 		
 		//first tab to show needs to preload
 		orders.load();
@@ -145,10 +149,8 @@ public class MainWindow extends JFrame{
 		partsTab.setName("partsTab");
 		JComponent providersTab=new JPanel();
 		providersTab.setName("providersTab");
-		JComponent automobileTab=new JPanel();
-		automobileTab.setName("automobilesTab");
-		JComponent manufacturersTab=new JPanel();
-		manufacturersTab.setName("manufacturersTab");
+
+
 		
 		
 		
@@ -156,9 +158,13 @@ public class MainWindow extends JFrame{
 		
 		tabbedPane.addTab("Parts", partsTab);
 		tabbedPane.addTab("Providers",providersTab);
-		tabbedPane.addTab("Automobiles",automobileTab);
-		tabbedPane.addTab("Manufacturers",manufacturersTab);
-				
+		
+		
+		Manufacturers=new JComboBox<Manufacturer>();
+		Manufacturers.setBounds(138, 95, 100, 19);
+		
+		
+		
 	     /*
 	        * Tab Listener
 	        * We load basic DB Content when every time a tab is switched
@@ -259,7 +265,7 @@ public class MainWindow extends JFrame{
             	btnAddProviderActionPerformed(evt);
             }
         });
-		
+		partsTab.setLayout(null);
 		
 		JLabel lblNewPhoneToProvider=new JLabel("New Phone to provider");
 		lblNewPhoneToProvider.setBounds(100,174,150,15);
@@ -304,7 +310,7 @@ public class MainWindow extends JFrame{
 		JLabel lblAddPart= new JLabel("ADD PART");
 		lblAddPart.setBounds(49, 5, 100, 10);
 		mainPartsTab.add(lblAddPart);
-		
+		mainPartsTab.add(Manufacturers);
 		JLabel lblPartName1= new JLabel("Part Name:");
 		lblPartName1.setBounds(49, 32, 100, 10);
 		mainPartsTab.add(lblPartName1);
@@ -326,9 +332,7 @@ public class MainWindow extends JFrame{
 		lblManufacturers.setBounds(49, 95, 100, 10);
 		mainPartsTab.add(lblManufacturers);
 		
-		Manufacturers=new JComboBox<Manufacturer>();
-		Manufacturers.setBounds(138, 95, 100, 19);
-		mainPartsTab.add(Manufacturers);
+
 		
 		JButton btnAddPart=new JButton("Add");
 		btnAddPart.setBounds(49, 123, 60, 19);
@@ -495,88 +499,9 @@ public class MainWindow extends JFrame{
 		updatePartsTab.add(comboPartPerProvider);
 		
 		
-		/*
-		 *Begin automobile tab stuff 
-		 * 
-		 */
-		automobileTab.setLayout(null);
-		partsTab.setLayout(null);
 		
-		JLabel lblCreateAutomobile= new JLabel("CREATE AUTOMOBILE");
-		lblCreateAutomobile.setBounds(200, 20, 220, 15);
-		automobileTab.add(lblCreateAutomobile);
-		
-		JLabel lblModel=new JLabel("Model:");
-		lblModel.setBounds(200,50,100,10);
-		automobileTab.add(lblModel);
-		
-		txtModel=new JTextField();
-		txtModel.setBounds(350,50,200,19);
-		txtModel.setColumns(10);
-		automobileTab.add(txtModel);
-		
-		JLabel lblDetail = new JLabel("Detail:");
-		lblDetail.setBounds(200,70,100,10);
-		automobileTab.add(lblDetail);
-		
-		txtDetail= new JTextField();
-		txtDetail.setBounds(350,70,200,19);
-		txtDetail.setColumns(10);
-		automobileTab.add(txtDetail);
-		
-		JLabel lblFabricationYear=new JLabel("Fabrication Year:");
-		lblFabricationYear.setBounds(200,90,200,10);
-		automobileTab.add(lblFabricationYear);
-		
-		txtFabricationYear=new JTextField();
-		txtFabricationYear.setBounds(350,90,200,19);
-		txtFabricationYear.setColumns(10);
-		automobileTab.add(txtFabricationYear);
-		
-		JLabel lblAutomobileManufacturer=new JLabel("Manufacturer:");
-		lblAutomobileManufacturer.setBounds(200,110,150,10);
-		automobileTab.add(lblAutomobileManufacturer);
-		
-		comboManufacturersOfAutomobile=new JComboBox<Manufacturer>();
-		comboManufacturersOfAutomobile.setBounds(350,110,200,19);
-		automobileTab.add(comboManufacturersOfAutomobile);
-		
-		JButton btnAddAutomobile=new JButton("Add");
-		btnAddAutomobile.setBounds(200,130,100,19);
-		automobileTab.add(btnAddAutomobile);
-		
-		btnAddAutomobile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddAutomobileActionPerformed(evt);
-            }
-        });
 
-		/*
-		 *Begin Manufacturers tab stuff 
-		 * 
-		 */
-		manufacturersTab.setLayout(null);
-		JLabel lblAddManufacturer= new JLabel("ADD MANUFACTURER");
-		lblAddManufacturer.setBounds(200, 5, 150, 10);
-		manufacturersTab.add(lblAddManufacturer);
-		
-		JLabel lblManufacturerName= new JLabel("Manufac Name:");
-		lblManufacturerName.setBounds(200, 32, 100, 10);
-		manufacturersTab.add(lblManufacturerName);
-		
-		txtManufacturerName=new JTextField();
-		txtManufacturerName.setBounds(350,27, 100, 19);
-		manufacturersTab.add(txtManufacturerName);
-		txtManufacturerName.setColumns(10);
-		
-		JButton btnAddManufacturer=new JButton("Add");
-		btnAddManufacturer.setBounds(200, 59, 60, 19);
-		manufacturersTab.add(btnAddManufacturer);
-		btnAddManufacturer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddManufacturerActionPerformed(evt);
-            }
-        });
+
 		
 		//add tabs to this frame
 		getContentPane().add(tabbedPane);
@@ -603,6 +528,8 @@ public class MainWindow extends JFrame{
         providersTab.setLayout(null);
         JLabel lblActualProvider=new JLabel("Actual provider");
         lblActualProvider.setBounds(400,1,100,10); 
+        
+        
 	}
 	
 	/*
@@ -628,7 +555,7 @@ public class MainWindow extends JFrame{
 				loadProvidersStuff();
 				break;
 			case "automobilesTab":
-				loadAutomobileStuff();
+				orders.load();
 				break;
 		}
 	}	
@@ -641,7 +568,7 @@ public class MainWindow extends JFrame{
 	
 	private void loadPartsStuff() {
 		loadComboBrand();
-		loadComboManufacturers();
+	
 		loadComboParts();
 		loadComboProvider();
 		loadComboAutomobiles();
@@ -654,10 +581,7 @@ public class MainWindow extends JFrame{
 		for(Provider provider: providerList)
 			providers.addItem(provider);
 	}
-	private void loadAutomobileStuff(){
-		loadComboManufacturers();
-	}
-	
+
 
 	
 	private void loadComboParts(){
@@ -701,17 +625,7 @@ public class MainWindow extends JFrame{
 		for(Brand brand : brandList)
 			brands.addItem(brand);
 	}
-	private void loadComboManufacturers(){
-		ArrayList<Manufacturer> manuList = db.getAllManufacturers();
-		Manufacturers.removeAllItems();
-		comboManufacturersOfAutomobile.removeAllItems();
-		for(Manufacturer manufacturer : manuList)
-		{
-			Manufacturers.addItem(manufacturer); //this combo is on the tab parts 
-			comboManufacturersOfAutomobile.addItem(manufacturer); //this combo is on the Automobile tab 
 
-		}
-	}
 	
 	/*
 	 * Client gui event/action section
@@ -749,21 +663,13 @@ public class MainWindow extends JFrame{
 		Provider selected=(Provider)providers.getSelectedItem();
 		selected.addPhoneNumber(txtProviderPhone2.getText());
 	}
-	private void btnAddAutomobileActionPerformed(java.awt.event.ActionEvent evt) {                                         
-		Automobile automobile= new Automobile(txtModel.getText(),txtDetail.getText(),
-				Integer.valueOf(txtFabricationYear.getText()),
-				(Manufacturer)comboManufacturersOfAutomobile.getSelectedItem(),
-				db,console);
-	}
+
 	private void btnAplayActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		PartPerProvider p=(PartPerProvider)comboPartPerProvider.getSelectedItem();
 		p.update(Integer.valueOf((txtProfitInUpdate.getText())), 
 				Integer.valueOf(txtCostInUpdate.getText()));
 	}
-	private void btnAddManufacturerActionPerformed(java.awt.event.ActionEvent evt) {                                         
-		Manufacturer manufact=new Manufacturer(txtManufacturerName.getText(),db,console);
-        Manufacturers.addItem(manufact);
-	} 
+
 	private void btnAssociateActionPerformed(java.awt.event.ActionEvent evt){
 		try{
 			int profit=Integer.parseInt(txtProfit.getText());
