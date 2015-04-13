@@ -1,9 +1,6 @@
 package gui;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.MouseAdapter;
-
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -16,13 +13,11 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.*;
 
 import dataBase.Automobile;
-import dataBase.Brand;
 import dataBase.Client;
 import dataBase.Company;
 import dataBase.DataBase;
 import dataBase.Manufacturer;
 import dataBase.Order;
-import dataBase.Part;
 import dataBase.PartPerProvider;
 import dataBase.PartsPerOrder;
 import dataBase.Person;
@@ -30,7 +25,6 @@ import dataBase.Provider;
 
 import javax.swing.JTabbedPane;
 
-import java.awt.event.MouseEvent;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
@@ -50,11 +44,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.text.DefaultCaret;
-import javax.swing.text.MaskFormatter;
 import javax.swing.JFormattedTextField;
-import javax.swing.ListSelectionModel;
 
-import java.awt.event.ActionListener;
 
 
 public class MainWindow extends JFrame{
@@ -107,17 +98,13 @@ public class MainWindow extends JFrame{
 	private JTextField txtContactName;
 	
 	private JTextField txtManufacturerName;
-	private JTextField txtProviderName;
-	private JTextField txtContactProviderName;
-	private JTextField txtDirectionProvider;
-	private JTextField txtCityProvider;
+	
+	
 	
 	private JTextField txtModel;
 	private JTextField txtDetail;
 	private JTextField txtFabricationYear;
 	private JComboBox<Manufacturer> comboManufacturersOfAutomobile;
-	private JFormattedTextField txtProviderPhone;
-	private JFormattedTextField txtProviderPhone2;
 	private JComboBox<Provider> providers;
 	
 	
@@ -125,6 +112,7 @@ public class MainWindow extends JFrame{
 
 
 	private PartsTab partsTab;
+	private ProvidersTab providersTab;
 	public MainWindow(){
 		createGui();
 		
@@ -134,6 +122,7 @@ public class MainWindow extends JFrame{
 		db.connect();
 		
 		partsTab=new PartsTab(tabbedPane, console, db);
+		providersTab= new ProvidersTab(tabbedPane, console, db);
 		//first tab to show needs to preload
 		this.loadOrdersStuff();
 	}
@@ -153,8 +142,6 @@ public class MainWindow extends JFrame{
 		JComponent clientTab = new JPanel();
 		clientTab.setName("clientTab");
 		
-		JComponent providersTab=new JPanel();
-		providersTab.setName("providersTab");
 		JComponent automobileTab=new JPanel();
 		automobileTab.setName("automobilesTab");
 		JComponent manufacturersTab=new JPanel();
@@ -284,7 +271,6 @@ public class MainWindow extends JFrame{
 		lblPartsByVehicle.setBounds(297, 17, 122, 14);
 		ordersTab.add(lblPartsByVehicle);
 		tabbedPane.addTab("Client", clientTab);
-		tabbedPane.addTab("Providers",providersTab);
 		tabbedPane.addTab("Automobiles",automobileTab);
 		tabbedPane.addTab("Manufacturers",manufacturersTab);
 				
@@ -300,124 +286,7 @@ public class MainWindow extends JFrame{
 	      }
 	    });
 		
-		JTabbedPane proviOppsTabbedPane=new JTabbedPane(JTabbedPane.LEFT);
-		proviOppsTabbedPane.setBounds(0, 0, 679, 269);
-		providersTab.add(proviOppsTabbedPane);
-		
-		
-		
-		JPanel newProviderTab = new JPanel();
-		proviOppsTabbedPane.addTab("New", null, newProviderTab , null);
-		newProviderTab.setLayout(null);
-		
-//		partsTab.addMouseListener(new MouseAdapter() {// empty implementation of all
-//            // MouseListener`s methods
-//		public void mousePressed(MouseEvent e) {
-//			System.out.println(e.getX() + "," + e.getY());
-//		}
-//		});
-		
-		/*
-		 * Begin Providers GUI Stuff
-		 */
-		
-		JLabel lblNewProvider=new JLabel("New Provider");
-		lblNewProvider.setBounds(100,1,100,15);
-		lblNewProvider.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		newProviderTab.add(lblNewProvider);
-		
-		JLabel lblProviderName=new JLabel("Name:");
-		lblProviderName.setBounds(49,23,100,10);
-		newProviderTab.add(lblProviderName);
-		
-		txtProviderName=new JTextField();
-		txtProviderName.setBounds(142, 23, 100, 19);
-		txtProviderName.setColumns(10);
-		newProviderTab.add(txtProviderName);
-		
-		JLabel lblContactProviderName=new JLabel("Contact Name:");
-		lblContactProviderName.setBounds(49, 43, 100, 10);
-		newProviderTab.add(lblContactProviderName);
-		
-		txtContactProviderName= new JTextField();
-		txtContactProviderName.setBounds(142,43,100,19);
-		txtContactProviderName.setColumns(10);
-		newProviderTab.add(txtContactProviderName);
-		
-		JLabel lblDireccionProvider=new JLabel("Direccion:");
-		lblDireccionProvider.setBounds(49,63,100,10);
-		newProviderTab.add(lblDireccionProvider);
-		
-		txtDirectionProvider=new JTextField();
-		txtDirectionProvider.setBounds(142,63,100,19);
-		txtDirectionProvider.setColumns(10);
-		newProviderTab.add(txtDirectionProvider);
-		
-		JLabel lblCiudadProvider= new JLabel("Ciudad:");
-		lblCiudadProvider.setBounds(49,83,100,10);
-		newProviderTab.add(lblCiudadProvider);
-		
-		txtCityProvider= new JTextField();
-		txtCityProvider.setBounds(142,83,100,19);
-		txtCityProvider.setColumns(10);
-		newProviderTab.add(txtCityProvider);
-		
-		JLabel lblNumber= new JLabel("Number:");
-		lblNumber.setBounds(49,103,100,10);
-		newProviderTab.add(lblNumber);
-		MaskFormatter mf = null;
-		
-		try{
-			mf= new MaskFormatter("(###) ####-####");
-			mf.setPlaceholderCharacter('_');
-			txtProviderPhone= new JFormattedTextField(mf);
-			txtProviderPhone.setBounds(142,103,100,19);
-			newProviderTab.add(txtProviderPhone);
-		}catch(Exception ex){
-			System.out.println(ex.toString());
-		}
-		
-		JButton btnAddProvider= new JButton("Add provider");
-		btnAddProvider.setBounds(49,133,120,19);
-		newProviderTab.add(btnAddProvider);
-		btnAddProvider.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	btnAddProviderActionPerformed(evt);
-            }
-        });
-		
-		
-		JLabel lblNewPhoneToProvider=new JLabel("New Phone to provider");
-		lblNewPhoneToProvider.setBounds(100,174,150,15);
-		lblNewPhoneToProvider.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		newProviderTab.add(lblNewPhoneToProvider);
-		
-		JLabel lblProvider=new JLabel("Provider:");
-		lblProvider.setBounds(49, 194, 100, 10);
-		newProviderTab.add(lblProvider);
-		
-		providers= new JComboBox<Provider>();
-		providers.setBounds(142, 194, 200, 19);
-		newProviderTab.add(providers);
-		
-		JLabel lblNumber2= new JLabel("Number:");
-		lblNumber2.setBounds(49,214,100,10);
-		newProviderTab.add(lblNumber2);
-		
-		txtProviderPhone2= new JFormattedTextField(mf);
-		txtProviderPhone2.setBounds(142,214,100,19);
-		newProviderTab.add(txtProviderPhone2);
-		
-		
-		JButton btnAddPhoneToProvider= new JButton("Add");
-		btnAddPhoneToProvider.setBounds(49,234,60,19);
-		newProviderTab.add(btnAddPhoneToProvider);
-		btnAddPhoneToProvider.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	btnAddPhoneToProviderActionPerformed(evt);
-            }
-        });
-		
+				
 		/*
 		 * Begin Client GUI stuff
 		 */
@@ -651,7 +520,7 @@ public class MainWindow extends JFrame{
 		
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
-        providersTab.setLayout(null);
+        
         JLabel lblActualProvider=new JLabel("Actual provider");
         lblActualProvider.setBounds(400,1,100,10); 
 	}
@@ -676,7 +545,7 @@ public class MainWindow extends JFrame{
 				loadOrdersStuff();
 				break;
 			case "providersTab":
-				loadProvidersStuff();
+				providersTab.load();
 				break;
 			case "automobilesTab":
 				loadAutomobileStuff();
@@ -711,13 +580,7 @@ public class MainWindow extends JFrame{
 	}
 	
 	
-	private void loadProvidersStuff(){
-		ArrayList<Provider> providerList = db.getAllProviders();
-		providers.removeAllItems();
-		
-		for(Provider provider: providerList)
-			providers.addItem(provider);
-	}
+
 	private void loadAutomobileStuff(){
 		loadComboManufacturers();
 	}
@@ -925,18 +788,6 @@ public class MainWindow extends JFrame{
 		}else{
 			per.updateClient();
 		}
-	}
-	
-	
-	 
-	
-	private void btnAddProviderActionPerformed(java.awt.event.ActionEvent evt) {      
-		Provider provider=new Provider(txtProviderName.getText(),txtContactProviderName.getText(),
-				txtDirectionProvider.getText(),txtCityProvider.getText(),txtProviderPhone.getText(),db,console);
-	}
-	private void btnAddPhoneToProviderActionPerformed(java.awt.event.ActionEvent evt) {                                         
-		Provider selected=(Provider)providers.getSelectedItem();
-		selected.addPhoneNumber(txtProviderPhone2.getText());
 	}
 	private void btnAddAutomobileActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Automobile automobile= new Automobile(txtModel.getText(),txtDetail.getText(),
