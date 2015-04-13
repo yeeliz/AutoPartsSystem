@@ -65,49 +65,13 @@ public class MainWindow extends JFrame{
 	private JTabbedPane tabbedPane;
 	
 
-	
-	
-	private JTextField txtOrderPartName;
-	private JTable searchResults;
-	private JTextField txtContactName;
-	
-	private JTextField txtManufacturerName;
-	
-	
-	
-	private JTextField txtModel;
-	private JTextField txtDetail;
-	private JTextField txtFabricationYear;
-	private JComboBox<Manufacturer> comboManufacturersOfAutomobile;
-
-
-
-	private JTextField txtPartName;
-	private JTextField txtBrandName;
-
-	private JTextField txtProviderName;
-	private JTextField txtContactProviderName;
-	private JTextField txtDirectionProvider;
-	private JTextField txtCityProvider;
-	private JTextField txtCost;
-	private JTextField txtProfit;
-	
-
-	
-	
-	private JFormattedTextField txtProviderPhone;
-	private JFormattedTextField txtProviderPhone2;
-	private JComboBox<Provider> providers;
-	
-	
-	
-
 	private PartsTab partsTab;
 	private ProvidersTab providersTab;
 	private OrdersTab orders;
 	private ClientTab clientsTb;
-	private AutomobilesTab autosTb;
 	private ManufacturersTab manuTb;
+	private AutomobilesTab autosTb;
+
 	
 	public MainWindow(){
 		createGui();
@@ -125,7 +89,6 @@ public class MainWindow extends JFrame{
 		autosTb = new AutomobilesTab(tabbedPane, db, console);
 		//first tab to show needs to preload
 		orders.load();
-		
 		
 	}
 	
@@ -159,10 +122,6 @@ public class MainWindow extends JFrame{
 		
 		
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        
-        
-        
-        
 	}
 	
 	/*
