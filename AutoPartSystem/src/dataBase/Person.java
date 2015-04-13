@@ -139,8 +139,8 @@ public class Person extends Client{
 			pst.close();
 			
 		}catch(Exception e){
-	    	 db.console.errorMsg();
-	    	 System.out.println(e);
+	    	 db.console.errorMsg("Not able to insert the client");
+	    	 System.out.println(e.toString());
 	     }
 		
 	}

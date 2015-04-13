@@ -84,7 +84,6 @@ public PartPerProvider(int pId,String pPartName,int providerID, int price,
 	}
 	public void update(int pProfit,int pCost){
 		try{
-			System.out.println(id);
 			cost=pCost;
 			profitPorcentage=pProfit;
 			String query = "UPDATE [PartesPorProveedor] "

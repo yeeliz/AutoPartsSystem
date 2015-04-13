@@ -172,7 +172,7 @@ public class Company extends Client{
 			pst.close();
 			
 		}catch(Exception e){
-	    	 db.console.errorMsg();
+	    	 db.console.errorMsg("Not able to insert the client");
 	    	 System.out.println(e);
 	     }
 		

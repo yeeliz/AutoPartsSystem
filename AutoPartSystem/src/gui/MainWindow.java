@@ -314,12 +314,12 @@ public class MainWindow extends JFrame{
 		proviOppsTabbedPane.addTab("New", null, newProviderTab , null);
 		newProviderTab.setLayout(null);
 		
-		partsTab.addMouseListener(new MouseAdapter() {// empty implementation of all
-            // MouseListener`s methods
-		public void mousePressed(MouseEvent e) {
-			System.out.println(e.getX() + "," + e.getY());
-		}
-		});
+//		partsTab.addMouseListener(new MouseAdapter() {// empty implementation of all
+//            // MouseListener`s methods
+//		public void mousePressed(MouseEvent e) {
+//			System.out.println(e.getX() + "," + e.getY());
+//		}
+//		});
 		
 		/*
 		 * Begin Providers GUI Stuff
@@ -378,7 +378,7 @@ public class MainWindow extends JFrame{
 			txtProviderPhone.setBounds(142,103,100,19);
 			newProviderTab.add(txtProviderPhone);
 		}catch(Exception ex){
-			System.out.println(ex.getStackTrace().toString());
+			System.out.println(ex.toString());
 		}
 		
 		JButton btnAddProvider= new JButton("Add provider");
