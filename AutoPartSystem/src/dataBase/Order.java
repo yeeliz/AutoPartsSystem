@@ -28,9 +28,12 @@ public class Order {
 	private void calcTotal(){
 		for(PartsPerOrder partsOrder: ppo){
 			this.saleAmount += partsOrder.price * partsOrder.amount;
+			System.out.println(partsOrder.amount);
 		}
+		
 		//this needs work!
-		this.totalCharged = (saleAmount * (taxPer / 100)) + saleAmount;
+		float addTax = (this.saleAmount * ((float)taxPer / 100));
+		this.totalCharged = Math.round((float) (Math.round(addTax) + this.saleAmount) / 100) * 100;
 	}
 	
 	private void setDate(){
