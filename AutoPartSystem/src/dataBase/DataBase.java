@@ -171,7 +171,6 @@ public class DataBase {
 			console.printConsole("Getting all providers");
 			
 			ResultSet rs=pst.executeQuery();
-			System.out.println("Here i am");
 			while(rs.next()){				
 				Provider p=new Provider(rs.getString("Nombre"),rs.getString("NombreContacto"),
 						rs.getString("Direccion"),rs.getString("Ciudad"),rs.getInt("ID"),this,console);
@@ -280,7 +279,7 @@ public class DataBase {
 		
 		}catch(Exception e){
 			console.errorMsg("Not able to get providers for that part from DB");
-			System.out.println(e);
+			System.out.println(e.toString());
 		}
 		
 		return order;

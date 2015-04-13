@@ -46,9 +46,7 @@ public class Provider {
 		id=pId;
 		db=pDb;
 		console=pConsole;
-		System.out.println("Here 1234567");
 		loadPhoneNumbers();
-		System.out.println("Here Joshua");		
 	}
 
 	public void addPhoneNumber(String pNumber){
