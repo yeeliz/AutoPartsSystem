@@ -32,7 +32,8 @@ public class Manufacturer {
 			}
 			pst.close();
 		}catch(Exception ex){
-			console.errorMsg(ex.toString());
+			System.out.println(ex.toString());
+			console.errorMsg("Not posible to add a manufacture, maybe already exist");
 		}
 	}
 	public String toString(){

@@ -49,6 +49,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.MaskFormatter;
 import javax.swing.JFormattedTextField;
 import javax.swing.ListSelectionModel;
@@ -848,6 +849,8 @@ public class MainWindow extends JFrame{
 		consoleTextArea.setRows(8);
 		Font f = new Font("Consolas",Font.PLAIN, 16);
 		consoleTextArea.setFont(f);
+		DefaultCaret caret = (DefaultCaret)consoleTextArea.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		
 		//console area's scroll bar
 		JScrollPane consoleScroll = new JScrollPane(consoleTextArea);

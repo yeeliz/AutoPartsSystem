@@ -12,6 +12,7 @@ public class Console {
 	
 	public Console(JTextArea console){
 		this.console = console;
+		
 	}
 	
 	public void errorMsg(String msg){
