@@ -44,6 +44,7 @@ public class Part{
 					+ " set @BrandName =?"
 					+ " set @PartName=?"
 					+ " exec AssociateBrandAndPart @PartName ,@BrandName";
+			
 			pst = dbConnection.prepareStatement(query);
 			pst.setString(1,pBrand.toString());
 			pst.setString(2,name);

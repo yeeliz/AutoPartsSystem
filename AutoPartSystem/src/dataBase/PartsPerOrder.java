@@ -1,9 +1,10 @@
 package dataBase;
 
 public class PartsPerOrder {
-	int idPartesPorProvedor, price, amount;
-	String name;
-	public PartsPerOrder(String name){
-		this.name = name;
+	int idPartsPerProvider, price, amount;
+	public PartsPerOrder(int idPartsPerProvider, int price, int amount){
+		this.idPartsPerProvider = idPartsPerProvider;
+		this.price = price;
+		this.amount = amount;
 	}
 }

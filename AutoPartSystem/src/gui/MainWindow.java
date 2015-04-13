@@ -229,7 +229,10 @@ public class MainWindow extends JFrame{
 		//order Table model
 		orderTableModel = new DefaultTableModel();
 		orderTableModel.addColumn("PartName");
-		orderTableModel.addRow(new Object[]{"PartName"});
+		orderTableModel.addColumn("providerID");
+		orderTableModel.addColumn("price");
+		orderTableModel.addColumn("#");
+		orderTableModel.addRow(new Object[]{"PartName", "providerID", "price", "#"});
 		
 		orderTable = new JTable();
 		orderTable.setBounds(391, 83, 261, 104);
@@ -903,6 +906,7 @@ public class MainWindow extends JFrame{
 	
 	private void loadOrdersStuff(){
 		loadComboClients();
+		orderParts.clear();
 		clearTable(this.searchResultsModel);
 		clearTable(this.orderTableModel);
 	}
@@ -1001,9 +1005,17 @@ public class MainWindow extends JFrame{
 		int selectedRow = searchResults.getSelectedRow();
 		String partName = this.searchResultsModel.getValueAt(selectedRow, 0).toString();
 		String providerName = this.searchResultsModel.getValueAt(selectedRow, 1).toString();
+		int providerID = (int) this.searchResultsModel.getValueAt(selectedRow, 2);
+		int price = (int) this.searchResultsModel.getValueAt(selectedRow, 3);
 		if(providerName != ""){
-			orderParts.add(partName);
-			this.orderTableModel.addRow(new Object[]{partName});
+			if(orderParts.contains(partName+providerID)){
+				int index = orderParts.indexOf(partName+providerID) + 1;
+				int amount = (int) this.orderTableModel.getValueAt(index, 3);
+				this.orderTableModel.setValueAt(amount + 1, index, 3);
+			}else{
+				orderParts.add(partName+providerID);
+				this.orderTableModel.addRow(new Object[]{partName, providerID, price, 1});
+			}
 			console.printConsole("Parte agregado a la orden");
 		}else{
 			console.printConsole("Parte no tiene un provedor no se pudo agregar a la orden!");
@@ -1018,8 +1030,12 @@ public class MainWindow extends JFrame{
 			ArrayList<PartsPerOrder> ppo = new ArrayList<PartsPerOrder>();
 			//get everything in the order
 			for(int i = 2; i <= orderTableModel.getRowCount(); i++){
-				String name = orderTableModel.getValueAt(i -1, 0).toString();
-				PartsPerOrder partOrder = new PartsPerOrder(name);
+				//String name = orderTableModel.getValueAt(i -1, 0).toString();
+				int providerId = (int) orderTableModel.getValueAt(i-1, 1);
+				int price = (int) orderTableModel.getValueAt(i-1, 2);
+				int amount = (int) orderTableModel.getValueAt(i-1, 3);
+				PartsPerOrder partOrder = new PartsPerOrder(providerId, price, 1);
+				ppo.add(partOrder);
 			}
 			
 			Order order = new Order(db,ppo,
