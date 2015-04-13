@@ -25,7 +25,7 @@ public class Console {
 	
 	public void printConsole(String msg){
 		console.append("[" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + 
-				calendar.get(Calendar.MINUTE)+"] << " + msg + "\n");
+				calendar.get(Calendar.MINUTE)+","+calendar.get(Calendar.SECOND)+"] << " + msg + "\n");
 	}
 	
 
