@@ -76,20 +76,19 @@ public class DataBase {
 		return values;
 	}
 
-	public ArrayList<Automobile> getAllAutomobile(){
-		ArrayList<Automobile> values = new ArrayList<Automobile>();
+	public ArrayList<String> getAllAutomobile(){
+		ArrayList<String> values = new ArrayList<String>();
 		try{
 			//look for the brand in the database
-			String query="Select * from [Automovil]";
+			String query="SELECT DISTINCT ModelO from [Automovil]";
 			PreparedStatement pst=dbConnection.prepareStatement(query);
 			
-			console.printConsole("Getting all brand Names");
+			console.printConsole("Getting all automobile Names");
 			
 			ResultSet rs=pst.executeQuery();
 			
 			while(rs.next()){
-				Automobile a=new Automobile(rs.getString("Modelo"),rs.getString("Detalle"),
-						rs.getInt("AnioDeFabricacion"),this,console);
+				String a=rs.getString("Modelo");
 			values.add(a);
 			}
 		}catch (Exception ex){
@@ -235,19 +234,21 @@ public class DataBase {
 		
 		return values;
 	}
-	public void associatePartWithAutomobile(Part pPart,Automobile pAutomobile, int  anioFrabricacion){
+	public void associatePartWithAutomobile(Part pPart,String pAutomobile, int  anioFrabricacion){
 		try{
-			String query="INSERT INTO [PartesDeAutomovil] (NombreParte,ModeloAutomovil, AnioFabricacion)"
+			String query="INSERT INTO [PartesDeAutomovil] (NombreParte,ModeloAutomovil, AnioDeFabricacion)"
 					+ "VALUES(?,?,?)";
 			PreparedStatement pst=dbConnection.prepareStatement(query);
 			pst.setString(1,pPart.toString());
-			pst.setString(2,pAutomobile.toString());
+			pst.setString(2,pAutomobile);
 			pst.setInt(3, anioFrabricacion);
 			pst.executeUpdate();
 			pst.close();
+			console.printConsole("Association done");
+			
 		}catch(Exception ex){
 			System.out.println(ex.toString());
-			console.printConsole("Not able to make de association, maybe already exist");
+			console.errorMsg("Not able to make de association, maybe already exist");
 		}
 	}
 	
@@ -282,12 +283,32 @@ public class DataBase {
 		
 		return order;
 	}
+	public ArrayList<Integer> getAllFabricationYears(String model){
+		ArrayList<Integer> years=new ArrayList<Integer>();
+		String sql = "SELECT AnioDeFabricacion FROM Automovil" +
+				" WHERE Modelo = ?";
+		try{
+			PreparedStatement pst= dbConnection.prepareStatement(sql);
+			pst.setString(1, model);
+			
+			console.printConsole("Obtaining all fabrication years from " + model );
+			
+			ResultSet rs=pst.executeQuery();
+			
+			while(rs.next()){
+				years.add(rs.getInt("AnioDeFabricacion"));
+			}
+		}catch(Exception e){
+			console.errorMsg(e.toString() + "");
+		}	
+		return years;
+	}
 
 	public ArrayList<String> getAllPartsForAutoMobile(String model, String year) {
 		ArrayList<String> partNames = new ArrayList<String>();
 		
 		
-		String sql = "SELECT * FROM PartesDeAutoMovil " +
+		String sql = "SELECT NombreParte FROM PartesDeAutoMovil " +
 		"WHERE ModeloAutomovil = ? AND AnioFabricacion = ? ";
 		try{
 			PreparedStatement pst= dbConnection.prepareStatement(sql);

@@ -56,9 +56,4 @@ public class Automobile {
 	public String toString(){
 		return model;
 	}
-	public Integer getFrabricacionYear() {
-		// TODO Auto-generated method stub
-		return this.fabricationYear;
-	}
-
 }

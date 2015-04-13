@@ -59,7 +59,7 @@ public abstract class Client {
 			updateSubData(); //add the data in subClass
 		}catch(Exception ex){ //need to add custom msg's
 			db.console.errorMsg("Error Updating general client");
-			System.out.println(ex);
+			System.out.println(ex.toString());
 		}
 	}
 	

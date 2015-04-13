@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.JButton;
@@ -49,6 +50,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.text.MaskFormatter;
 import javax.swing.JFormattedTextField;
 import javax.swing.ListSelectionModel;
+
 import java.awt.event.ActionListener;
 
 
@@ -118,7 +120,7 @@ public class MainWindow extends JFrame{
 	private JComboBox<Provider> providers;
 	private JComboBox<Provider> comboProvidersInPartsTab;
 	private JComboBox<Part> comboPartsToAssociateWithProvider;
-	private JComboBox<Automobile> comboAutomobilesInPartsTab;
+	private JComboBox<String> comboAutomobilesInPartsTab;
 	private JComboBox<Part> comboPartsToAssociateWithAutomobile;
 	private JComboBox<PartPerProvider> comboPartPerProvider ;
 	private JComboBox<Integer> partsYearComboBox;
@@ -603,7 +605,7 @@ public class MainWindow extends JFrame{
 		lblAutomobile.setBounds(49,193,100,10);
 		mainPartsTab.add(lblAutomobile);
 		
-		comboAutomobilesInPartsTab= new JComboBox<Automobile>();
+		comboAutomobilesInPartsTab= new JComboBox<String>();
 		comboAutomobilesInPartsTab.setBounds(120,193,200,19);
 		mainPartsTab.add(comboAutomobilesInPartsTab);
 		
@@ -689,7 +691,13 @@ public class MainWindow extends JFrame{
 		partsYearComboBox = new JComboBox();
 		partsYearComboBox.setBounds(120, 212, 200, 20);
 		mainPartsTab.add(partsYearComboBox);
-		
+		comboAutomobilesInPartsTab.addItemListener(new java.awt.event.ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				partsYearComboActionPerformed(e);
+			}
+        });
 		btnAssociate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAssociateActionPerformed(evt);
@@ -942,17 +950,16 @@ public class MainWindow extends JFrame{
 		}
 	};
 	private void loadComboAutomobiles(){
-		ArrayList<Automobile> automobilesList = db.getAllAutomobile();
+		ArrayList<String> automobilesList = db.getAllAutomobile();
 		comboAutomobilesInPartsTab.removeAllItems();
 		this.partsYearComboBox.removeAllItems();
-		for(Automobile automobile: automobilesList){
+		for(String automobile: automobilesList){
 			comboAutomobilesInPartsTab.addItem(automobile);
-			this.partsYearComboBox.addItem(automobile.getFrabricacionYear());
 		}
 	}
 	private void loadComboProvider(){
 		ArrayList<Provider> providerList = db.getAllProviders();
-		providers.removeAllItems();
+		comboProvidersInPartsTab.removeAllItems();
 		for(Provider provider: providerList)
 			comboProvidersInPartsTab.addItem(provider);		
 	}
@@ -1121,14 +1128,23 @@ public class MainWindow extends JFrame{
 	
 	private void btnAddPartActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Part part=new Part(txtPartName.getText(),(Brand) brands.getSelectedItem(), (Manufacturer)Manufacturers.getSelectedItem(), db, console);
-    }  
+    }
+	private void partsYearComboActionPerformed(ItemEvent e) {   
+		partsYearComboBox.removeAllItems();
+		String automobile=(String)comboAutomobilesInPartsTab.getSelectedItem();
+		if(automobile!=null){
+			ArrayList<Integer> years=db.getAllFabricationYears(automobile.toString());
+			for(Integer i:years)
+				this.partsYearComboBox.addItem(i);	
+		}
+    }
 	private void btnAddBrandActionPerformed(java.awt.event.ActionEvent evt) {                                         
         Brand brand=new Brand(txtBrandName.getText(),db,console);
         brands.addItem(brand);
 	}  
 	private void btnAssociatePartAutomobileActionPerformed(java.awt.event.ActionEvent evt) {
 		db.associatePartWithAutomobile((Part)comboPartsToAssociateWithAutomobile.getSelectedItem(),
-				(Automobile)comboAutomobilesInPartsTab.getSelectedItem(),(int) this.partsYearComboBox.getSelectedItem());
+				(String)comboAutomobilesInPartsTab.getSelectedItem(),(int) this.partsYearComboBox.getSelectedItem());
 	}
 	private void btnAddProviderActionPerformed(java.awt.event.ActionEvent evt) {      
 		Provider provider=new Provider(txtProviderName.getText(),txtContactProviderName.getText(),
