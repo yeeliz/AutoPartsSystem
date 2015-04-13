@@ -20,8 +20,10 @@ import dataBase.Client;
 import dataBase.Company;
 import dataBase.DataBase;
 import dataBase.Manufacturer;
+import dataBase.Order;
 import dataBase.Part;
 import dataBase.PartPerProvider;
+import dataBase.PartsPerOrder;
 import dataBase.Person;
 import dataBase.Provider;
 
@@ -49,6 +51,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.text.MaskFormatter;
 import javax.swing.JFormattedTextField;
 import javax.swing.ListSelectionModel;
+
 import java.awt.event.ActionListener;
 
 
@@ -225,8 +228,7 @@ public class MainWindow extends JFrame{
 		//order Table model
 		orderTableModel = new DefaultTableModel();
 		orderTableModel.addColumn("PartName");
-		orderTableModel.addColumn("#");
-		orderTableModel.addRow(new Object[]{"PartName", "#"});
+		orderTableModel.addRow(new Object[]{"PartName"});
 		
 		orderTable = new JTable();
 		orderTable.setBounds(391, 83, 261, 104);
@@ -236,6 +238,12 @@ public class MainWindow extends JFrame{
 		JButton btnOrder = new JButton("Order");
 		btnOrder.setBounds(568, 196, 89, 23);
 		ordersTab.add(btnOrder);
+		btnOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	btnFillOrder(evt);
+            }
+        }		
+				);
 		
 		orderClientBox = new JComboBox<Client>();
 		orderClientBox.setBounds(490, 11, 162, 20);
@@ -934,6 +942,7 @@ public class MainWindow extends JFrame{
 			comboPartsToAssociateWithAutomobile.addItem(part);
 		}			
 	}
+	
 	private void loadList(){
 		ArrayList<PartPerProvider> partsList = db.getAllPartsPerProvider();
 		comboPartPerProvider.removeAllItems();
@@ -941,6 +950,7 @@ public class MainWindow extends JFrame{
 			comboPartPerProvider.addItem(part);
 		}
 	};
+	
 	private void loadComboAutomobiles(){
 		ArrayList<Automobile> automobilesList = db.getAllAutomobile();
 		comboAutomobilesInPartsTab.removeAllItems();
@@ -950,6 +960,7 @@ public class MainWindow extends JFrame{
 			this.partsYearComboBox.addItem(automobile.getFrabricacionYear());
 		}
 	}
+	
 	private void loadComboProvider(){
 		ArrayList<Provider> providerList = db.getAllProviders();
 		providers.removeAllItems();
@@ -969,7 +980,7 @@ public class MainWindow extends JFrame{
 		comboManufacturersOfAutomobile.removeAllItems();
 		for(Manufacturer manufacturer : manuList)
 		{
-			Manufacturers.addItem(manufacturer); //this combo is on the tab parts
+			Manufacturers.addItem(manufacturer); //this combo is on the tab parts 
 			comboManufacturersOfAutomobile.addItem(manufacturer); //this combo is on the Automobile tab 
 
 		}
@@ -983,9 +994,32 @@ public class MainWindow extends JFrame{
 	private void addPartToOrder(ActionEvent eve){
 		int selectedRow = searchResults.getSelectedRow();
 		String partName = this.searchResultsModel.getValueAt(selectedRow, 0).toString();
-		orderParts.add(partName);
-		this.orderTableModel.addRow(new Object[]{partName});
-		System.out.println(partName);
+		String providerName = this.searchResultsModel.getValueAt(selectedRow, 1).toString();
+		if(providerName != ""){
+			orderParts.add(partName);
+			this.orderTableModel.addRow(new Object[]{partName});
+			console.printConsole("Parte agregado a la orden");
+		}else{
+			console.printConsole("Parte no tiene un provedor no se pudo agregar a la orden!");
+		}
+		
+	}
+	
+	
+	private void btnFillOrder(ActionEvent eve){
+		//if there is a part in the order
+		if(orderTableModel.getRowCount() > 1){
+			ArrayList<PartsPerOrder> ppo = new ArrayList<PartsPerOrder>();
+			//get everything in the order
+			for(int i = 2; i <= orderTableModel.getRowCount(); i++){
+				String name = orderTableModel.getValueAt(i -1, 0).toString();
+				PartsPerOrder partOrder = new PartsPerOrder(name);
+			}
+			
+			Order order = new Order(db,ppo,
+					this.orderClientBox.getSelectedItem().toString());
+			order.fillOrder();
+		}
 	}
 	
 	//get all providers that have x part
@@ -1023,6 +1057,7 @@ public class MainWindow extends JFrame{
 					,ppp.getProviderId(), ppp.getPrice()});
 		}
 	}
+	
 	private void selectClientBtn(java.awt.event.ActionEvent evt){
 		int selected = jListClients.getSelectedIndex();
 	

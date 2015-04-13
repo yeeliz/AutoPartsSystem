@@ -268,10 +268,12 @@ public class DataBase {
 				int tId = rs.getInt("ID");
 				int idProvider = rs.getInt("IDProveedor");
 				String partsName = rs.getString("NombreParte");
+				int earning = rs.getInt("PorcentajeDeGanancia");
 				int price = rs.getInt("Precio");
+				int realPrice = price + ((earning/100) * price);
 				
 				PartPerProvider or = new PartPerProvider(idProvider, 
-						partsName,tId, price, this);
+						partsName,tId, realPrice, this);
 				order.add(or);
 			}
 		
