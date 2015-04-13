@@ -33,7 +33,8 @@ public class Brand {
 			pst.close();
 		}catch(Exception ex){
 			//we need write our own custom msg
-			console.errorMsg(ex.toString());
+			System.out.println(ex.toString());
+			console.errorMsg("Not able to create a brand");
 		}
 	}
 	public String toString(){
