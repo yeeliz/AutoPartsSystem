@@ -1034,7 +1034,7 @@ public class MainWindow extends JFrame{
 				int providerId = (int) orderTableModel.getValueAt(i-1, 1);
 				int price = (int) orderTableModel.getValueAt(i-1, 2);
 				int amount = (int) orderTableModel.getValueAt(i-1, 3);
-				PartsPerOrder partOrder = new PartsPerOrder(providerId, price, 1);
+				PartsPerOrder partOrder = new PartsPerOrder(providerId, price, amount);
 				ppo.add(partOrder);
 			}
 			
