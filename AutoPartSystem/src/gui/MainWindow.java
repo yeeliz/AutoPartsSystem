@@ -91,6 +91,9 @@ public class MainWindow extends JFrame{
 	private JTextField txtOrderVehicleModel;
 	private JTextField txtOrderVehicleYear;
 	private DefaultTableModel searchResultsModel;
+	private DefaultTableModel orderTableModel;
+	private JButton btnAdd;
+	private ArrayList<String> orderParts = new ArrayList<String>();
 	//--<<
 	
 	
@@ -208,13 +211,27 @@ public class MainWindow extends JFrame{
 		ordersTab.add(searchResults);
 		searchResults.setModel(searchResultsModel);
 		
-		JButton btnAgregar = new JButton("Add");
-		btnAgregar.setBounds(250, 196, 89, 23);
-		ordersTab.add(btnAgregar);
+		btnAdd = new JButton("Add");
+		btnAdd.setBounds(250, 196, 89, 23);
+		ordersTab.add(btnAdd);
+		btnAdd.addActionListener(
+			new java.awt.event.ActionListener() {
+	            public void actionPerformed(java.awt.event.ActionEvent evt) {
+	            	addPartToOrder(evt);
+	            }
+	        }
+				);
+		
+		//order Table model
+		orderTableModel = new DefaultTableModel();
+		orderTableModel.addColumn("PartName");
+		orderTableModel.addColumn("#");
+		orderTableModel.addRow(new Object[]{"PartName", "#"});
 		
 		orderTable = new JTable();
 		orderTable.setBounds(391, 83, 261, 104);
 		ordersTab.add(orderTable);
+		orderTable.setModel(orderTableModel);
 		
 		JButton btnOrder = new JButton("Order");
 		btnOrder.setBounds(568, 196, 89, 23);
@@ -266,9 +283,6 @@ public class MainWindow extends JFrame{
 		ordersTab.add(lblPartsByVehicle);
 		tabbedPane.addTab("Client", clientTab);
 		tabbedPane.addTab("Parts", partsTab);
-		
-		
-
 		tabbedPane.addTab("Providers",providersTab);
 		tabbedPane.addTab("Automobiles",automobileTab);
 		tabbedPane.addTab("Manufacturers",manufacturersTab);
@@ -284,9 +298,6 @@ public class MainWindow extends JFrame{
 	        loadTabsStuff();
 	      }
 	    });
-		
-		
-	
 		
 		JTabbedPane proviOppsTabbedPane=new JTabbedPane(JTabbedPane.LEFT);
 		proviOppsTabbedPane.setBounds(0, 0, 679, 269);
@@ -408,9 +419,6 @@ public class MainWindow extends JFrame{
             	btnAddPhoneToProviderActionPerformed(evt);
             }
         });
-		
-
-		
 		
 		/*
 		 * Begin Client GUI stuff
@@ -880,14 +888,14 @@ public class MainWindow extends JFrame{
 	
 	private void loadOrdersStuff(){
 		loadComboClients();
-		clearSearchTable();
+		clearTable(this.searchResultsModel);
+		clearTable(this.orderTableModel);
 	}
 	
-	private void clearSearchTable(){
-		int numRows = this.searchResultsModel.getRowCount();
-		System.out.println(numRows);
+	private void clearTable(DefaultTableModel model){
+		int numRows = model.getRowCount();
 		for(int i = numRows; i >= 2; i--)
-			this.searchResultsModel.removeRow(i-1);
+			model.removeRow(i-1);
 	}
 	
 	private void loadPartsStuff() {
@@ -971,9 +979,18 @@ public class MainWindow extends JFrame{
 	 * Client gui event/action section
 	 */
 	
+	//add part to the order table
+	private void addPartToOrder(ActionEvent eve){
+		int selectedRow = searchResults.getSelectedRow();
+		String partName = this.searchResultsModel.getValueAt(selectedRow, 0).toString();
+		orderParts.add(partName);
+		this.orderTableModel.addRow(new Object[]{partName});
+		System.out.println(partName);
+	}
+	
 	//get all providers that have x part
 	private void loadSearchResults(ActionEvent evt){
-		clearSearchTable();
+		clearTable(this.searchResultsModel);
 		
 		String model = this.txtOrderVehicleModel.getText();
 		String year = this.txtOrderVehicleYear.getText();
@@ -996,7 +1013,7 @@ public class MainWindow extends JFrame{
 	}
 	
 	private void btnFilterByPart(ActionEvent evt){
-		clearSearchTable();
+		clearTable(this.searchResultsModel);
 		String partName = this.txtOrderPartName.getText();
 		
 		ArrayList<PartPerProvider> partProvider = db.getProvidersSellPart(partName);
