@@ -208,7 +208,7 @@ public class OrdersTab {
 		if(providerName != ""){
 			if(orderParts.contains(partName+providerID)){
 				int index = orderParts.indexOf(partName+providerID) + 1;
-				int amount = (int) this.orderTableModel.getValueAt(index, 3);
+				int amount = (int)this.orderTableModel.getValueAt(index, 3);
 				this.orderTableModel.setValueAt(amount + 1, index, 3);
 			}else{
 				orderParts.add(partName+providerID);
