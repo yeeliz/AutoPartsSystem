@@ -22,7 +22,7 @@ public abstract class Client {
 	/*
 	 * Add this client to the DataBase
 	 */
-	public void addClient(){
+	public boolean addClient(){
 		try{
 			Connection dbConnection = db.getDbConnection();
 			String query = "INSERT INTO [Cliente] (Nombre, Estado, EsPersona) VALUES (?,?,?)";
@@ -36,12 +36,14 @@ public abstract class Client {
 			db.console.printConsole("Inserted general cliente info into Client table.");
 			
 			this.addSubData(); //add the data in subClass
+			
 		}catch(Exception ex){ //need to add custom msg's
 			db.console.errorMsg(ex.toString());
 		}
+		return true;
 	}
 	
-	public void updateClient(){
+	public boolean updateClient(){
 		try{
 			Connection dbConnection = db.getDbConnection();
 			String query = "UPDATE [Cliente] " +
@@ -61,6 +63,7 @@ public abstract class Client {
 			db.console.errorMsg("Error Updating general client");
 			System.out.println(ex.toString());
 		}
+		return true;
 	}
 	
 	public abstract void fillClient();

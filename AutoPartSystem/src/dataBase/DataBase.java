@@ -325,7 +325,6 @@ public class DataBase {
 			
 			while(rs.next()){
 				partNames.add(rs.getString("NombreParte"));
-				
 			}
 			
 		}catch(Exception e){
