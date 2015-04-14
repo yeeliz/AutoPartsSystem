@@ -127,6 +127,7 @@ public class ClientTab {
 		clientStateComboBox = new JComboBox();
 		clientStateComboBox.setModel(new DefaultComboBoxModel(new String[] {"ACTIVE", "INACTIVE", "SUSPENDED"}));
 		clientStateComboBox.setBounds(164, 236, 88, 20);
+		clientStateComboBox.setSelectedIndex(0);
 		clientTab.add(clientStateComboBox);
 		
 		txtTels = new JTextArea();
@@ -206,11 +207,11 @@ public class ClientTab {
 			this.clientTypeComboBox.setEnabled(true);
 		}else{
 			//get selected client name
-			String clientName = this.clientBox.getSelectedItem().getClass().toString();
+			String clientName = this.clientBox.getSelectedItem().toString();
 			
 			Client client;
 			//if it is a person type client
-			if(this.clientBox.getSelectedItem().getClass().toString().contains("Person")){
+			if(this.clientBox.getSelectedItem().toString().contains("Person")){
 				Person per = new Person(db, clientName);
 				per.fillClient();
 				client = per;
