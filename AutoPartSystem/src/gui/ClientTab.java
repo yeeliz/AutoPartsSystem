@@ -33,6 +33,8 @@ public class ClientTab {
 	
 	//Client Tab Vars
 	JComboBox clientTypeComboBox;
+	ListModel<Object> clientListModel;
+	private JComboBox<Object> clientBox;
 	private JButton btnUpdate;
 	private JButton btnSelect;
 	private JTextField txtFieldID;
@@ -65,28 +67,20 @@ public class ClientTab {
 		 * Begin Client GUI stuff
 		 */
 		
-		ListModel clientListModel = new AbstractListModel() {
-			public int getSize() {
-				return modelClientList.size();
-			}
-			public Object getElementAt(int index) {
-				return modelClientList.get(index);
-			}
-		};
+		clientBox = new JComboBox<Object>();
+		clientBox.setBounds(10, 11, 94, 20);
+		clientTab.add(clientBox);
+	
 		
-		jListClients = new JList(clientListModel);
-		jListClients.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		jListClients.setBounds(0, 0, 104, 231);
-		clientTab.add(jListClients);
 		
 		//type of client
 		JLabel lblType = new JLabel("Type:");
-		lblType.setBounds(114, 3, 46, 14);
+		lblType.setBounds(125, 14, 46, 14);
 		clientTab.add(lblType);
 		
 		clientTypeComboBox = new JComboBox();
 		clientTypeComboBox.setModel(new DefaultComboBoxModel(new String[] {"Personal", "Business"}));
-		clientTypeComboBox.setBounds(163, 0, 89, 20);
+		clientTypeComboBox.setBounds(181, 11, 89, 20);
 		clientTab.add(clientTypeComboBox);
 		
 		JLabel lblId = new JLabel("ID:");
@@ -181,14 +175,9 @@ public class ClientTab {
             }
         });
 		
-		
-		
 		clientTab.setLayout(null);
-		//---<<<< END OF CLIENT TAB
-		
+		//---<<<< END OF CLIENT TAB	
 	}
-	
-	
 	
 	//BEGIN GUI HELPERS
 	
@@ -197,14 +186,14 @@ public class ClientTab {
 	public void load(){
 		//fill JClientList
 		ArrayList<Client> clientList = db.getAllClients();
-		modelClientList.clear(); //clear list first
+		//modelClientList.clear();
+		clientBox.removeAllItems();
+		for(Client c: clientList)
+			clientBox.addItem(c);
 		
-		for(Client client : clientList)
-				modelClientList.add(client);
 		
-		modelClientList.add((String) "New Client");
-		
-		System.out.println(modelClientList.get(0));
+		clientBox.addItem("New Client");
+		System.out.println("In Client Load");
 	}
 	
 	
@@ -286,7 +275,6 @@ public class ClientTab {
 			console.printConsole("Saving Personal Client to DB");
 			
 		}else{ //business Client
-			
 			per = new Company(db, this.txtClientFullName.getText(),
 					this.txtClientAddress.getText(), 
 					this.clientStateComboBox.getSelectedItem().toString(),
@@ -295,15 +283,19 @@ public class ClientTab {
 			
 			//save it to the server
 			console.printConsole("Saving a COMPANY type Client to DB");
+		}
+		boolean result = false;
+		if(this.txtClientFullName.isEditable()){
+			 result = per.addClient();
+			this.txtClientFullName.setEditable(false);
 			
+		}else{
+			result = per.updateClient();
 		}
 		
-
-		if(this.txtClientFullName.isEditable()){
-			per.addClient();
-			this.txtClientFullName.setEditable(false);
-		}else{
-			per.updateClient();
+		//if inserted add to clinet list
+		if(result){
+			modelClientList.add(0, per.toString());
 		}
 	}
 	

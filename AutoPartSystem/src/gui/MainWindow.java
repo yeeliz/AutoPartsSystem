@@ -89,6 +89,7 @@ public class MainWindow extends JFrame{
 		manuTb = new ManufacturersTab(tabbedPane, db, console);
 		//first tab to show needs to preload
 		orders.load();
+		clientsTb.load();
 	}
 	
 	
@@ -135,7 +136,6 @@ public class MainWindow extends JFrame{
 		consoleScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		getContentPane().add(consoleScroll, BorderLayout.SOUTH);
 	
-
 		
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}

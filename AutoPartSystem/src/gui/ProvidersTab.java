@@ -162,10 +162,12 @@ public class ProvidersTab {
 	private void btnAddProviderActionPerformed(java.awt.event.ActionEvent evt) {      
 		Provider provider=new Provider(txtProviderName.getText(),txtContactProviderName.getText(),
 				txtDirectionProvider.getText(),txtCityProvider.getText(),txtProviderPhone.getText(),db,console);
+		load();
 	}
 	private void btnAddPhoneToProviderActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Provider selected=(Provider)providers.getSelectedItem();
 		selected.addPhoneNumber(txtProviderPhone2.getText());
+		load();
 	}
 	public void load(){
 		ArrayList<Provider> providerList = db.getAllProviders();
