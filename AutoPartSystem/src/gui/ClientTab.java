@@ -45,8 +45,6 @@ public class ClientTab {
 	private JTextField txtClientCity;
 	private JTextField txtContactDoes;
 	private JTextField txtContactName;
-	private JList<String> jListClients;
-	private ArrayList<Object> modelClientList = new ArrayList<Object>();
 	//--<<
 	
 	public ClientTab(JTabbedPane tabbedPane, DataBase db, Console console){
@@ -200,20 +198,19 @@ public class ClientTab {
 	//BUTTON ACTIONS
 	
 	private void selectClientBtn(java.awt.event.ActionEvent evt){
-		int selected = jListClients.getSelectedIndex();
+		int selected = clientBox.getSelectedIndex();
 	
-		if(modelClientList.size() == selected + 1){
+		if(clientBox.getItemCount() == selected + 1){
 			System.out.println("New Client selected");
 			this.txtClientFullName.setEditable(true);
 			this.clientTypeComboBox.setEnabled(true);
 		}else{
-			
 			//get selected client name
-			String clientName = this.modelClientList.get(selected).toString();
+			String clientName = this.clientBox.getSelectedItem().getClass().toString();
 			
 			Client client;
 			//if it is a person type client
-			if(this.modelClientList.get(selected).getClass().toString().contains("Person")){
+			if(this.clientBox.getSelectedItem().getClass().toString().contains("Person")){
 				Person per = new Person(db, clientName);
 				per.fillClient();
 				client = per;
