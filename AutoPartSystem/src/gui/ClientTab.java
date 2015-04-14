@@ -205,6 +205,15 @@ public class ClientTab {
 			System.out.println("New Client selected");
 			this.txtClientFullName.setEditable(true);
 			this.clientTypeComboBox.setEnabled(true);
+			//clear
+			txtContactName.setText("");
+			txtContactDoes.setText("");
+			txtFieldID.setText("");
+			txtClientFullName.setText("");
+			txtClientAddress.setText("");
+			txtTels.setText("");
+			txtClientCity.setText("");
+			
 		}else{
 			//get selected client name
 			String clientName = this.clientBox.getSelectedItem().toString();
