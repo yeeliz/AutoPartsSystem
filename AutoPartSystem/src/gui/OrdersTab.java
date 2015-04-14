@@ -265,14 +265,16 @@ public class OrdersTab {
 			//all providers with that part
 			ArrayList<PartPerProvider> partProvider;
 			partProvider = db.getProvidersSellPart(part);
-			//System.out.println(part);
+			
 			
 			boolean entered = false;
+		
 			//add all the parts with their provider
 			for(PartPerProvider ppp: partProvider){
 				searchResultsModel.addRow(new Object[]{part, ppp.getProviderName()
 						,ppp.getProviderId(), ppp.getPrice()});
 				entered = true;
+				System.out.println(ppp.getProviderName());
 			}
 			if(!entered){
 				searchResultsModel.addRow(new Object[]{part});

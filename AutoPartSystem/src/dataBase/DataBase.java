@@ -124,7 +124,7 @@ public class DataBase {
 		try{
 			//look for the brand in the database
 			String query="SELECT Nombre FROM [Proveedor]"
-					+ " WHERE ID=?";
+					+ " WHERE ID = ?";
 			PreparedStatement pst=dbConnection.prepareStatement(query);
 			pst.setInt(1,ID);
 			console.printConsole("Getting Provider Name");
@@ -133,6 +133,7 @@ public class DataBase {
 			while(rs.next()){
 				name=rs.getString("Nombre");				
 			}
+			System.out.println(name + ID);
 		}catch (Exception ex){
 			console.errorMsg();
 		}
@@ -272,8 +273,8 @@ public class DataBase {
 				int price = rs.getInt("Precio");
 				int realPrice = price + ((earning/100) * price);
 				
-				PartPerProvider or = new PartPerProvider(idProvider, 
-						partsName,tId, realPrice, this);
+				PartPerProvider or = new PartPerProvider(tId, 
+						partsName,idProvider, realPrice, this);
 				order.add(or);
 			}
 		
