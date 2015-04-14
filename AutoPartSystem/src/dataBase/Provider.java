@@ -21,7 +21,7 @@ public class Provider {
 		contactName=new String();
 		direction=new String();
 		city=new String();
-		phoneNumbers=new ArrayList<>();
+		phoneNumbers=new ArrayList<String>();
 		name=pName;
 		contactName=pContactName;
 		direction=pDirection;
@@ -38,7 +38,7 @@ public class Provider {
 		contactName=new String();
 		direction=new String();
 		city=new String();
-		phoneNumbers=new ArrayList<>();
+		phoneNumbers=new ArrayList<String>();
 		name=pName;
 		contactName=pContactName;
 		direction=pDirection;
