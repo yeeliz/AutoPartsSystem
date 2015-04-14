@@ -142,6 +142,5 @@ public class Person extends Client{
 	    	 db.console.errorMsg("Not able to insert the client");
 	    	 System.out.println(e.toString());
 	     }
-		
 	}
 }
