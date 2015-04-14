@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 import javax.swing.JTextArea;
 
 public class Console {
-	private Calendar calendar = GregorianCalendar.getInstance();
+	
 	private JTextArea console;
 	private String text = "";
 	
@@ -25,6 +25,7 @@ public class Console {
 	}
 	
 	public void printConsole(String msg){
+		private Calendar calendar = GregorianCalendar.getInstance();
 		console.append("[" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + 
 				calendar.get(Calendar.MINUTE)+","+calendar.get(Calendar.SECOND)+"] << " + msg + "\n");
 	}
