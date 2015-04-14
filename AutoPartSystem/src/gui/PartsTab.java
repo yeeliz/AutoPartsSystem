@@ -231,7 +231,7 @@ public class PartsTab {
         });
 		
 		
-		btnAplay.setBounds(263, 128, 60, 19);
+		btnAplay.setBounds(263, 128, 100, 19);
 		updatePartsTab.add(btnAplay);
 		
 		txtProfitInUpdate = new JTextField();
