@@ -213,7 +213,6 @@ public class ClientTab {
 			txtClientAddress.setText("");
 			txtTels.setText("");
 			txtClientCity.setText("");
-			
 		}else{
 			//get selected client name
 			String clientName = this.clientBox.getSelectedItem().toString();

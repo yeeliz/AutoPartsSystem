@@ -202,9 +202,18 @@ public class OrdersTab {
 	private void addPartToOrder(ActionEvent eve){
 		int selectedRow = searchResults.getSelectedRow();
 		String partName = this.searchResultsModel.getValueAt(selectedRow, 0).toString();
-		String providerName = this.searchResultsModel.getValueAt(selectedRow, 1).toString();
-		int providerID = (int) this.searchResultsModel.getValueAt(selectedRow, 2);
-		int price = (int) this.searchResultsModel.getValueAt(selectedRow, 3);
+		
+		String providerName = "";
+		int providerID = 0, price = 0;
+		try{
+			providerName = this.searchResultsModel.getValueAt(selectedRow, 2).toString();
+		    providerID = (int) this.searchResultsModel.getValueAt(selectedRow, 2);
+		    price = (int) this.searchResultsModel.getValueAt(selectedRow, 3);
+		}catch(Exception e){
+			
+		}
+		
+		
 		if(providerName != ""){
 			if(orderParts.contains(partName+providerID)){
 				int index = orderParts.indexOf(partName+providerID) + 1;
@@ -251,17 +260,23 @@ public class OrdersTab {
 		
 		ArrayList<String> nameParts;
 		nameParts = db.getAllPartsForAutoMobile(model,year);
-		
 	
 		for(String part: nameParts){
 			//all providers with that part
 			ArrayList<PartPerProvider> partProvider;
 			partProvider = db.getProvidersSellPart(part);
+			//System.out.println(part);
 			
+			boolean entered = false;
 			//add all the parts with their provider
 			for(PartPerProvider ppp: partProvider){
 				searchResultsModel.addRow(new Object[]{part, ppp.getProviderName()
 						,ppp.getProviderId(), ppp.getPrice()});
+				entered = true;
+			}
+			if(!entered){
+				searchResultsModel.addRow(new Object[]{part});
+				entered = true;
 			}
 		}
 	}
@@ -273,6 +288,7 @@ public class OrdersTab {
 		ArrayList<PartPerProvider> partProvider = db.getProvidersSellPart(partName);
 		//add all the parts with their provider
 		for(PartPerProvider ppp: partProvider){
+			//System.out.println(partName);
 			searchResultsModel.addRow(new Object[]{partName, ppp.getProviderName()
 					,ppp.getProviderId(), ppp.getPrice()});
 		}

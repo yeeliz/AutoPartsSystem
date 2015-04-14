@@ -256,7 +256,7 @@ public class DataBase {
 		
 		try{
 			String query = "SELECT * FROM PartesPorProveedor " +
-			"WHERE NombreParte = ?";
+			"WHERE NombreParte LIKE ? ";
 			
 			PreparedStatement pst = dbConnection.prepareStatement(query);	
 			pst.setString(1, partName);
@@ -310,7 +310,8 @@ public class DataBase {
 		
 		
 		String sql = "SELECT NombreParte FROM PartesDeAutoMovil " +
-		"WHERE ModeloAutomovil = ? AND AnioDeFabricacion = ? ";
+		"WHERE ModeloAutomovil LIKE ? AND AnioDeFabricacion = ? ";
+		
 		try{
 			PreparedStatement pst= dbConnection.prepareStatement(sql);
 			
