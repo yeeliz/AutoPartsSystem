@@ -89,7 +89,6 @@ public class MainWindow extends JFrame{
 		autosTb = new AutomobilesTab(tabbedPane, db, console);
 		//first tab to show needs to preload
 		orders.load();
-		
 	}
 	
 	
@@ -100,6 +99,23 @@ public class MainWindow extends JFrame{
 
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		
+	     /*
+	        * Tab Listener
+	        * We load basic DB Content when every time a tab is switched
+	     */
+		
+	    tabbedPane.addChangeListener(new ChangeListener()
+	    {
+	      public void stateChanged(ChangeEvent e)
+	      {
+	    	 try{
+	    		  loadTabsStuff();
+	    	 }catch(Exception eve){
+	        	
+	        }
+	    }
+	    });
 		
 		//add tabs to this frame
 		getContentPane().add(tabbedPane);
@@ -119,7 +135,7 @@ public class MainWindow extends JFrame{
 		consoleScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		getContentPane().add(consoleScroll, BorderLayout.SOUTH);
 	
-		
+
 		
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
@@ -147,10 +163,13 @@ public class MainWindow extends JFrame{
 				providersTab.load();
 				break;
 			case "automobilesTab":
-				orders.load();
+				autosTb.load();
 				break;
-		}
-	}	
+		}	
+	}
+	
+	
+	
 	public static void main(String args[]){
 		//open main window
 		MainWindow mainWindow = new MainWindow();

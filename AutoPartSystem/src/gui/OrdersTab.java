@@ -53,11 +53,9 @@ public class OrdersTab {
 	private void gui(){
 		JComponent ordersTab = new JPanel();
 		ordersTab.setName("ordersTab");
-		
-		
 		//tabs
 		tabbedPane.addTab("Orders", ordersTab);
-		ordersTab.setLayout(null);
+		
 		
 		JLabel lblPartName = new JLabel("Part Name (Filter):");
 		lblPartName.setBounds(10, 198, 121, 14);
@@ -176,6 +174,8 @@ public class OrdersTab {
 		JLabel lblPartsByVehicle = new JLabel("Parts by Vehicle");
 		lblPartsByVehicle.setBounds(297, 17, 122, 14);
 		ordersTab.add(lblPartsByVehicle);
+		
+		ordersTab.setLayout(null);
 	}
 	
 	public void load(){

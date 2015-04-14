@@ -203,6 +203,8 @@ public class ClientTab {
 				modelClientList.add(client);
 		
 		modelClientList.add((String) "New Client");
+		
+		System.out.println(modelClientList.get(0));
 	}
 	
 	
