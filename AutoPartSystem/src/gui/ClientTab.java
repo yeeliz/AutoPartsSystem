@@ -211,7 +211,7 @@ public class ClientTab {
 			
 			Client client;
 			//if it is a person type client
-			if(this.clientBox.getSelectedItem().toString().contains("Person")){
+			if(this.clientBox.getSelectedItem().getClass().toString().contains("Person")){
 				Person per = new Person(db, clientName);
 				per.fillClient();
 				client = per;
