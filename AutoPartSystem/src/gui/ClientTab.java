@@ -193,7 +193,6 @@ public class ClientTab {
 		
 		
 		clientBox.addItem("New Client");
-		System.out.println("In Client Load");
 	}
 	
 	
@@ -293,10 +292,7 @@ public class ClientTab {
 			result = per.updateClient();
 		}
 		
-		//if inserted add to clinet list
-		if(result){
-			modelClientList.add(0, per.toString());
-		}
+		load();
 	}
 	
 }
