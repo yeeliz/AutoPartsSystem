@@ -310,7 +310,7 @@ public class DataBase {
 		
 		
 		String sql = "SELECT NombreParte FROM PartesDeAutoMovil " +
-		"WHERE ModeloAutomovil = ? AND AnioFabricacion = ? ";
+		"WHERE ModeloAutomovil = ? AND AnioDeFabricacion = ? ";
 		try{
 			PreparedStatement pst= dbConnection.prepareStatement(sql);
 			
