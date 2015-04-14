@@ -37,6 +37,7 @@ public class PartsTab {
 	private JComboBox<PartPerProvider> comboPartPerProvider ;
 	private Console console;
 	private DataBase db;
+	private JComboBox<Part> comboPartsToDelete;
 	
 	
 	public PartsTab(JTabbedPane tabbedPane,Console pConsole,DataBase pDb){
@@ -246,6 +247,42 @@ public class PartsTab {
 		comboPartPerProvider = new JComboBox<PartPerProvider>();
 		comboPartPerProvider.setBounds(45, 63, 208, 21);
 		updatePartsTab.add(comboPartPerProvider);
+		
+		JPanel deletePartsTab = new JPanel();
+		partOppsTabbedPane.addTab("Delete", null, deletePartsTab, null);
+		deletePartsTab.setLayout(null);
+		
+		
+		JLabel lblDelete= new JLabel("PARTS DELETION");
+		lblDelete.setBounds(49,50,100,10);
+		deletePartsTab.add(lblDelete);
+		
+		comboPartsToDelete= new JComboBox<Part>();
+		comboPartsToDelete.setBounds(49,75,100,20);
+		deletePartsTab.add(comboPartsToDelete);
+				
+		JButton btnDelete = new JButton("Delete");
+		btnDelete.setBounds(49,100,100,19);
+		deletePartsTab.add(btnDelete);
+		btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	btnDeleteActionPerformed(evt);
+            }
+        });
+		
+	}
+	private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt){
+		try{
+			if(comboPartsToDelete.getItemCount()!=0){
+				((Part)comboPartsToDelete.getSelectedItem()).deleteFromDb();
+				load();
+			}else{
+				console.errorMsg("No Parts to delete");	
+			}
+			
+		}catch(Exception ex){
+			console.errorMsg("Invalid profit value");
+		}
 	}
 	private void btnAssociateActionPerformed(java.awt.event.ActionEvent evt){
 		try{
@@ -254,6 +291,7 @@ public class PartsTab {
 				int cost=Integer.parseInt(txtCost.getText());
 				PartPerProvider p=new PartPerProvider((Part)comboPartsToAssociateWithProvider.getSelectedItem(),
 						(Provider)comboProvidersInPartsTab.getSelectedItem(),profit,cost,db,console);
+				load();
 			}catch(Exception ex2){
 				console.errorMsg("Invalid cost value");
 			}
@@ -264,14 +302,16 @@ public class PartsTab {
 	private void btnAssociatePartAutomobileActionPerformed(java.awt.event.ActionEvent evt) {
 		db.associatePartWithAutomobile((Part)comboPartsToAssociateWithAutomobile.getSelectedItem(),
 				(String)comboAutomobilesInPartsTab.getSelectedItem(),(int) this.partsYearComboBox.getSelectedItem());
+		load();
 	}
 	private void btnAddBrandActionPerformed(java.awt.event.ActionEvent evt) {                                         
         Brand brand=new Brand(txtBrandName.getText(),db,console);
-        brands.addItem(brand);
+        load();
 	} 
 	private void btnAddPartActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		Part part=new Part(txtPartName.getText(),(Brand) brands.getSelectedItem(), (Manufacturer)Manufacturers.getSelectedItem(), db, console);
-    }
+		load();
+	}
 	private void partsYearComboActionPerformed(ItemEvent e) {   
 		partsYearComboBox.removeAllItems();
 		String automobile=(String)comboAutomobilesInPartsTab.getSelectedItem();
@@ -288,11 +328,13 @@ public class PartsTab {
 		for(String automobile: automobilesList){
 			comboAutomobilesInPartsTab.addItem(automobile);
 		}
+
 	}
 	private void btnAplayActionPerformed(java.awt.event.ActionEvent evt) {                                         
 		PartPerProvider p=(PartPerProvider)comboPartPerProvider.getSelectedItem();
 		p.update(Integer.valueOf((txtProfitInUpdate.getText())), 
 				Integer.valueOf(txtCostInUpdate.getText()));
+		load();
 	}
 	public void load() {
 		loadComboBrand();
@@ -306,10 +348,12 @@ public class PartsTab {
 		ArrayList<Part> partsList = db.getAllParts();
 		comboPartsToAssociateWithProvider.removeAllItems();
 		comboPartsToAssociateWithAutomobile.removeAllItems();
+		comboPartsToDelete.removeAllItems();
 		
 		for(Part part: partsList){
 			comboPartsToAssociateWithProvider.addItem(part);
 			comboPartsToAssociateWithAutomobile.addItem(part);
+			comboPartsToDelete.addItem(part);
 		}			
 	}
 	private void loadList(){

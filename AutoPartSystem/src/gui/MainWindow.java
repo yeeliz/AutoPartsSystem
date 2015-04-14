@@ -85,8 +85,8 @@ public class MainWindow extends JFrame{
 		clientsTb = new ClientTab(tabbedPane, db, console);
 		partsTab=new PartsTab(tabbedPane, console, db);
 		providersTab= new ProvidersTab(tabbedPane, console, db);
-		manuTb = new ManufacturersTab(tabbedPane, db, console);
 		autosTb = new AutomobilesTab(tabbedPane, db, console);
+		manuTb = new ManufacturersTab(tabbedPane, db, console);
 		//first tab to show needs to preload
 		orders.load();
 	}

@@ -25,7 +25,7 @@ public class Manufacturer {
 			pst.setString(1, name);
 			if(name!=""){
 				pst.executeUpdate();	
-				console.printConsole("Manufacturer Adder");
+				console.printConsole("Manufacturer Added");
 			}else{
 				console.errorMsg("Please fill up the name");
 				throw new Exception("No name to create a Manufacturer");

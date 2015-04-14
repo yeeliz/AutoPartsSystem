@@ -105,11 +105,30 @@ public class AutomobilesTab {
 	}
 	
 	//BUTTON STUFF
-	private void btnAddAutomobileActionPerformed(java.awt.event.ActionEvent evt) {                                         
-		Automobile automobile= new Automobile(txtModel.getText(),txtDetail.getText(),
-				Integer.valueOf(txtFabricationYear.getText()),
-				(Manufacturer)comboManufacturersOfAutomobile.getSelectedItem(),
-				db,console);
+	private void btnAddAutomobileActionPerformed(java.awt.event.ActionEvent evt) {  
+		try{
+			if(validateEntry()){
+				Automobile automobile= new Automobile(txtModel.getText(),txtDetail.getText(),
+						Integer.valueOf(txtFabricationYear.getText()),
+						(Manufacturer)comboManufacturersOfAutomobile.getSelectedItem(),
+						db,console);				
+			}else{
+				System.out.println("Here");
+				console.errorMsg("Please insert good data");				
+			}
+		}catch (Exception ex){
+			System.out.println(ex.toString());
+			console.errorMsg("Please insert good data");
+		}
+	}
+	private boolean validateEntry(){
+		if(!txtModel.getText().equals("")&& !txtDetail.getText().equals("") &&
+				!txtFabricationYear.getText().equals("")
+				&&comboManufacturersOfAutomobile.getItemCount()!=0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 }

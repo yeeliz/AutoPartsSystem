@@ -24,11 +24,12 @@ public class Brand {
 			String query = "INSERT INTO [Marca] (Nombre) VALUES (?)";
 			PreparedStatement pst = dbConnection.prepareStatement(query);
 			pst.setString(1, name);
-			if(name!=""){
-				pst.executeUpdate();	
+			if(!name.equals("")){
+				pst.executeUpdate();
+				console.printConsole("Brand inserted");
 			}else{
 				//need to show msg's to console too 
-				throw new Exception("No name to create a brand");
+				console.errorMsg("Insert good data");
 			}
 			pst.close();
 		}catch(Exception ex){

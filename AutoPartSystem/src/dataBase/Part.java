@@ -56,11 +56,21 @@ public class Part{
 			console.errorMsg("Not able to insert a part, maybe the name already exist");
 		}
 	}
-	private void deleteFromDb(){
+	public void deleteFromDb(){
 		try{
-			
+			Connection dbConnection=db.getDbConnection();
+			String query = "delete from Parte  where nombre=? and nombre not in("
+					+ "select p.Nombre from Parte p inner join PartesPorProveedor pp "
+					+ "on p.Nombre=pp.NombreParte inner join PartesPorOrden po on "
+					+ "pp.ID=po.IdPartesPorProveedor)";
+			PreparedStatement  pst = dbConnection.prepareStatement(query);
+			pst = dbConnection.prepareStatement(query);
+			pst.setString(1,name);
+			pst.executeUpdate();
+			pst.close();
 		}catch (Exception ex){
-			console.errorMsg(ex.toString());
+			System.out.println(ex.toString());
+			console.errorMsg("Not able to delete");
 		}
 	}
 	public String toString(){

@@ -73,8 +73,12 @@ public class ManufacturersTab {
 	
 	//BUTTON STUFF
 	private void btnAddManufacturerActionPerformed(java.awt.event.ActionEvent evt) {                                         
-		Manufacturer manufact=new Manufacturer(txtManufacturerName.getText(),db,console);
-        Manufacturers.addItem(manufact);
+		if(!txtManufacturerName.getText().equals("")){
+			Manufacturer manufact=new Manufacturer(txtManufacturerName.getText(),db,console);
+		}else{
+			console.errorMsg("Please insert good data");
+		}
+		
 	} 
 
 }
