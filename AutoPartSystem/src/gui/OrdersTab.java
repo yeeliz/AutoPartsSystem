@@ -206,7 +206,7 @@ public class OrdersTab {
 		String providerName = "";
 		int providerID = 0, price = 0;
 		try{
-			providerName = this.searchResultsModel.getValueAt(selectedRow, 2).toString();
+			providerName = this.searchResultsModel.getValueAt(selectedRow, 1).toString();
 		    providerID = (int) this.searchResultsModel.getValueAt(selectedRow, 2);
 		    price = (int) this.searchResultsModel.getValueAt(selectedRow, 3);
 		}catch(Exception e){
